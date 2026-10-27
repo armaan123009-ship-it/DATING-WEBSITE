@@ -45,10 +45,12 @@
           <div class="glow"></div>
           <div class="profile-card">
             <div class="profile-art">
+              <img id="girly" src="girl.png" alt="Profile placeholder image"/>
+
               <div class="verified-chip"><span class="check">✓</span> Verification concept</div>
             </div>
             <div class="profile-info">
-              <div class="profile-name">Aarohi, 24 <span class="check" title="Example verification badge">✓</span></div>
+              <div class="profile-name">Aarohi, 22 <span class="check" title="Example verification badge">✓</span></div>
               <p>Lucknow · Example profile</p>
               <div class="tags"><span class="tag">Music</span><span class="tag">Travel</span><span class="tag">Books</span></div>
             </div>
@@ -141,11 +143,19 @@
     <div class="modal">
       <div class="modal-top">
         <h2 id="modalTitle">Join Veylqora</h2>
+        
         <button class="close" id="closeModal" aria-label="Close dialog">×</button>
       </div>
       <p id="modalDescription">This is a front-end demo. It will not create a real account or send an OTP.</p>
       <form id="demoForm">
         <div class="field">
+          <label for="name">First Name</label>
+          <input id="name" name="name" type="text" placeholder="First Name" autocomplete="name" required />
+          <label for="name">Last Name</label>
+          <input id="name" name="name" type="text" placeholder="Last  Name" autocomplete="name" required />
+          <label >Phone</label>
+          <input id="name" name="name" type="text" placeholder="Your Number" autocomplete="name" required />
+
           <label for="email">Email address</label>
           <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
         </div>
