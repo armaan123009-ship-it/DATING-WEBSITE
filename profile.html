@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- VEYLQORA: Dedicated nine-screen onboarding page. Keep these three files together. -->
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Complete Your Profile | Veylqora</title>
+  <link rel="stylesheet" href="profile.css">
+  <!-- Supabase browser SDK: used by profile.js for authenticated saving. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="profile.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <!-- HEADER: logo, progress label and thin progress indicator. -->
+    <header class="header">
+      <a href="index.html" class="logo"><span class="logo-heart">♥</span><span>Veylqora<small>Real People. Real Connections.</small></span></a>
+      <div class="header-right"><div class="topline"><span id="topCaption">Your Profile</span><span id="stepCounter">1 / 6</span></div><div class="progress"><div id="progressFill"></div></div></div>
+    </header>
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+    <!-- The welcome, success and preview screens span the full available width. -->
+    <main class="layout" id="layout">
+      <!-- SIDE NAVIGATION: visually tracks the six editable stages. -->
+      <aside class="sidebar" id="sidebar" aria-label="Profile setup steps">
+        <p class="side-title">YOUR PROFILE</p>
+        <div class="side-item" data-nav="1"><span class="side-dot">1</span><span>Basic Information</span></div>
+        <div class="side-item" data-nav="2"><span class="side-dot">2</span><span>Personal Details</span></div>
+        <div class="side-item" data-nav="3"><span class="side-dot">3</span><span>Location &amp; About</span></div>
+        <div class="side-item" data-nav="4"><span class="side-dot">4</span><span>Interests</span></div>
+        <div class="side-item" data-nav="5"><span class="side-dot">5</span><span>Profile Photo</span></div>
+        <div class="side-item" data-nav="6"><span class="side-dot">6</span><span>Review</span></div>
+      </aside>
+      <form id="profileForm" class="content" novalidate>
+        <!-- SCREEN 1: Welcome / introductory hero. -->
+        <section class="step welcome" data-step="0"><div class="welcome-copy"><span class="kicker">YOUR STORY STARTS HERE</span><h1>Complete Your<br><em>Profile</em></h1><p>Tell us a little about yourself so we can find better matches for you.</p><div class="welcome-benefits"><span>✦ Be yourself</span><span>♡ Find real connections</span><span>✧ Your privacy matters</span></div></div><div class="welcome-art"><span class="floating-heart">♡</span><div class="people"><span></span><span></span></div></div></section>
+        <!-- SCREEN 2: First and last names, side by side. -->
+        <section class="step" data-step="1"><div class="section-head"><span class="kicker">LET'S START WITH YOUR NAME</span><h1>Basic Information</h1><p>Let's start with your name and some details.</p></div><div class="two"><label>First Name <b>*</b><input id="firstName" maxlength="60" autocomplete="given-name" placeholder="Enter your first name" required></label><label>Last Name <b>*</b><input id="lastName" maxlength="60" autocomplete="family-name" placeholder="Enter your last name" required></label></div><p class="field-note">Use your real first name to build genuine connections.</p></section>
+        <!-- SCREEN 3: Birthday, gender and who they want to meet. -->
+        <section class="step" data-step="2"><div class="section-head"><span class="kicker">TELL US ABOUT YOURSELF</span><h1>Personal Details</h1><p>Tell us more about yourself.</p></div><label>Date of Birth <b>*</b><input id="birthDate" type="date" required></label><label>Gender <b>*</b><select id="gender" required><option value="">Select your gender</option><option>Man</option><option>Woman</option><option>Non-binary</option><option>Prefer to self-describe</option></select></label><label>Interested In <b>*</b><select id="interestedIn" required><option value="">Select who you're interested in</option><option>Women</option><option>Men</option><option>Everyone</option></select></label><p class="field-note">You must be 18 or older to join Veylqora.</p></section>
+        <!-- SCREEN 4: City and a personal introduction. -->
+        <section class="step" data-step="3"><div class="section-head"><span class="kicker">YOUR STORY</span><h1>Location &amp; About</h1><p>Where are you and what's your story?</p></div><label>City <b>*</b><input id="city" maxlength="100" placeholder="Enter your city (e.g. Lucknow)" required></label><label>About Me <b>*</b><textarea id="bio" rows="6" maxlength="500" placeholder="Tell us about yourself, your interests, and what you love doing..." required></textarea></label><p class="field-note">Keep your exact address and contact details private.</p></section>
+        <!-- SCREEN 5: Interests; JS builds selectable chips in interestChips. -->
+        <section class="step" data-step="4"><div class="section-head"><span class="kicker">YOUR FAVORITE THINGS</span><h1>Interests</h1><p>Choose what you enjoy. Select at least 3.</p></div><div id="interestChips" class="chips"></div><div class="custom-row"><input id="customInterest" maxlength="40" aria-label="Custom interest" placeholder="Add your own interest..."><button id="addInterest" type="button" class="outline">+ Add</button></div><div id="chosenInterests" class="chosen"></div></section>
+        <!-- SCREEN 6: Photo upload circle; local preview appears before upload. -->
+        <section class="step" data-step="5"><div class="section-head"><span class="kicker">LET THEM SEE YOU</span><h1>Profile Photo</h1><p>Add a clear photo of yourself. You can change it later.</p></div><div class="photo-zone"><label class="photo-circle" for="photo"><img id="photoPreview" alt="Your chosen profile photo" hidden><span id="photoPlaceholder" class="photo-placeholder"><span class="camera">⌁</span><strong>Click to upload</strong><small>or drag and drop</small></span></label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp"><p>JPG, PNG or WebP · Maximum 5 MB</p></div><p class="field-note">Photo is optional for now. Only upload an image you have permission to use.</p></section>
+        <!-- SCREEN 7: Profile details review. All text is inserted safely by JS. -->
+        <section class="step" data-step="6"><div class="section-head"><span class="kicker">ALMOST THERE</span><h1>Review Your Profile</h1><p>Check your details before saving.</p></div><div id="review" class="review"></div></section>
+        <!-- SCREEN 8: Displayed only after Supabase confirms successful saving. -->
+        <section class="step success-screen" data-step="7"><div class="success-glow"><span>✓</span></div><div class="sparkle left">♥</div><div class="sparkle right">♥</div><h1>Profile Created Successfully!</h1><p>Your profile is now saved to Veylqora.</p></section>
+        <!-- SCREEN 9: Final profile preview with user-provided details. -->
+        <section class="step final-screen" data-step="8"><div class="section-head"><span class="kicker">THIS IS YOU</span><h1>Your Profile Preview</h1><p>Here's how your profile could look to others.</p></div><div id="finalPreview" class="profile-card-preview"></div><p class="field-note">Matching and public discovery are not live yet.</p></section>
+        <!-- Shared buttons: JS changes their labels based on the active screen. -->
+        <div class="actions"><button id="backBtn" class="secondary" type="button">← Back</button><button id="nextBtn" class="primary" type="button">Next →</button></div>
+      </form>
+    </main>
+    <footer>♥ Veylqora <span>Real People. Real Connections.</span></footer>
+  </div>
+</body>
+</html>
