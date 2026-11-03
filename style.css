@@ -1,4 +1,7 @@
 
+/* =========================================
+   1. GLOBAL COLORS AND DESIGN VARIABLES
+========================================= */
 :root {
     --bg: #0c0b14;
     --panel: #151321;
@@ -7,172 +10,1112 @@
     --muted: #b8b2c9;
     --pink: #ff6caa;
     --violet: #a18bff;
-    --line: rgba(255,255,255,.12);
+    --line: rgba(255, 255, 255, .12);
     --green: #70e2b0;
     --radius: 22px;
 }
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+
+/* Apply consistent box sizing */
+* {
+    box-sizing: border-box;
+}
+
+/* Smooth scrolling between page sections */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Main page background and typography */
 body {
     margin: 0;
-    background: radial-gradient(ellipse at 80% 0%, rgba(113, 77, 190, .18), transparent 34%), var(--bg);
+    background:
+        radial-gradient(
+            ellipse at 80% 0%,
+            rgba(113, 77, 190, .18),
+            transparent 34%
+        ),
+        var(--bg);
+
     color: var(--text);
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
     line-height: 1.6;
 }
-a { color: inherit; text-decoration: none; }
-button, a { -webkit-tap-highlight-color: transparent; }
-.container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+
+/* Default link and button behavior */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+/* =========================================
+   2. COMMON CONTAINER
+========================================= */
+.container {
+    width: min(1120px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   3. NAVIGATION BAR
+========================================= */
 .nav {
-    position: sticky; top: 0; z-index: 10;
-    background: rgba(12,11,20,.82); backdrop-filter: blur(16px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    background: rgba(12, 11, 20, .82);
+    backdrop-filter: blur(16px);
+
     border-bottom: 1px solid var(--line);
 }
-.nav-inner { display:flex; align-items:center; justify-content:space-between; min-height:76px; gap:20px; }
-.brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.22rem; letter-spacing:-.04em; }
+
+/* Arrange logo, links and buttons */
+.nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 76px;
+    gap: 20px;
+}
+
+/* Website logo */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-weight: 800;
+    font-size: 1.22rem;
+    letter-spacing: -.04em;
+}
+
+/* Logo heart background */
 .brand-mark {
-    width:36px; height:36px; display:grid; place-items:center; border-radius:12px;
-    background:linear-gradient(135deg,var(--pink),var(--violet)); color:#180d23; font-size:1.2rem;
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        var(--pink),
+        var(--violet)
+    );
+
+    color: #180d23;
+    font-size: 1.2rem;
 }
-.nav-links { display:flex; align-items:center; gap:28px; color:var(--muted); font-size:.93rem; }
-.nav-links a:hover { color:var(--text); }
-.nav-actions { display:flex; align-items:center; gap:10px; }
+
+/* Navigation links */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    color: var(--muted);
+    font-size: .93rem;
+}
+
+.nav-links a:hover {
+    color: var(--text);
+}
+
+/* Login and signup button group */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* =========================================
+   4. BUTTON DESIGN
+========================================= */
 .btn {
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    padding:12px 18px; border-radius:999px; border:1px solid transparent;
-    font-weight:750; font-size:.92rem; cursor:pointer; transition:transform .2s, opacity .2s, background .2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 12px 18px;
+
+    border-radius: 999px;
+    border: 1px solid transparent;
+
+    font-weight: 750;
+    font-size: .92rem;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s,
+        opacity .2s,
+        background .2s;
 }
-.btn:hover { transform:translateY(-2px); }
-.btn-primary { background:linear-gradient(110deg,var(--pink),#b59aff); color:#1b1022; box-shadow:0 10px 32px rgba(255,108,170,.18); }
-.btn-secondary { border-color:var(--line); background:rgba(255,255,255,.04); color:var(--text); }
-.btn-small { padding:10px 15px; }
-.hero { padding:84px 0 76px; overflow:hidden; }
-.hero-grid { display:grid; grid-template-columns:1.08fr .92fr; align-items:center; gap:60px; }
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Main pink and violet gradient button */
+.btn-primary {
+    background: linear-gradient(
+        110deg,
+        var(--pink),
+        #b59aff
+    );
+
+    color: #1b1022;
+
+    box-shadow:
+        0 10px 32px rgba(255, 108, 170, .18);
+}
+
+/* Secondary transparent button */
+.btn-secondary {
+    border-color: var(--line);
+    background: rgba(255, 255, 255, .04);
+    color: var(--text);
+}
+
+/* Smaller navigation buttons */
+.btn-small {
+    padding: 10px 15px;
+}
+
+/* Disabled button state */
+.btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* =========================================
+   5. HERO SECTION
+========================================= */
+.hero {
+    padding: 84px 0 76px;
+    overflow: hidden;
+}
+
+/* Two-column hero layout */
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.08fr .92fr;
+
+    align-items: center;
+    gap: 60px;
+}
+
+/* Small label above main heading */
 .eyebrow {
-    display:inline-flex; align-items:center; gap:9px; padding:7px 12px; border:1px solid var(--line);
-    border-radius:999px; background:rgba(255,255,255,.035); color:#ded6ff; font-size:.82rem; font-weight:700;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 7px 12px;
+
+    border: 1px solid var(--line);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, .035);
+
+    color: #ded6ff;
+    font-size: .82rem;
+    font-weight: 700;
 }
-.eyebrow-dot { width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 0 5px rgba(112,226,176,.12); }
-h1 { margin:22px 0 18px; font-size:clamp(2.7rem,6vw,5.1rem); line-height:1.02; letter-spacing:-.065em; }
-.gradient-text { background:linear-gradient(100deg,var(--pink),#c3a7ff); -webkit-background-clip:text; background-clip:text; color:transparent; }
-.hero-copy { max-width:570px; color:var(--muted); font-size:1.08rem; }
-.hero-buttons { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
-.trust-note { margin-top:18px; font-size:.82rem; color:#938ba9; }
-.visual { min-height:470px; position:relative; display:grid; place-items:center; }
-.glow { position:absolute; width:330px; height:330px; border-radius:50%; background:linear-gradient(135deg,rgba(255,108,170,.23),rgba(161,139,255,.22)); filter:blur(24px); }
-.profile-card {
-    position:relative; width:min(300px,78%); padding:14px; border:1px solid rgba(255,255,255,.18);
-    border-radius:28px; background:linear-gradient(160deg,rgba(37,32,55,.97),rgba(19,17,30,.98));
-    box-shadow:0 30px 90px rgba(0,0,0,.45); transform:rotate(-4deg);
+
+/* Small green dot */
+.eyebrow-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+    background: var(--green);
+
+    box-shadow:
+        0 0 0 5px rgba(112, 226, 176, .12);
 }
-#girly{
+
+/* Main heading */
+h1 {
+    margin: 22px 0 18px;
+
+    font-size: clamp(2.7rem, 6vw, 5.1rem);
+    line-height: 1.02;
+    letter-spacing: -.065em;
+}
+
+/* Pink and violet gradient text */
+.gradient-text {
+    background: linear-gradient(
+        100deg,
+        var(--pink),
+        #c3a7ff
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+/* Hero paragraph */
+.hero-copy {
+    max-width: 570px;
+
+    color: var(--muted);
+    font-size: 1.08rem;
+}
+
+/* Hero buttons */
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 28px;
+}
+
+/* Small note under hero buttons */
+.trust-note {
+    margin-top: 18px;
+
+    font-size: .82rem;
+    color: #938ba9;
+}
+
+
+/* =========================================
+   6. PROFILE CARD AND PHOTO
+========================================= */
+.visual {
+    min-height: 470px;
+
+    position: relative;
+
+    display: grid;
+    place-items: center;
+}
+
+/* Soft glow behind profile card */
+.glow {
     position: absolute;
-    top: 0;
-    left: 0;
+
+    width: 330px;
+    height: 330px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        rgba(255, 108, 170, .23),
+        rgba(161, 139, 255, .22)
+    );
+
+    filter: blur(24px);
+}
+
+/* Profile card */
+.profile-card {
+    position: relative;
+
+    width: min(300px, 78%);
+    padding: 14px;
+
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 28px;
+
+    background: linear-gradient(
+        160deg,
+        rgba(37, 32, 55, .97),
+        rgba(19, 17, 30, .98)
+    );
+
+    box-shadow: 0 30px 90px rgba(0, 0, 0, .45);
+
+    transform: rotate(-4deg);
+}
+
+/* Profile photo container */
+.profile-art {
+    height: 255px;
+
+    border-radius: 20px;
+    overflow: hidden;
+
+    position: relative;
+
+    background: linear-gradient(
+        145deg,
+        #f8a7bf,
+        #8b76d9 60%,
+        #33284f
+    );
+}
+
+/* Profile photo itself */
+#girly {
+    position: absolute;
+    inset: 0;
+
     width: 100%;
     height: 100%;
+
     object-fit: cover;
+    object-position: center;
 }
-.profile-art {
-    height:255px; border-radius:20px; overflow:hidden; position:relative;
-    background:radial-gradient(circle at 50% 30%,#f4c7d6 0 13%,transparent 13.5%),
-    radial-gradient(ellipse at 50% 47%,#9d6c83 0 19%,transparent 19.5%),
-    radial-gradient(ellipse at 50% 90%,#6f5bba 0 36%,transparent 36.5%),
-    linear-gradient(145deg,#f8a7bf,#8b76d9 60%,#33284f);
+
+/* Dark gradient over the bottom of the image */
+.profile-art::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        0deg,
+        rgba(13, 10, 23, .4),
+        transparent 60%
+    );
+
+    pointer-events: none;
 }
-.profile-art::after { content:""; position:absolute; inset:0; background:linear-gradient(0deg,rgba(13,10,23,.4),transparent 60%); }
+
+/* Verification chip on profile photo */
 .verified-chip {
-    position:absolute; z-index:1; left:12px; top:12px; display:flex; gap:6px; align-items:center;
-    background:rgba(12,11,20,.76); border:1px solid rgba(255,255,255,.22); padding:7px 10px; border-radius:999px; font-size:.74rem; font-weight:800;
+    position: absolute;
+    z-index: 1;
+
+    left: 12px;
+    top: 12px;
+
+    display: flex;
+    gap: 6px;
+    align-items: center;
+
+    background: rgba(12, 11, 20, .76);
+
+    border: 1px solid rgba(255, 255, 255, .22);
+    padding: 7px 10px;
+
+    border-radius: 999px;
+
+    font-size: .74rem;
+    font-weight: 800;
 }
-.check { color:var(--green); }
-.profile-info { padding:15px 5px 5px; }
-.profile-name { display:flex; align-items:center; justify-content:space-between; font-size:1.15rem; font-weight:800; }
-.profile-info p { margin:6px 0 12px; color:var(--muted); font-size:.86rem; }
-.tags { display:flex; flex-wrap:wrap; gap:7px; }
-.tag { padding:5px 9px; border-radius:999px; background:rgba(161,139,255,.13); color:#d5cbff; font-size:.73rem; }
+
+/* Green check mark */
+.check {
+    color: var(--green);
+}
+
+/* Profile information area */
+.profile-info {
+    padding: 15px 5px 5px;
+}
+
+/* Profile name and verification icon */
+.profile-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+/* Profile location */
+.profile-info p {
+    margin: 6px 0 12px;
+
+    color: var(--muted);
+    font-size: .86rem;
+}
+
+/* Profile interests */
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+/* Individual interest tag */
+.tag {
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    background: rgba(161, 139, 255, .13);
+    color: #d5cbff;
+
+    font-size: .73rem;
+}
+
+
+/* =========================================
+   7. FLOATING PROFILE CARDS
+========================================= */
 .float-card {
-    position:absolute; padding:13px 15px; border:1px solid var(--line); border-radius:16px;
-    background:rgba(27,24,42,.92); box-shadow:0 15px 40px rgba(0,0,0,.22); backdrop-filter:blur(10px);
-    font-size:.84rem;
+    position: absolute;
+
+    padding: 13px 15px;
+
+    border: 1px solid var(--line);
+    border-radius: 16px;
+
+    background: rgba(27, 24, 42, .92);
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .22);
+
+    backdrop-filter: blur(10px);
+
+    font-size: .84rem;
 }
-.float-card strong { display:block; margin-bottom:2px; }
-.float-card span { color:var(--muted); font-size:.76rem; }
-.float-top { top:48px; right:0; }
-.float-bottom { bottom:48px; left:0; }
-section { padding:76px 0; }
-.section-heading { max-width:690px; margin:0 auto 42px; text-align:center; }
-.section-heading h2 { margin:0 0 12px; font-size:clamp(2rem,4vw,3.1rem); line-height:1.1; letter-spacing:-.045em; }
-.section-heading p { margin:0; color:var(--muted); }
-.feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+
+.float-card strong {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.float-card span {
+    color: var(--muted);
+    font-size: .76rem;
+}
+
+.float-top {
+    top: 48px;
+    right: 0;
+}
+
+.float-bottom {
+    bottom: 48px;
+    left: 0;
+}
+
+
+/* =========================================
+   8. GENERAL SECTION SPACING
+========================================= */
+section {
+    padding: 76px 0;
+}
+
+/* Section heading and paragraph */
+.section-heading {
+    max-width: 690px;
+
+    margin: 0 auto 42px;
+
+    text-align: center;
+}
+
+.section-heading h2 {
+    margin: 0 0 12px;
+
+    font-size: clamp(2rem, 4vw, 3.1rem);
+    line-height: 1.1;
+    letter-spacing: -.045em;
+}
+
+.section-heading p {
+    margin: 0;
+    color: var(--muted);
+}
+
+
+/* =========================================
+   9. FEATURE CARDS
+========================================= */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+/* Individual feature card */
 .feature {
-    padding:25px; border:1px solid var(--line); border-radius:var(--radius);
-    background:linear-gradient(150deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+    padding: 25px;
+
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+
+    background: linear-gradient(
+        150deg,
+        rgba(255, 255, 255, .055),
+        rgba(255, 255, 255, .018)
+    );
 }
-.feature-icon { width:46px; height:46px; display:grid; place-items:center; border-radius:15px; background:rgba(161,139,255,.14); font-size:1.35rem; }
-.feature h3 { margin:17px 0 8px; font-size:1.12rem; }
-.feature p { margin:0; color:var(--muted); font-size:.94rem; }
-.how-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; }
-.step { padding:22px; border-radius:18px; background:var(--panel); border:1px solid var(--line); }
-.step-num { color:var(--pink); font-size:.82rem; font-weight:900; letter-spacing:.1em; }
-.step h3 { margin:10px 0 7px; font-size:1rem; }
-.step p { margin:0; color:var(--muted); font-size:.88rem; }
+
+/* Feature icon box */
+.feature-icon {
+    width: 46px;
+    height: 46px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 15px;
+
+    background: rgba(161, 139, 255, .14);
+
+    font-size: 1.35rem;
+}
+
+.feature h3 {
+    margin: 17px 0 8px;
+    font-size: 1.12rem;
+}
+
+.feature p {
+    margin: 0;
+
+    color: var(--muted);
+    font-size: .94rem;
+}
+
+
+/* =========================================
+   10. HOW IT WORKS CARDS
+========================================= */
+.how-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+/* Individual step card */
+.step {
+    padding: 22px;
+
+    border-radius: 18px;
+
+    background: var(--panel);
+    border: 1px solid var(--line);
+}
+
+/* Step number */
+.step-num {
+    color: var(--pink);
+
+    font-size: .82rem;
+    font-weight: 900;
+    letter-spacing: .1em;
+}
+
+.step h3 {
+    margin: 10px 0 7px;
+    font-size: 1rem;
+}
+
+.step p {
+    margin: 0;
+
+    color: var(--muted);
+    font-size: .88rem;
+}
+
+
+/* =========================================
+   11. IMPACT AND TRUST PANEL
+========================================= */
 .impact-panel {
-    display:grid; grid-template-columns:1fr 1fr; gap:38px; align-items:center;
-    padding:clamp(26px,5vw,52px); border:1px solid var(--line); border-radius:30px;
-    background:radial-gradient(ellipse at 0% 100%,rgba(255,108,170,.13),transparent 45%),var(--panel);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 38px;
+    align-items: center;
+
+    padding: clamp(26px, 5vw, 52px);
+
+    border: 1px solid var(--line);
+    border-radius: 30px;
+
+    background:
+        radial-gradient(
+            ellipse at 0% 100%,
+            rgba(255, 108, 170, .13),
+            transparent 45%
+        ),
+        var(--panel);
 }
-.impact-panel h2 { font-size:clamp(2rem,4vw,3rem); line-height:1.08; letter-spacing:-.05em; margin:0 0 15px; }
-.impact-panel p { color:var(--muted); }
-.impact-list { display:grid; gap:14px; }
-.impact-item { display:flex; gap:12px; align-items:flex-start; }
-.impact-item .tick { flex:0 0 27px; height:27px; border-radius:50%; display:grid; place-items:center; color:var(--green); background:rgba(112,226,176,.12); font-weight:900; }
-.impact-item strong { display:block; margin-bottom:2px; }
-.impact-item span { color:var(--muted); font-size:.9rem; }
-.cta { text-align:center; padding:72px 24px; border:1px solid var(--line); border-radius:30px; background:linear-gradient(120deg,rgba(255,108,170,.13),rgba(161,139,255,.12)); }
-.cta h2 { font-size:clamp(2rem,4vw,3.2rem); letter-spacing:-.05em; line-height:1.08; margin:0 0 14px; }
-.cta p { color:var(--muted); max-width:590px; margin:0 auto 25px; }
-footer { border-top:1px solid var(--line); padding:28px 0; color:#9e97b0; font-size:.82rem; }
-.footer-inner { display:flex; justify-content:space-between; align-items:center; gap:20px; flex-wrap:wrap; }
-.modal-backdrop { display:none; position:fixed; inset:0; z-index:30; padding:20px; background:rgba(0,0,0,.72); align-items:center; justify-content:center; }
-.modal-backdrop.open { display:flex; }
-.modal { width:min(430px,100%); padding:27px; border:1px solid var(--line); border-radius:24px; background:#171424; box-shadow:0 30px 100px rgba(0,0,0,.5); }
-.modal-top { display:flex; align-items:center; justify-content:space-between; gap:15px; }
-.modal h2 { margin:0; font-size:1.5rem; }
-.close { border:0; background:transparent; color:var(--muted); font-size:1.7rem; cursor:pointer; }
-.modal p { color:var(--muted); font-size:.91rem; }
-.field { display:grid; gap:7px; margin:17px 0; width:100%; height: 100%; }
-.field label { font-size:.86rem; font-weight:700; }
-.field input { width:100%; padding:13px 14px; border-radius:12px; border:1px solid var(--line); background:#0e0c18; color:var(--text); font:inherit; }
-.field input:focus { outline:2px solid var(--violet); outline-offset:1px; }
-.modal .btn { width:100%; margin-top:5px; }
-.form-message { min-height:22px; color:var(--green)!important; font-size:.83rem!important; }
-.disclaimer { font-size:.76rem!important; color:#928ba5!important; }
-@media (max-width:850px) {
-    .nav-links { display:none; }
-    .hero-grid { grid-template-columns:1fr; gap:18px; }
-    .hero { padding-top:62px; }
-    .visual { min-height:410px; }
-    .feature-grid { grid-template-columns:repeat(2,1fr); }
-    .how-grid { grid-template-columns:repeat(2,1fr); }
-    .impact-panel { grid-template-columns:1fr; }
+
+.impact-panel h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -.05em;
+
+    margin: 0 0 15px;
 }
-@media (max-width:540px) {
-    .container { width:min(100% - 28px,1120px); }
-    .nav-inner { min-height:66px; }
-    .brand { font-size:1.05rem; }
-    .nav-actions .btn-secondary { display:none; }
-    .hero { padding:48px 0 45px; }
-    h1 { font-size:2.8rem; }
-    .hero-copy { font-size:1rem; }
-    .visual { min-height:370px; }
-    .profile-card { width:250px; }
-    .profile-art { height:215px; }
-    .float-top { right:-2px; top:23px; }
-    .float-bottom { left:-2px; bottom:25px; }
-    section { padding:55px 0; }
-    .feature-grid, .how-grid { grid-template-columns:1fr; }
-    .feature { padding:22px; }
-    .cta { padding:45px 20px; }
+
+.impact-panel p {
+    color: var(--muted);
 }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } *,*::before,*::after { transition:none!important; } }
+
+/* List of trust features */
+.impact-list {
+    display: grid;
+    gap: 14px;
+}
+
+/* Each trust feature */
+.impact-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+/* Green tick circle */
+.impact-item .tick {
+    flex: 0 0 27px;
+
+    height: 27px;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    color: var(--green);
+    background: rgba(112, 226, 176, .12);
+
+    font-weight: 900;
+}
+
+.impact-item strong {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.impact-item span {
+    color: var(--muted);
+    font-size: .9rem;
+}
+
+
+/* =========================================
+   12. FINAL CALL-TO-ACTION SECTION
+========================================= */
+.cta {
+    text-align: center;
+
+    padding: 72px 24px;
+
+    border: 1px solid var(--line);
+    border-radius: 30px;
+
+    background: linear-gradient(
+        120deg,
+        rgba(255, 108, 170, .13),
+        rgba(161, 139, 255, .12)
+    );
+}
+
+.cta h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: -.05em;
+    line-height: 1.08;
+
+    margin: 0 0 14px;
+}
+
+.cta p {
+    color: var(--muted);
+
+    max-width: 590px;
+
+    margin: 0 auto 25px;
+}
+
+
+/* =========================================
+   13. FOOTER
+========================================= */
+footer {
+    border-top: 1px solid var(--line);
+
+    padding: 28px 0;
+
+    color: #9e97b0;
+    font-size: .82rem;
+}
+
+.footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+
+/* =========================================
+   14. POPUP BACKGROUND
+========================================= */
+
+/* Dark overlay covering the homepage */
+.modal-backdrop {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 9999;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, .78);
+
+    align-items: center;
+    justify-content: center;
+
+    overflow-y: auto;
+}
+
+/* JavaScript adds this class to show the popup */
+.modal-backdrop.open {
+    display: flex;
+}
+
+
+/* =========================================
+   15. POPUP BOX
+========================================= */
+.modal {
+    width: min(460px, 100%);
+
+    max-height: 90vh;
+    overflow-y: auto;
+
+    padding: 27px;
+
+    border: 1px solid var(--line);
+    border-radius: 24px;
+
+    background: #171424;
+
+    color: var(--text);
+
+    box-shadow: 0 30px 100px rgba(0, 0, 0, .5);
+}
+
+/* Popup title and close button row */
+.modal-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+.modal h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Close popup button */
+.close {
+    border: 0;
+    background: transparent;
+
+    color: var(--muted);
+
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+/* Popup description */
+.modal > p {
+    color: var(--muted);
+    font-size: .91rem;
+}
+
+
+/* =========================================
+   16. SIGNUP AND LOGIN INPUT FIELDS
+========================================= */
+
+/* First and last name side by side */
+.name-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+/* Each input group */
+.modal .field {
+    display: grid;
+    gap: 7px;
+
+    margin: 15px 0;
+
+    width: 100%;
+    height: auto;
+}
+
+/* Input labels */
+.modal .field label {
+    font-size: .86rem;
+    font-weight: 700;
+
+    color: #e9d5ff;
+}
+
+/* Text input appearance */
+.modal .field input {
+    box-sizing: border-box;
+
+    width: 100%;
+    min-width: 0;
+
+    padding: 13px 14px;
+
+    border-radius: 12px;
+    border: 1px solid var(--line);
+
+    background: #0e0c18;
+
+    color: var(--text);
+
+    font: inherit;
+}
+
+/* Highlight input when selected */
+.modal .field input:focus {
+    outline: 2px solid var(--violet);
+    outline-offset: 1px;
+}
+
+/* Buttons inside the popup */
+.modal .btn {
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* Disabled popup buttons */
+.modal .btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* =========================================
+   17. SWITCH FORM AND FORGOT PASSWORD
+========================================= */
+.text-button {
+    padding: 5px;
+
+    border: 0;
+    background: transparent;
+
+    color: #d9b4ff;
+
+    font: inherit;
+    cursor: pointer;
+}
+
+.text-button:hover {
+    text-decoration: underline;
+}
+
+/* Center the switch login/signup text */
+.switch-text {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Message shown after form submission */
+.form-message {
+    min-height: 22px;
+
+    color: var(--green) !important;
+    font-size: .84rem !important;
+
+    overflow-wrap: anywhere;
+}
+
+/* Small disclaimer text */
+.disclaimer {
+    font-size: .76rem !important;
+    color: #928ba5 !important;
+}
+
+/* Hide forms when their hidden attribute is present */
+[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================
+   18. TABLET RESPONSIVE DESIGN
+========================================= */
+@media (max-width: 850px) {
+
+    /* Hide navigation links on smaller screens */
+    .nav-links {
+        display: none;
+    }
+
+    /* Hero becomes one column */
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .hero {
+        padding-top: 62px;
+    }
+
+    .visual {
+        min-height: 410px;
+    }
+
+    /* Feature cards become two columns */
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Steps become two columns */
+    .how-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Impact panel becomes one column */
+    .impact-panel {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================
+   19. MOBILE RESPONSIVE DESIGN
+========================================= */
+@media (max-width: 540px) {
+
+    .container {
+        width: min(100% - 28px, 1120px);
+    }
+
+    .nav-inner {
+        min-height: 66px;
+    }
+
+    .brand {
+        font-size: 1.05rem;
+    }
+
+    /* Hide secondary login button in small navigation */
+    .nav-actions .btn-secondary {
+        display: none;
+    }
+
+    .hero {
+        padding: 48px 0 45px;
+    }
+
+    h1 {
+        font-size: 2.8rem;
+    }
+
+    .hero-copy {
+        font-size: 1rem;
+    }
+
+    .visual {
+        min-height: 370px;
+    }
+
+    .profile-card {
+        width: 250px;
+    }
+
+    .profile-art {
+        height: 215px;
+    }
+
+    .float-top {
+        right: -2px;
+        top: 23px;
+    }
+
+    .float-bottom {
+        left: -2px;
+        bottom: 25px;
+    }
+
+    section {
+        padding: 55px 0;
+    }
+
+    .feature-grid,
+    .how-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .feature {
+        padding: 22px;
+    }
+
+    .cta {
+        padding: 45px 20px;
+    }
+}
+
+
+/* =========================================
+   20. MOBILE POPUP ADJUSTMENTS
+========================================= */
+@media (max-width: 480px) {
+
+    .modal {
+        padding: 20px;
+    }
+
+    /* Stack first and last name on narrow screens */
+    .name-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}
+
+
+/* =========================================
+   21. ACCESSIBILITY
+========================================= */
+
+/* Reduce animations for users who request reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+    }
+}
