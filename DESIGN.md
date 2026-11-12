@@ -1,64 +1,44 @@
 <!-- MIT licensed. Copyright and license: https://opendesignmd.com/licenses/ -->
 
-# How Loveeez Dating Design System is Designed
+# How Jan.ai Design System is Applied
 
 ## Overview
 
-Loveeez Dating is built around soft, rounded visual language and pastel candy colors inspired by Japanese character storytelling and modern dating platforms (Tinder, Bumble, Hinge). The design system prioritizes emotional warmth, psychological safety, and playful accessibility through blob-like shapes, generous corner radii, pill buttons, and responsive micro-interactions. Every surface feels cushiony and approachable—cards curve gently, buttons are fully pill-shaped (`9999px`), and typography alternates between bouncy display faces and friendly rounded gothic text.
+Jan presents an open-source, developer-grade aesthetic that pairs rigorous Swiss-style grotesque typography with stark monochrome contrast and neo-brutalist graphic depth. The interface utilizes pure black against pure white for chrome and primary actions, with vibrant pastel color fields (`#FFD21E`, `#BBF7D0`, `#E9D5FF`, `#458EDF`) reserved for feature cards, tags, and status badges.
 
-## Architecture & Data Management (Top Dating Apps Comparison)
-
-Modern dating applications like Tinder, Bumble, and Hinge follow a decoupled, state-driven client architecture:
-
-1. **Deck & Feed Management**:
-   - Algorithmic deck stack with eager card pre-fetching (top 3 cards rendered in DOM: active, undercard, background).
-   - Multi-gesture input handling (touch drag, mouse drag, keyboard arrows, and action bar pill buttons).
-   - Reversible action stack (`undo` / rewind queue for accidental passes).
-
-2. **Match Engine & Compatibility**:
-   - Island / Vibe based taxonomy (Pinky Island for Romance, Kappe Island for Active/Adventures, Central Island for Cozy & Deep Chats).
-   - Mutual match triggers with celebratory modals, instant icebreaker suggestions, and sound/haptic feedback.
-
-3. **Real-time Messaging & Presence**:
-   - Chat thread state with typing indicators, timestamp grouping, read receipts, and icebreaker prompts.
-   - Local state cache with optimistic UI updates and local persistence.
-
-4. **Authentication & Identity**:
-   - Google Sign-In identity provider integration with one-tap authentication.
-   - Verified profile badges and safety-first reporting/blocking controls.
+All emojis are strictly replaced with clean, minimalist geometric SVG icons. Depth is achieved entirely through hard, flat cut-paper shadows (`box-shadow: 4px 4px 0 #000000`) and solid 2px black outlines (`border: 2px solid #000000`), completely avoiding blurry gradients or soft drop shadows.
 
 ## Color Tokens
 
 | token | value | use |
 |---|---|---|
-| ink | #3D3D3D | Primary text, character outlines, diagram connectors |
-| canvas | #FFFFFF | Speech bubbles, card surfaces, text on dark surfaces |
-| surface-pink | #FFE4F0 | Primary page background, romantic island theme, match glow |
-| surface-cyan | #A8F0F8 | Playful island theme, hero accent surfaces |
-| surface-mint | #C8F8E8 | Active card backgrounds, compatibility chips |
-| surface-yellow | #FFF8C8 | Central island card, warm accent highlights |
-| surface-lavender | #E8E0F8 | Tertiary card backgrounds, secondary tags |
-| accent-pink | #FF88B8 | Primary pill buttons, like action, active states |
-| accent-cyan | #38D8F0 | Secondary buttons, refresh icons, message bubble |
-| accent-coral | #FF6B6B | Nope/pass action, alerts, badge notifications |
-| muted-ink | #888888 | Secondary text, captions, subtitles |
+| ink | #000000 | Primary text, borders, primary button fills, hard shadows |
+| ink-secondary | #1F2937 | Body text on light backgrounds, secondary headings |
+| ink-tertiary | #374151 | Muted text, captions, metadata |
+| muted | #4B5563 | De-emphasized labels, subtitles |
+| canvas | #FFFFFF | Background, inverted text on dark surfaces |
+| surface | #2C2C2C | Dark stat cards, terminal containers |
+| surface-secondary | #404040 | Secondary dark UI components |
+| accent-blue | #458EDF | Verified badges, primary system accents |
+| accent-indigo | #5765F2 | Integration accents |
+| accent-yellow | #FFD21E | Highlight cards, compatibility badges |
+| accent-green | #BBF7D0 | Active status, match success indicators |
+| accent-purple | #E9D5FF | Layered offset cards, category chips |
+| accent-cream | #FEF08A | Profile note backgrounds, sticky cards |
 
 ## Typography
 
-| token | family | size | weight | use |
-|---|---|---:|---:|---|
-| hero-display | 'Cherry Bomb One', cursive | 3.5rem - 4.5rem | 400 | Page titles, large celebratory headers |
-| section-display | 'Cherry Bomb One', cursive | 2rem - 2.5rem | 400 | Card titles, match notices |
-| label | 'Coiny', cursive | 0.875rem - 1.1rem | 400 | Buttons, tags, badges, swipe stamps |
-| body | 'Zen Maru Gothic', sans-serif | 0.95rem - 1rem | 400 | Descriptions, bios, dialogue |
-| body-bold | 'Zen Maru Gothic', sans-serif | 0.95rem - 1rem | 700 | Emphasized text, speech bubbles |
-| navigation | 'Zen Maru Gothic', sans-serif | 0.875rem | 700 | Navigation, tabs, status |
+Built using geometric grotesques (`Plus Jakarta Sans` / `Inter` / `Space Grotesk`) with tight tracking at display sizes and neutral tracking for body text:
 
-## Components
+- **Hero Display:** 3.5rem - 4.5rem, Weight: 800, Tracking: -0.04em
+- **Section Heading:** 2.25rem, Weight: 700, Tracking: -0.03em
+- **Feature Title:** 1.5rem, Weight: 700, Tracking: -0.02em
+- **Body & Controls:** 0.95rem - 1rem, Weight: 400 & 500, Leading: 1.5
+- **Labels & Tags:** 0.8125rem, Weight: 600, Uppercase or Title Case
 
-- **Pill Buttons**: Full `border-radius: 9999px`, solid pastel/accent fills, zero harsh box-shadows.
-- **Swipeable Card Stack**: Smooth transform transitions, realistic rotation proportional to horizontal drag distance, dynamic LIKE/NOPE stamps.
-- **Speech Bubbles**: Rounded rectangular badges with directional triangle tails.
-- **Island Badges**: Color-coded location and vibe tags for matching compatibility.
-- **Chat Drawer**: Sliding panel with real-time mockup messaging, automated companion replies, and quick prompts.
-- **Google Auth Modal**: Authentic Google Sign-in flow with profile picture and email synchronization.
+## Key Principles
+
+1. **Zero Emojis:** All UI indicators, statuses, and navigation items use high-contrast monochrome and two-tone SVG line icons.
+2. **2px Solid Borders:** Every card, button, input, and modal features crisp `2px solid #000000` boundaries.
+3. **Hard 4px Shadows:** Flat `4px 4px 0px #000000` shadows with hover transform `translate(-2px, -2px)` and shadow expansion `6px 6px 0px #000000`.
+4. **Information Architecture:** Seamless flow between Landing Page, Login / Authentication portal, and the full Discovery & Chat Dashboard.

@@ -1,6 +1,6 @@
 // ============================================================================
-// LOVEEEZ DATING APP - CHATS & REAL-TIME MESSAGING ENGINE
-// Pre-populated conversations, icebreakers, and automated companion responses
+// JAN.AI EDITORIAL DATING SYSTEM - CHATS & MESSAGING ENGINE
+// Professional dialogue threads, icebreaker prompts, and automated responses
 // ============================================================================
 
 export const INITIAL_MATCHES = [
@@ -8,13 +8,13 @@ export const INITIAL_MATCHES = [
     profileId: "profile-1",
     matchedAt: "Just now",
     unread: true,
-    lastMessage: "Hey! Your vibe is so warm ✨ What's your comfort cafe spot?"
+    lastMessage: "Hello! Noticed your appreciation for clean systems. What's your current favorite cafe or reading sanctuary?"
   },
   {
     profileId: "profile-3",
     matchedAt: "2h ago",
     unread: false,
-    lastMessage: "Winner picks the ramen spot 🍜"
+    lastMessage: "Up for checking out that contemporary photography exhibit this Thursday?"
   }
 ];
 
@@ -23,7 +23,7 @@ export const INITIAL_MESSAGES = {
     {
       id: "m-101",
       sender: "them",
-      text: "Hey! Your vibe is so warm ✨ What's your comfort anime or favorite cafe spot?",
+      text: "Hello! Noticed your appreciation for clean systems. What's your current favorite cafe or reading sanctuary?",
       time: "1:42 PM"
     }
   ],
@@ -31,61 +31,61 @@ export const INITIAL_MESSAGES = {
     {
       id: "m-301",
       sender: "them",
-      text: "Yo! Ready for a friendly Mario Kart showdown? 🎮",
+      text: "Hey! Impressed by your focus. Up for an espresso or a visit to the contemporary photography exhibit this week?",
       time: "11:15 AM"
     },
     {
       id: "m-302",
       sender: "me",
-      text: "Only if you can handle Rainbow Road without falling off! 🏎️",
+      text: "Definitely. I've been meaning to check out the new architectural gallery in Roppongi as well.",
       time: "11:20 AM"
     },
     {
       id: "m-303",
       sender: "them",
-      text: "Haha challenge accepted! Winner picks the ramen spot 🍜",
+      text: "Up for checking out that contemporary photography exhibit this Thursday?",
       time: "11:22 AM"
     }
   ]
 };
 
 export const ICEBREAKER_PROMPTS = [
-  "✨ What's your ideal Sunday morning?",
-  "☕ Matcha latte or pour-over coffee?",
-  "🎮 Arcade challenge or quiet bookstore stroll?",
-  "🍰 Two truths and one sweet lie?",
-  "🎵 What song is stuck in your head today?"
+  "What is your quintessential weekend unwinding ritual?",
+  "What architectural or design detail recently caught your attention?",
+  "Early morning espresso or evening listening bar?",
+  "What non-fiction book or journal has shaped your thinking lately?",
+  "Tell me about a side project you're currently passionate about."
 ];
 
 export const BOT_RESPONSES = {
   "profile-1": [
-    "Aww I love that! 🥰 There's this tiny hidden garden cafe in Shibuya with the flakiest matcha croissants, we should definitely check it out!",
-    "That sounds so cozy. I was actually just sketching some character designs while listening to lofi music ✨",
-    "Haha you have great taste! What kind of books or anime are you into lately?"
+    "That aligns with my taste completely. There is an intimate, quiet roastery in Shibuya with natural light and exceptional filter brew—we should plan a visit.",
+    "Very thoughtful. I find that intentional spaces make a tremendous difference in how we connect.",
+    "I appreciate your directness. What other creative disciplines inspire your daily routine?"
   ],
   "profile-2": [
-    "That's so thoughtful. Slow mornings with fresh tea and records are the best kind of therapy ☕",
-    "I'm actually in my pottery studio right now! Just finished throwing a set of peach-colored mugs.",
-    "Haha deal! I'll hold you to that promise. Do you like thrift shopping too?"
+    "That is such a grounded perspective. Slow mornings with natural light and pour-overs are essential.",
+    "Currently at my ceramics atelier trimming porcelain mugs. Would love to show you the studio space sometime.",
+    "Agreed. Genuine conversation without rushed expectations is rare and valuable."
   ],
   "profile-3": [
-    "Hahaha no way! You're definitely getting wrecked on Rainbow Road 🏁",
-    "Let's go to the Akihabara Sega arcade this weekend, they just got the newest rhythm drum game!",
-    "Spicy tonkotsu ramen with extra green onions is non-negotiable though 🍜 You in?"
+    "Sounds like a plan. Let's aim for Thursday afternoon around 5 PM before the gallery gets crowded.",
+    "Agreed. High quality design and zero pretension is the ideal combination.",
+    "I'll send over the location pin—they have a fantastic listening room adjacent to the exhibition space."
   ],
   "profile-4": [
-    "Ooh that sounds delicious! 🍓 I'm testing a new strawberry rhubarb tart today—would love your opinion!",
-    "Nothing beats sharing fresh warm pastries on a weekend stroll.",
-    "Haha you're making me blush! Promise you'll be my official taste-tester?"
+    "A refined choice. The balance of acidity and sweetness in a single origin roast is much like balancing pastry elements.",
+    "I would be glad to share some freshly baked financiers on our first meetup.",
+    "Looking forward to hearing more about your projects in person."
   ],
   "profile-5": [
-    "Inokashira park is blooming right now! The cherry trees near the pond are stunning 🌸",
-    "That's such a gentle perspective. I love people who appreciate quiet nature moments.",
-    "We should pack some iced tea and sketchbooks for a weekend picnic!"
+    "Inokashira park courtyard is particularly serene this week. The autumn foliage is beginning to turn.",
+    "That is a very rare and admirable quality. Consideration for one's surroundings matters immensely.",
+    "We could easily bring sketchbooks or a book and spend a quiet afternoon along the canal."
   ],
   "profile-6": [
-    "Yes!! That song gives the best midnight drive energy 🎛️",
-    "I'm working on a new synth-pop DJ mix right now, let me send you the tracklist later tonight!",
-    "Haha homemade crispy gyoza is ready whenever you are! 🥟"
+    "That synthesizer track you mentioned has phenomenal low-end fidelity.",
+    "I'm putting together a new analog hardware set tonight. I'll share the preview track with you.",
+    "Sounds great. Let's meet at the craft coffee spot near the station."
   ]
 };

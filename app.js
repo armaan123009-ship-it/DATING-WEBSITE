@@ -1,21 +1,22 @@
 // ============================================================================
-// LOVEEEZ DATING APPLICATION - CORE CONTROLLER & STATE ENGINE
+// JAN.AI EDITORIAL DATING APP - CONTROLLER & STATE ARCHITECTURE
+// Clean, professional, zero emojis, full multi-view navigation & messaging
 // ============================================================================
 
-import { PROFILES, ISLANDS } from './data/profiles.js';
+import { PROFILES, CATEGORIES } from './data/profiles.js';
 import { INITIAL_MATCHES, INITIAL_MESSAGES, ICEBREAKER_PROMPTS, BOT_RESPONSES } from './data/chats.js';
 
-class LoveeezDatingApp {
+class JanDatingApp {
   constructor() {
-    this.storageKey = 'loveeez_dating_state_v1';
+    this.storageKey = 'jandate_app_state_v1';
     this.initState();
     this.initDOM();
     this.bindEvents();
-    this.renderAll();
+    this.renderCurrentView();
   }
 
   // --------------------------------------------------------------------------
-  // STATE INITIALIZATION & LOCALSTORAGE SYNC
+  // 1. STATE INITIALIZATION & LOCALSTORAGE
   // --------------------------------------------------------------------------
   initState() {
     const saved = localStorage.getItem(this.storageKey);
@@ -25,7 +26,7 @@ class LoveeezDatingApp {
         this.user = parsed.user || this.getDefaultUser();
         this.matches = parsed.matches || INITIAL_MATCHES;
         this.chats = parsed.chats || INITIAL_MESSAGES;
-        this.swiped = parsed.swiped || {}; // profileId -> 'like' | 'pass' | 'superlike'
+        this.swiped = parsed.swiped || {};
         this.activeFilter = parsed.activeFilter || 'all';
       } catch (e) {
         this.resetDefaultState();
@@ -34,16 +35,10 @@ class LoveeezDatingApp {
       this.resetDefaultState();
     }
 
-    this.activeTab = 'discover';
+    // Default View: 'home', 'login', or 'dashboard'
+    this.currentView = 'home';
+    this.activeDashTab = 'discover';
     this.activeChatId = this.matches.length > 0 ? this.matches[0].profileId : null;
-    this.dragState = {
-      isDragging: false,
-      startX: 0,
-      startY: 0,
-      currentX: 0,
-      currentY: 0,
-      cardEl: null
-    };
   }
 
   resetDefaultState() {
@@ -57,178 +52,226 @@ class LoveeezDatingApp {
 
   getDefaultUser() {
     return {
-      name: "Armaan",
-      age: 23,
+      name: "Armaan Yadav",
+      email: "armaan123009@gmail.com",
       city: "Tokyo",
-      bio: "Coffee enthusiast, music lover, and exploring cozy city corners ☕✨",
+      role: "Design Engineer",
+      bio: "Focusing on distributed interfaces, editorial typography, and quiet specialty coffee roasters.",
       avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80",
-      isLoggedIn: true,
-      island: "pinky"
+      verified: true,
+      isLoggedIn: true
     };
   }
 
   saveState() {
-    const data = {
+    const state = {
       user: this.user,
       matches: this.matches,
       chats: this.chats,
       swiped: this.swiped,
       activeFilter: this.activeFilter
     };
-    localStorage.setItem(this.storageKey, JSON.stringify(data));
+    localStorage.setItem(this.storageKey, JSON.stringify(state));
   }
 
   // --------------------------------------------------------------------------
-  // DOM ELEMENT REFERENCES
+  // 2. DOM INITIALIZATION
   // --------------------------------------------------------------------------
   initDOM() {
-    // Navigation Tabs
-    this.tabButtons = document.querySelectorAll('[data-tab-target]');
-    this.tabPanes = document.querySelectorAll('.tab-pane');
-    this.matchesBadge = document.getElementById('matchesBadge');
-    
-    // Header controls
-    this.userAvatarBtn = document.getElementById('userAvatarBtn');
-    this.headerUserAvatar = document.getElementById('headerUserAvatar');
-    this.headerGoogleBtn = document.getElementById('headerGoogleBtn');
-    
-    // Deck elements
-    this.deckStage = document.getElementById('deckStage');
-    this.islandFilterBar = document.getElementById('islandFilterBar');
-    this.btnRewind = document.getElementById('btnRewind');
-    this.btnPass = document.getElementById('btnPass');
-    this.btnSuperlike = document.getElementById('btnSuperlike');
-    this.btnLike = document.getElementById('btnLike');
-    this.btnInfo = document.getElementById('btnInfo');
+    // High-level Views
+    this.views = {
+      home: document.getElementById('viewHome'),
+      login: document.getElementById('viewLogin'),
+      dashboard: document.getElementById('viewDashboard')
+    };
 
-    // Chat elements
-    this.newMatchesRow = document.getElementById('newMatchesRow');
-    this.chatThreadsList = document.getElementById('chatThreadsList');
-    this.chatPane = document.getElementById('chatPane');
+    // Nav triggers
+    this.navViewLinks = document.querySelectorAll('[data-route]');
+    this.navUserBtn = document.getElementById('navUserBtn');
+    this.navUserAvatar = document.getElementById('navUserAvatar');
+
+    // Dashboard Sub-navigation Tabs
+    this.dashTabButtons = document.querySelectorAll('[data-dash-tab]');
+    this.dashTabPanes = document.querySelectorAll('.dash-tab-pane');
+    this.dashMatchesBadge = document.getElementById('dashMatchesBadge');
+
+    // Deck Elements
+    this.janCardArena = document.getElementById('janCardArena');
+    this.categoryFilterRow = document.getElementById('categoryFilterRow');
+    this.btnDeckPass = document.getElementById('btnDeckPass');
+    this.btnDeckLike = document.getElementById('btnDeckLike');
+    this.btnDeckRewind = document.getElementById('btnDeckRewind');
+    this.btnDeckInfo = document.getElementById('btnDeckInfo');
+
+    // Chat Elements
+    this.threadsList = document.getElementById('threadsList');
     this.chatPartnerAvatar = document.getElementById('chatPartnerAvatar');
     this.chatPartnerName = document.getElementById('chatPartnerName');
-    this.chatMessagesArea = document.getElementById('chatMessagesArea');
-    this.icebreakerDrawer = document.getElementById('icebreakerDrawer');
+    this.messageStreamBody = document.getElementById('messageStreamBody');
+    this.conversationIcebreakers = document.getElementById('conversationIcebreakers');
     this.chatInput = document.getElementById('chatInput');
-    this.chatSendBtn = document.getElementById('chatSendBtn');
+    this.btnSendMessage = document.getElementById('btnSendMessage');
 
     // Modals
     this.matchModal = document.getElementById('matchModal');
-    this.matchPartnerAvatar = document.getElementById('matchPartnerAvatar');
     this.matchPartnerName = document.getElementById('matchPartnerName');
-    this.matchChatBtn = document.getElementById('matchChatBtn');
-    this.matchKeepBtn = document.getElementById('matchKeepBtn');
+    this.matchPartnerAvatar = document.getElementById('matchPartnerAvatar');
+    this.btnMatchChat = document.getElementById('btnMatchChat');
+    this.btnMatchContinue = document.getElementById('btnMatchContinue');
 
-    this.googleModal = document.getElementById('googleModal');
-    this.googleSignInBtn = document.getElementById('googleSignInBtn');
-
-    this.profileModal = document.getElementById('profileModal');
-    this.profileModalBody = document.getElementById('profileModalBody');
+    this.profileDetailModal = document.getElementById('profileDetailModal');
+    this.profileModalContent = document.getElementById('profileModalContent');
   }
 
   // --------------------------------------------------------------------------
-  // EVENT BINDINGS
+  // 3. EVENT BINDINGS
   // --------------------------------------------------------------------------
   bindEvents() {
-    // Tab switching
-    this.tabButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = btn.dataset.tabTarget;
-        this.switchTab(target);
+    // Navigation Routing
+    this.navViewLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const route = link.dataset.route;
+        this.navigateTo(route);
       });
     });
 
-    // Deck action buttons
-    this.btnPass.addEventListener('click', () => this.swipeTopCard('pass'));
-    this.btnLike.addEventListener('click', () => this.swipeTopCard('like'));
-    this.btnSuperlike.addEventListener('click', () => this.swipeTopCard('superlike'));
-    this.btnRewind.addEventListener('click', () => this.rewindLastSwipe());
-    this.btnInfo.addEventListener('click', () => this.showCurrentCardDetails());
+    // Dashboard Sub-tabs
+    this.dashTabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.dashTab;
+        this.switchDashTab(tab);
+      });
+    });
 
-    // Keyboard controls (Arrow keys)
+    // Deck Action Triggers
+    if (this.btnDeckPass) this.btnDeckPass.addEventListener('click', () => this.swipeTopCard('pass'));
+    if (this.btnDeckLike) this.btnDeckLike.addEventListener('click', () => this.swipeTopCard('like'));
+    if (this.btnDeckRewind) this.btnDeckRewind.addEventListener('click', () => this.rewindLastSwipe());
+    if (this.btnDeckInfo) this.btnDeckInfo.addEventListener('click', () => this.showCardDetails());
+
+    // Keyboard Shortcuts
     window.addEventListener('keydown', (e) => {
-      if (this.activeTab !== 'discover' || document.activeElement.tagName === 'INPUT') return;
+      if (this.currentView !== 'dashboard' || this.activeDashTab !== 'discover') return;
+      if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+
       if (e.key === 'ArrowLeft') this.swipeTopCard('pass');
       if (e.key === 'ArrowRight') this.swipeTopCard('like');
-      if (e.key === 'ArrowUp') this.swipeTopCard('superlike');
       if (e.key === 'ArrowDown') this.rewindLastSwipe();
       if (e.key === ' ') {
         e.preventDefault();
-        this.showCurrentCardDetails();
+        this.showCardDetails();
       }
     });
 
-    // Chat sending
-    this.chatSendBtn.addEventListener('click', () => this.sendMessage());
-    this.chatInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') this.sendMessage();
-    });
+    // Chat Message Sending
+    if (this.btnSendMessage) {
+      this.btnSendMessage.addEventListener('click', () => this.sendChatMessage());
+    }
+    if (this.chatInput) {
+      this.chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') this.sendChatMessage();
+      });
+    }
 
-    // Header & Google Auth
-    this.userAvatarBtn.addEventListener('click', () => this.switchTab('profile'));
-    this.headerGoogleBtn.addEventListener('click', () => this.openGoogleModal());
-    this.googleSignInBtn.addEventListener('click', () => this.completeGoogleAuth());
+    // Google Sign-In Triggers
+    const googleAuthBtn = document.getElementById('googleAuthBtn');
+    if (googleAuthBtn) {
+      googleAuthBtn.addEventListener('click', () => this.completeGoogleAuth());
+    }
 
-    // Match Modal actions
-    this.matchKeepBtn.addEventListener('click', () => this.closeModals());
-    this.matchChatBtn.addEventListener('click', () => {
-      this.closeModals();
-      this.switchTab('chats');
-    });
+    const guestLoginBtn = document.getElementById('guestLoginBtn');
+    if (guestLoginBtn) {
+      guestLoginBtn.addEventListener('click', () => this.navigateTo('dashboard'));
+    }
 
-    // Modal Close buttons
+    // Modal Triggers
+    if (this.btnMatchContinue) {
+      this.btnMatchContinue.addEventListener('click', () => this.closeModals());
+    }
+    if (this.btnMatchChat) {
+      this.btnMatchChat.addEventListener('click', () => {
+        this.closeModals();
+        this.switchDashTab('chats');
+      });
+    }
+
     document.querySelectorAll('[data-close-modal]').forEach(btn => {
       btn.addEventListener('click', () => this.closeModals());
     });
   }
 
   // --------------------------------------------------------------------------
-  // TAB NAVIGATION
+  // 4. ROUTING & VIEW CONTROLLER
   // --------------------------------------------------------------------------
-  switchTab(tabId) {
-    this.activeTab = tabId;
-    this.tabButtons.forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.tabTarget === tabId);
-    });
-    this.tabPanes.forEach(pane => {
-      pane.classList.toggle('active', pane.id === `${tabId}Tab`);
+  navigateTo(viewName) {
+    this.currentView = viewName;
+    this.renderCurrentView();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  renderCurrentView() {
+    // Toggle active view container
+    Object.keys(this.views).forEach(key => {
+      if (this.views[key]) {
+        this.views[key].classList.toggle('active', key === this.currentView);
+      }
     });
 
-    if (tabId === 'chats') {
-      this.renderChatsView();
-    } else if (tabId === 'discover') {
+    // Update Nav Link Active states
+    this.navViewLinks.forEach(link => {
+      link.classList.toggle('active', link.dataset.route === this.currentView);
+    });
+
+    if (this.currentView === 'dashboard') {
+      this.renderDashboard();
+    }
+  }
+
+  switchDashTab(tabName) {
+    this.activeDashTab = tabName;
+    this.dashTabButtons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.dashTab === tabName);
+    });
+    this.dashTabPanes.forEach(pane => {
+      pane.classList.toggle('active', pane.id === `dashTab_${tabName}`);
+    });
+
+    if (tabName === 'discover') {
       this.renderDeck();
+    } else if (tabName === 'chats') {
+      this.renderChatWorkspace();
     }
   }
 
   // --------------------------------------------------------------------------
-  // DECK & CARD SWIPING LOGIC
+  // 5. DECK & CARD SWIPE ENGINE (JAN.AI SPECIFICATION)
   // --------------------------------------------------------------------------
   getActiveDeck() {
     return PROFILES.filter(p => {
-      // Must not be already swiped
       if (this.swiped[p.id]) return false;
-      // Filter by island
-      if (this.activeFilter !== 'all' && p.island !== this.activeFilter) return false;
+      if (this.activeFilter !== 'all' && p.category !== this.activeFilter) return false;
       return true;
     });
   }
 
   renderDeck() {
-    this.renderIslandFilters();
+    this.renderCategoryFilters();
     const deck = this.getActiveDeck();
-    this.deckStage.innerHTML = '';
+    this.janCardArena.innerHTML = '';
 
     if (deck.length === 0) {
-      this.deckStage.innerHTML = `
-        <div class="deck-empty">
-          <div class="empty-blob">🌸</div>
-          <h3>You're All Caught Up!</h3>
-          <p>There are no more profiles in this island right now. Try switching islands or check back later!</p>
-          <button class="pill-btn pill-primary" id="btnResetDeck">↺ Reset Swipes</button>
+      this.janCardArena.innerHTML = `
+        <div style="background:var(--canvas); border:2px solid var(--ink); border-radius:var(--radius-md); box-shadow:var(--shadow-xl); padding:3rem 2rem; text-align:center; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.25rem;">
+          <div style="width:3.5rem; height:3.5rem; border:2px solid var(--ink); border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--accent-yellow); box-shadow:var(--shadow-sm);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <h3 style="font-size:1.75rem; font-weight:800; letter-spacing:-0.03em;">Queue Completed</h3>
+          <p style="color:var(--muted); font-size:0.95rem; max-width:320px; line-height:1.5;">You have reviewed all available profiles within this focus area. Reset your queue or select another filter category.</p>
+          <button class="btn btn-primary" id="btnResetJanDeck">Reset Discovery Queue</button>
         </div>
       `;
-      const resetBtn = document.getElementById('btnResetDeck');
+      const resetBtn = document.getElementById('btnResetJanDeck');
       if (resetBtn) {
         resetBtn.addEventListener('click', () => {
           this.swiped = {};
@@ -239,76 +282,79 @@ class LoveeezDatingApp {
       return;
     }
 
-    // Render up to 3 cards for performance and 3D stacking
+    // Render top 3 stacked cards
     const topThree = deck.slice(0, 3);
     topThree.reverse().forEach((profile, index) => {
       const cardEl = this.createCardElement(profile, index, topThree.length);
-      this.deckStage.appendChild(cardEl);
+      this.janCardArena.appendChild(cardEl);
     });
 
-    // Setup drag events on the top-most card
-    const topCardEl = this.deckStage.lastElementChild;
-    if (topCardEl) {
-      this.attachDragEvents(topCardEl);
+    // Attach gestures to topmost card
+    const topCard = this.janCardArena.lastElementChild;
+    if (topCard) {
+      this.attachCardGestures(topCard);
     }
   }
 
-  renderIslandFilters() {
-    this.islandFilterBar.innerHTML = '';
-    ISLANDS.forEach(island => {
+  renderCategoryFilters() {
+    this.categoryFilterRow.innerHTML = '';
+    CATEGORIES.forEach(cat => {
       const btn = document.createElement('button');
-      btn.className = `filter-pill ${this.activeFilter === island.id ? 'active' : ''}`;
-      btn.innerHTML = `<span>${island.emoji}</span> <span>${island.name}</span>`;
+      btn.className = `cat-filter-btn ${this.activeFilter === cat.id ? 'active' : ''}`;
+      btn.innerHTML = `<span>${cat.label}</span>`;
       btn.addEventListener('click', () => {
-        this.activeFilter = island.id;
+        this.activeFilter = cat.id;
         this.saveState();
         this.renderDeck();
       });
-      this.islandFilterBar.appendChild(btn);
+      this.categoryFilterRow.appendChild(btn);
     });
   }
 
   createCardElement(profile, reverseIndex, totalCount) {
-    const isTop = reverseIndex === totalCount - 1;
     const isSecond = reverseIndex === totalCount - 2;
     const isThird = reverseIndex === totalCount - 3;
 
     const card = document.createElement('div');
-    card.className = `swipe-card ${isSecond ? 'is-second' : ''} ${isThird ? 'is-third' : ''}`;
+    card.className = `jan-swipe-card ${isSecond ? 'card-depth-2' : ''} ${isThird ? 'card-depth-3' : ''}`;
     card.dataset.profileId = profile.id;
 
     card.innerHTML = `
-      <div class="card-media">
+      <div class="jan-card-media">
         <img src="${profile.photos[0]}" alt="${profile.name}">
-        <div class="card-island-badge">${profile.islandName}</div>
-        <div class="card-compat-badge">💖 ${profile.compatibility}% Match</div>
-        
-        <!-- Action stamps -->
-        <div class="card-stamp stamp-like">LIKE</div>
-        <div class="card-stamp stamp-nope">NOPE</div>
-        <div class="card-stamp stamp-super">SUPER LIKE</div>
+        <div class="badge-tag-overlay">${profile.categoryLabel}</div>
+        <div class="badge-compat-overlay">${profile.compatibility}% COMPATIBILITY</div>
+
+        <!-- Stamp Indicators -->
+        <div class="card-stamp-indicator stamp-accept">CONNECT</div>
+        <div class="card-stamp-indicator stamp-reject">PASS</div>
       </div>
 
-      <div class="card-details">
+      <div class="jan-card-body">
         <div>
-          <div class="card-title-row">
+          <div class="card-title-group">
             <div>
-              <span class="card-name">${profile.name}</span>
-              <span class="card-age">${profile.age}</span>
-              ${profile.verified ? '<span class="verified-icon" title="Verified Profile">✓</span>' : ''}
+              <span class="card-display-name">${profile.name}</span>
+              <span class="card-display-age">${profile.age}</span>
+              ${profile.verified ? `
+                <span class="verified-badge-icon" title="Verified Profile">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </span>
+              ` : ''}
             </div>
+            <span style="font-size:0.75rem; font-weight:700; color:var(--muted);">${profile.distance}</span>
           </div>
-          <div class="card-subtitle">📍 ${profile.city} · ${profile.occupation}</div>
-          <p class="card-bio">${profile.bio}</p>
+          <div class="card-role-line">${profile.occupation} · ${profile.city}</div>
+          <p class="card-bio-clamp">${profile.bio}</p>
         </div>
 
         <div>
-          <div class="card-tags">
-            ${profile.tags.slice(0, 3).map(tag => `<span class="interest-tag">${tag}</span>`).join('')}
+          <div class="card-tags-cloud">
+            ${profile.tags.slice(0, 3).map(tag => `<span class="tag-capsule">${tag}</span>`).join('')}
           </div>
-          <div class="card-prompt-bubble">
-            <strong>${profile.prompts[0].question}</strong>
-            <span>"${profile.prompts[0].answer}"</span>
+          <div style="background:var(--accent-cream); border:1.5px solid var(--ink); border-radius:var(--radius-sm); padding:0.5rem 0.75rem; margin-top:0.6rem; font-size:0.8125rem;">
+            <strong style="display:block; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.04em;">${profile.prompts[0].question}</strong>
+            <span style="color:var(--ink-secondary); font-weight:600;">"${profile.prompts[0].answer}"</span>
           </div>
         </div>
       </div>
@@ -317,19 +363,15 @@ class LoveeezDatingApp {
     return card;
   }
 
-  // --------------------------------------------------------------------------
-  // DRAG & GESTURE SYSTEM
-  // --------------------------------------------------------------------------
-  attachDragEvents(cardEl) {
+  attachCardGestures(cardEl) {
     let startX = 0;
     let startY = 0;
     let currentX = 0;
     let currentY = 0;
     let isDragging = false;
 
-    const stampLike = cardEl.querySelector('.stamp-like');
-    const stampNope = cardEl.querySelector('.stamp-nope');
-    const stampSuper = cardEl.querySelector('.stamp-super');
+    const stampAccept = cardEl.querySelector('.stamp-accept');
+    const stampReject = cardEl.querySelector('.stamp-reject');
 
     const onStart = (e) => {
       isDragging = true;
@@ -345,47 +387,35 @@ class LoveeezDatingApp {
       currentX = point.clientX - startX;
       currentY = point.clientY - startY;
 
-      const rotate = currentX * 0.08;
+      const rotate = currentX * 0.06;
       cardEl.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) rotate(${rotate}deg)`;
 
-      // Dynamic stamp opacity
       if (currentX > 30) {
-        stampLike.style.opacity = Math.min((currentX - 30) / 90, 1);
-        stampNope.style.opacity = 0;
-        stampSuper.style.opacity = 0;
+        stampAccept.style.opacity = Math.min((currentX - 30) / 90, 1);
+        stampReject.style.opacity = 0;
       } else if (currentX < -30) {
-        stampNope.style.opacity = Math.min((Math.abs(currentX) - 30) / 90, 1);
-        stampLike.style.opacity = 0;
-        stampSuper.style.opacity = 0;
-      } else if (currentY < -40) {
-        stampSuper.style.opacity = Math.min((Math.abs(currentY) - 40) / 80, 1);
-        stampLike.style.opacity = 0;
-        stampNope.style.opacity = 0;
+        stampReject.style.opacity = Math.min((Math.abs(currentX) - 30) / 90, 1);
+        stampAccept.style.opacity = 0;
       } else {
-        stampLike.style.opacity = 0;
-        stampNope.style.opacity = 0;
-        stampSuper.style.opacity = 0;
+        stampAccept.style.opacity = 0;
+        stampReject.style.opacity = 0;
       }
     };
 
     const onEnd = () => {
       if (!isDragging) return;
       isDragging = false;
-      cardEl.style.transition = 'transform 0.25s var(--ease-smooth), opacity 0.2s ease';
+      cardEl.style.transition = 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease';
 
       const threshold = 110;
       if (currentX > threshold) {
         this.executeSwipe(cardEl, 'like');
       } else if (currentX < -threshold) {
         this.executeSwipe(cardEl, 'pass');
-      } else if (currentY < -threshold) {
-        this.executeSwipe(cardEl, 'superlike');
       } else {
-        // Snap back
         cardEl.style.transform = '';
-        stampLike.style.opacity = 0;
-        stampNope.style.opacity = 0;
-        stampSuper.style.opacity = 0;
+        stampAccept.style.opacity = 0;
+        stampReject.style.opacity = 0;
       }
     };
 
@@ -399,38 +429,34 @@ class LoveeezDatingApp {
   }
 
   swipeTopCard(action) {
-    const topCardEl = this.deckStage.lastElementChild;
-    if (!topCardEl || !topCardEl.classList.contains('swipe-card')) return;
-    this.executeSwipe(topCardEl, action);
+    const topCard = this.janCardArena.lastElementChild;
+    if (!topCard || !topCard.classList.contains('jan-swipe-card')) return;
+    this.executeSwipe(topCard, action);
   }
 
   executeSwipe(cardEl, action) {
     const profileId = cardEl.dataset.profileId;
     const profile = PROFILES.find(p => p.id === profileId);
 
-    // Apply swipe exit animation
     if (action === 'like') {
-      cardEl.style.transform = `translate3d(${window.innerWidth + 200}px, 50px, 0) rotate(35deg)`;
-    } else if (action === 'pass') {
-      cardEl.style.transform = `translate3d(-${window.innerWidth + 200}px, 50px, 0) rotate(-35deg)`;
-    } else if (action === 'superlike') {
-      cardEl.style.transform = `translate3d(0, -${window.innerHeight + 200}px, 0) scale(1.1)`;
+      cardEl.style.transform = `translate3d(${window.innerWidth + 200}px, 30px, 0) rotate(25deg)`;
+    } else {
+      cardEl.style.transform = `translate3d(-${window.innerWidth + 200}px, 30px, 0) rotate(-25deg)`;
     }
     cardEl.style.opacity = '0';
 
     this.swiped[profileId] = action;
     this.lastSwipedId = profileId;
 
-    // Check for match (like or superlike)
-    if (action === 'like' || action === 'superlike') {
-      this.triggerMatch(profile);
+    if (action === 'like') {
+      this.triggerMutualMatch(profile);
     } else {
       this.saveState();
     }
 
     setTimeout(() => {
       this.renderDeck();
-    }, 250);
+    }, 240);
   }
 
   rewindLastSwipe() {
@@ -441,8 +467,7 @@ class LoveeezDatingApp {
     this.renderDeck();
   }
 
-  triggerMatch(profile) {
-    // Add to matches if not already present
+  triggerMutualMatch(profile) {
     const exists = this.matches.some(m => m.profileId === profile.id);
     if (!exists) {
       this.matches.unshift({
@@ -452,7 +477,6 @@ class LoveeezDatingApp {
         lastMessage: profile.initialMessage
       });
 
-      // Initialize initial conversation message
       if (!this.chats[profile.id]) {
         this.chats[profile.id] = [
           {
@@ -464,97 +488,57 @@ class LoveeezDatingApp {
         ];
       }
       this.saveState();
-      this.updateMatchesBadge();
     }
 
-    // Show Match Celebration Modal
-    this.matchPartnerAvatar.src = profile.photos[0];
+    this.matchPartnerAvatar.src = profile.avatar;
     this.matchPartnerName.textContent = profile.name;
     this.activeChatId = profile.id;
     this.matchModal.classList.add('active');
   }
 
-  updateMatchesBadge() {
-    const unreadCount = this.matches.filter(m => m.unread).length;
-    if (unreadCount > 0) {
-      this.matchesBadge.textContent = unreadCount;
-      this.matchesBadge.style.display = 'inline-block';
-    } else {
-      this.matchesBadge.style.display = 'none';
-    }
-  }
-
   // --------------------------------------------------------------------------
-  // CHAT & MESSAGING ENGINE
+  // 6. CHAT & MESSAGING WORKSPACE
   // --------------------------------------------------------------------------
-  renderChatsView() {
-    this.updateMatchesBadge();
-    this.renderNewMatchesRow();
-    this.renderChatThreads();
+  renderChatWorkspace() {
+    this.renderThreadsList();
     this.renderActiveConversation();
   }
 
-  renderNewMatchesRow() {
-    this.newMatchesRow.innerHTML = '';
-    this.matches.forEach(match => {
-      const profile = PROFILES.find(p => p.id === match.profileId);
-      if (!profile) return;
-
-      const item = document.createElement('div');
-      item.className = 'new-match-avatar';
-      item.innerHTML = `
-        <img src="${profile.avatar}" alt="${profile.name}">
-        <span class="new-match-name">${profile.name}</span>
-      `;
-      item.addEventListener('click', () => {
-        this.selectChat(profile.id);
-      });
-      this.newMatchesRow.appendChild(item);
-    });
-  }
-
-  renderChatThreads() {
-    this.chatThreadsList.innerHTML = '';
+  renderThreadsList() {
+    this.threadsList.innerHTML = '';
     this.matches.forEach(match => {
       const profile = PROFILES.find(p => p.id === match.profileId);
       if (!profile) return;
 
       const isActive = this.activeChatId === profile.id;
-      const thread = document.createElement('div');
-      thread.className = `chat-thread-item ${isActive ? 'active' : ''}`;
-      thread.innerHTML = `
-        <div class="thread-avatar">
-          <img src="${profile.avatar}" alt="${profile.name}">
-          ${match.unread ? '<div class="thread-unread-dot"></div>' : ''}
-        </div>
-        <div class="thread-info">
-          <div class="thread-top">
-            <span class="thread-name">${profile.name}</span>
-            <span class="thread-time">${match.matchedAt}</span>
+      const entry = document.createElement('div');
+      entry.className = `thread-entry ${isActive ? 'active' : ''}`;
+      entry.innerHTML = `
+        <img class="thread-entry-avatar" src="${profile.avatar}" alt="${profile.name}">
+        <div class="thread-entry-meta">
+          <div class="thread-name-row">
+            <span class="thread-person-name">${profile.name}</span>
+            <span class="thread-time-label">${match.matchedAt}</span>
           </div>
-          <p class="thread-preview">${match.lastMessage || 'New connection!'}</p>
+          <div class="thread-snippet">${match.lastMessage || 'New connection confirmed'}</div>
         </div>
       `;
 
-      thread.addEventListener('click', () => {
+      entry.addEventListener('click', () => {
         match.unread = false;
+        this.activeChatId = profile.id;
         this.saveState();
-        this.selectChat(profile.id);
+        this.renderChatWorkspace();
       });
 
-      this.chatThreadsList.appendChild(thread);
+      this.threadsList.appendChild(entry);
     });
-  }
-
-  selectChat(profileId) {
-    this.activeChatId = profileId;
-    this.renderChatsView();
   }
 
   renderActiveConversation() {
     if (!this.activeChatId) {
-      this.chatPartnerName.textContent = "Select a Match";
-      this.chatMessagesArea.innerHTML = `<div style="text-align:center; padding:3rem; color:var(--muted-ink);">Select a connection to start chatting! 💬</div>`;
+      this.chatPartnerName.textContent = "Select Connection";
+      this.messageStreamBody.innerHTML = `<div style="text-align:center; padding:3rem; color:var(--muted); font-size:0.9375rem;">Select an active dialogue thread to begin messaging.</div>`;
       return;
     }
 
@@ -565,44 +549,43 @@ class LoveeezDatingApp {
     this.chatPartnerName.textContent = profile.name;
 
     const messages = this.chats[profile.id] || [];
-    this.chatMessagesArea.innerHTML = '';
+    this.messageStreamBody.innerHTML = '';
 
     messages.forEach(msg => {
       const bubble = document.createElement('div');
-      bubble.className = `message-bubble ${msg.sender}`;
+      bubble.className = `editorial-bubble ${msg.sender}`;
       bubble.innerHTML = `
         <div>${msg.text}</div>
-        <div class="message-time">${msg.time}</div>
+        <div class="bubble-timestamp">${msg.time}</div>
       `;
-      this.chatMessagesArea.appendChild(bubble);
+      this.messageStreamBody.appendChild(bubble);
     });
 
     // Render Icebreakers
-    this.icebreakerDrawer.innerHTML = '';
+    this.conversationIcebreakers.innerHTML = '';
     ICEBREAKER_PROMPTS.forEach(prompt => {
       const chip = document.createElement('button');
-      chip.className = 'icebreaker-chip';
+      chip.className = 'icebreaker-capsule';
       chip.textContent = prompt;
       chip.addEventListener('click', () => {
-        this.sendMessage(prompt);
+        this.sendChatMessage(prompt);
       });
-      this.icebreakerDrawer.appendChild(chip);
+      this.conversationIcebreakers.appendChild(chip);
     });
 
-    // Auto scroll to bottom
-    this.chatMessagesArea.scrollTop = this.chatMessagesArea.scrollHeight;
+    this.messageStreamBody.scrollTop = this.messageStreamBody.scrollHeight;
   }
 
-  sendMessage(customText = null) {
+  sendChatMessage(customText = null) {
     const text = customText || this.chatInput.value.trim();
     if (!text || !this.activeChatId) return;
 
-    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const userMsg = {
-      id: `msg-${Date.now()}`,
+      id: `m-${Date.now()}`,
       sender: "me",
       text: text,
-      time: now
+      time: timeString
     };
 
     if (!this.chats[this.activeChatId]) {
@@ -610,7 +593,6 @@ class LoveeezDatingApp {
     }
     this.chats[this.activeChatId].push(userMsg);
 
-    // Update match last message
     const match = this.matches.find(m => m.profileId === this.activeChatId);
     if (match) {
       match.lastMessage = text;
@@ -625,151 +607,139 @@ class LoveeezDatingApp {
   }
 
   triggerCompanionResponse(profileId) {
-    // Show typing indicator
-    const typingEl = document.createElement('div');
-    typingEl.className = 'typing-indicator';
-    typingEl.innerHTML = `
-      <div class="typing-dot"></div>
-      <div class="typing-dot"></div>
-      <div class="typing-dot"></div>
+    const typingBox = document.createElement('div');
+    typingBox.className = 'typing-box';
+    typingBox.innerHTML = `
+      <div class="typing-dot-mono"></div>
+      <div class="typing-dot-mono"></div>
+      <div class="typing-dot-mono"></div>
+      <span style="font-size:0.75rem; font-weight:700; color:var(--muted); margin-left:0.25rem;">Typing...</span>
     `;
-    this.chatMessagesArea.appendChild(typingEl);
-    this.chatMessagesArea.scrollTop = this.chatMessagesArea.scrollHeight;
+    this.messageStreamBody.appendChild(typingBox);
+    this.messageStreamBody.scrollTop = this.messageStreamBody.scrollHeight;
 
     setTimeout(() => {
-      typingEl.remove();
-      const responses = BOT_RESPONSES[profileId] || [
-        "That's so lovely! I'd love to hear more about that 🌸",
-        "Haha totally agree! What else are you up to today?",
-        "Aw that sounds wonderful! ✨"
+      typingBox.remove();
+      const pool = BOT_RESPONSES[profileId] || [
+        "I find that perspective very compelling. Would love to explore that further.",
+        "Agreed. High standards and clear intent create the best connections.",
+        "That sounds like a great plan. Let's arrange a time to meet."
       ];
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      const reply = pool[Math.floor(Math.random() * pool.length)];
 
       const botMsg = {
-        id: `msg-${Date.now()}`,
+        id: `m-${Date.now()}`,
         sender: "them",
-        text: randomResponse,
+        text: reply,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
       this.chats[profileId].push(botMsg);
       const match = this.matches.find(m => m.profileId === profileId);
       if (match) {
-        match.lastMessage = randomResponse;
+        match.lastMessage = reply;
       }
       this.saveState();
       this.renderActiveConversation();
-      this.renderChatThreads();
+      this.renderThreadsList();
     }, 1200);
   }
 
   // --------------------------------------------------------------------------
-  // GOOGLE AUTHENTICATION SIMULATION
+  // 7. GOOGLE AUTHENTICATION & LOGIN FLOW
   // --------------------------------------------------------------------------
-  openGoogleModal() {
-    this.googleModal.classList.add('active');
-  }
-
   completeGoogleAuth() {
     this.user = {
       name: "Armaan Yadav",
       email: "armaan123009@gmail.com",
       city: "Tokyo",
-      bio: "Software creator & music lover. Verified Google User ✨",
+      role: "Design Engineer",
+      bio: "Focusing on distributed interfaces, editorial typography, and quiet specialty coffee roasters.",
       avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80",
-      isLoggedIn: true,
-      island: "pinky"
+      verified: true,
+      isLoggedIn: true
     };
     this.saveState();
-    this.closeModals();
-    this.renderHeader();
-    this.renderProfileView();
-    alert("🎉 Successfully signed in with Google! Your profile is verified.");
+    this.navigateTo('dashboard');
   }
 
   // --------------------------------------------------------------------------
-  // PROFILE DETAILS MODAL
+  // 8. PROFILE MODAL DETAILS
   // --------------------------------------------------------------------------
-  showCurrentCardDetails() {
+  showCardDetails() {
     const deck = this.getActiveDeck();
     if (deck.length === 0) return;
     const profile = deck[0];
 
-    this.profileModalBody.innerHTML = `
-      <div style="text-align: left; display: flex; flex-direction: column; gap: 1rem;">
-        <img src="${profile.photos[0]}" style="width:100%; height:320px; object-fit:cover; border-radius:1.5rem; border:2px solid var(--ink);" alt="${profile.name}">
+    this.profileModalContent.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:1.25rem;">
+        <img src="${profile.photos[0]}" style="width:100%; height:300px; object-fit:cover; border:2px solid var(--ink); border-radius:var(--radius-sm); box-shadow:var(--shadow-sm);" alt="${profile.name}">
         <div>
-          <h2 style="font-family: var(--font-display); font-size: 2.2rem; color: var(--ink);">${profile.name}, ${profile.age} ${profile.verified ? '✓' : ''}</h2>
-          <p style="color: var(--muted-ink); font-weight:700;">📍 ${profile.city} · ${profile.occupation}</p>
+          <div style="display:flex; justify-content:space-between; align-items:baseline;">
+            <h2 style="font-size:1.75rem; font-weight:800; letter-spacing:-0.03em;">${profile.name}, ${profile.age}</h2>
+            <span style="font-size:0.8125rem; font-weight:700; color:var(--muted);">${profile.distance}</span>
+          </div>
+          <div style="color:var(--muted); font-weight:600; font-size:0.9375rem;">${profile.occupation} · ${profile.city}</div>
         </div>
-        <div style="background:var(--surface-pink); padding:1rem; border-radius:1rem; border:2px solid var(--ink);">
-          <strong style="display:block; font-family:var(--font-label); margin-bottom:0.25rem;">About Me</strong>
-          <p>${profile.bio}</p>
+
+        <div style="border-top:1px solid var(--border-subtle); padding-top:1rem;">
+          <h4 style="font-size:0.8125rem; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.4rem;">Overview</h4>
+          <p style="color:var(--ink-secondary); line-height:1.6; font-size:0.9375rem;">${profile.bio}</p>
         </div>
+
+        <div style="background:var(--accent-cream); border:2px solid var(--ink); border-radius:var(--radius-sm); padding:1rem; box-shadow:var(--shadow-sm);">
+          <strong style="display:block; font-size:0.8125rem; text-transform:uppercase; letter-spacing:0.04em;">${profile.prompts[0].question}</strong>
+          <p style="margin-top:0.35rem; color:var(--ink); font-weight:600;">"${profile.prompts[0].answer}"</p>
+        </div>
+
         <div>
-          <strong style="display:block; font-family:var(--font-label); margin-bottom:0.4rem;">Prompts</strong>
-          ${profile.prompts.map(p => `
-            <div style="background:var(--surface-yellow); padding:0.85rem; border-radius:1rem; border:2px solid var(--ink); margin-bottom:0.6rem;">
-              <strong>${p.question}</strong>
-              <p style="margin-top:0.2rem;">"${p.answer}"</p>
-            </div>
-          `).join('')}
-        </div>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-          ${profile.tags.map(t => `<span class="interest-tag">${t}</span>`).join('')}
+          <h4 style="font-size:0.8125rem; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.5rem;">Interests</h4>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+            ${profile.tags.map(t => `<span class="tag-capsule">${t}</span>`).join('')}
+          </div>
         </div>
       </div>
     `;
-    this.profileModal.classList.add('active');
+
+    this.profileDetailModal.classList.add('active');
   }
 
   // --------------------------------------------------------------------------
-  // USER PROFILE & SETTINGS VIEW
+  // 9. DASHBOARD INITIALIZATION
   // --------------------------------------------------------------------------
-  renderProfileView() {
-    const profileAvatar = document.getElementById('profileAvatarImg');
-    const profileName = document.getElementById('profileDisplayName');
-    const profileEmail = document.getElementById('profileDisplayEmail');
-    const profileBioInput = document.getElementById('profileBioInput');
-    const profileCityInput = document.getElementById('profileCityInput');
-    const saveProfileBtn = document.getElementById('saveProfileBtn');
+  renderDashboard() {
+    this.renderDeck();
+    this.renderChatWorkspace();
+    this.renderProfileSettings();
+  }
 
-    if (profileAvatar) profileAvatar.src = this.user.avatar;
-    if (profileName) profileName.textContent = this.user.name;
-    if (profileEmail) profileEmail.textContent = this.user.email || 'armaan123009@gmail.com';
-    if (profileBioInput) profileBioInput.value = this.user.bio;
-    if (profileCityInput) profileCityInput.value = this.user.city;
+  renderProfileSettings() {
+    const nameInput = document.getElementById('userSettingName');
+    const cityInput = document.getElementById('userSettingCity');
+    const bioInput = document.getElementById('userSettingBio');
+    const btnSave = document.getElementById('btnSaveSettings');
 
-    if (saveProfileBtn) {
-      saveProfileBtn.onclick = () => {
-        this.user.bio = profileBioInput.value;
-        this.user.city = profileCityInput.value;
+    if (nameInput) nameInput.value = this.user.name;
+    if (cityInput) cityInput.value = this.user.city;
+    if (bioInput) bioInput.value = this.user.bio;
+
+    if (btnSave) {
+      btnSave.onclick = () => {
+        this.user.name = nameInput.value;
+        this.user.city = cityInput.value;
+        this.user.bio = bioInput.value;
         this.saveState();
-        alert("✨ Profile updated successfully!");
+        alert("Account configuration updated.");
       };
     }
   }
 
-  // --------------------------------------------------------------------------
-  // RENDER APP
-  // --------------------------------------------------------------------------
-  renderHeader() {
-    if (this.headerUserAvatar) this.headerUserAvatar.src = this.user.avatar;
-  }
-
   closeModals() {
-    document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
-  }
-
-  renderAll() {
-    this.renderHeader();
-    this.renderDeck();
-    this.renderChatsView();
-    this.renderProfileView();
+    document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('active'));
   }
 }
 
-// Instantiate on DOMContentLoaded
+// Instantiate on DOM load
 window.addEventListener('DOMContentLoaded', () => {
-  window.loveeezApp = new LoveeezDatingApp();
+  window.janApp = new JanDatingApp();
 });
