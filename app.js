@@ -259,9 +259,16 @@ class CrazyCreativeApp {
 
     // Sync Liquid Navbar state
     if (this.liquidNav) {
-      if (viewName === 'home') this.liquidNav.setActive(0);
-      else if (viewName === 'discover') this.liquidNav.setActive(2);
-      else if (viewName === 'chats') this.liquidNav.setActive(3);
+      if (viewName === 'home') {
+        this.liquidNav.setActive(0);
+        this.liquidNav.setTone('light');
+      } else if (viewName === 'discover') {
+        this.liquidNav.setActive(2);
+        this.liquidNav.setTone('dark');
+      } else if (viewName === 'chats') {
+        this.liquidNav.setActive(3);
+        this.liquidNav.setTone('dark');
+      }
     }
 
     Object.keys(this.views).forEach(key => {
@@ -300,11 +307,11 @@ class CrazyCreativeApp {
 
     if (deck.length === 0) {
       this.ccSwipeStage.innerHTML = `
-        <div style="background:var(--canvas-white); border:3px solid var(--ink-dark); border-radius:var(--radius-card); padding:3.5rem 2rem; text-align:center; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.5rem; box-shadow:0 20px 50px rgba(0,0,0,0.1);">
-          <div style="width:4.5rem; height:4.5rem; border-radius:50%; background:var(--accent-lime); display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:900; border:2px solid var(--ink-dark);">★</div>
-          <h3 style="font-size:2.5rem; font-weight:800; text-transform:uppercase; line-height:1;">Queue Complete!</h3>
+        <div class="liquid-glass-modal" style="border-radius:var(--radius-card); padding:3.5rem 2rem; text-align:center; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.5rem;">
+          <div style="width:4.5rem; height:4.5rem; border-radius:50%; background:var(--accent-lime); display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:900; box-shadow:0 4px 16px rgba(212,255,0,0.4);">★</div>
+          <h3 style="font-size:2.5rem; font-weight:800; text-transform:uppercase; line-height:1; color:var(--ink-dark);">Queue Complete!</h3>
           <p style="color:var(--muted-gray); font-size:1.15rem; max-width:320px; font-weight:600;">You've explored the wild roster. Rewind or reload your discovery queue.</p>
-          <button class="pill-btn pill-pink" id="btnResetCrazyDeck">↺ Reset Deck</button>
+          <button class="pill-btn pill-pink liquid-glass-btn" id="btnResetCrazyDeck">↺ Reset Deck</button>
         </div>
       `;
       const resetBtn = document.getElementById('btnResetCrazyDeck');
@@ -595,7 +602,7 @@ class CrazyCreativeApp {
       c.innerHTML = '';
       ICEBREAKER_PROMPTS.forEach(prompt => {
         const chip = document.createElement('button');
-        chip.className = 'pill-btn pill-sm pill-white';
+        chip.className = 'pill-btn pill-sm pill-white liquid-glass-btn';
         chip.style.padding = '0.35rem 0.85rem';
         chip.style.fontSize = '0.8rem';
         chip.textContent = prompt;
@@ -704,14 +711,14 @@ class CrazyCreativeApp {
           <h2 style="font-size:2.5rem; font-weight:800; line-height:1; letter-spacing:-0.02em;">${profile.name}, ${profile.age}</h2>
           <div style="color:var(--canvas-pink); font-size:1.1rem; font-weight:800; margin-top:0.4rem;">${profile.occupation} · ${profile.city}</div>
         </div>
-        <div style="background:#FFF0F7; border:2px solid var(--canvas-pink); border-radius:1.25rem; padding:1.25rem;">
+        <div class="auth-info-card" style="border-color:var(--canvas-pink);">
           <strong style="display:block; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.04em; color:var(--canvas-pink); margin-bottom:0.35rem;">Story &amp; Vibe</strong>
           <p style="font-size:1.1rem; font-weight:600; line-height:1.5;">${profile.bio}</p>
         </div>
         <div>
           <strong style="display:block; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.04em; margin-bottom:0.5rem;">Interests</strong>
           <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
-            ${profile.tags.map(t => `<span style="background:var(--canvas-dark); color:#FFF; font-weight:800; padding:0.35rem 0.85rem; border-radius:9999px; font-size:0.85rem;">${t}</span>`).join('')}
+            ${profile.tags.map(t => `<span class="liquid-glass-badge" style="position:static; display:inline-block; font-size:0.85rem; padding:0.35rem 0.85rem; border-radius:9999px;">${t}</span>`).join('')}
           </div>
         </div>
       </div>

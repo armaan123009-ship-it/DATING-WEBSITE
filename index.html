@@ -18,7 +18,7 @@
 <body>
 
   <!-- ========================================================================
-       TOP HEADER & LIQUID GLASS NAVBAR (GUGLIELMO GIANNATTASIO SPECIFICATION)
+       TOP HEADER & LIQUID GLASS NAVBAR
        ======================================================================== -->
   <header class="cc-header">
     <div class="cc-header-container">
@@ -39,7 +39,7 @@
 
       <!-- Action Pill CTA -->
       <div class="cc-header-actions">
-        <button class="pill-btn pill-white pill-sm" id="btnHeaderAction" data-route="discover" type="button">
+        <button class="pill-btn pill-white pill-sm liquid-glass-btn" id="btnHeaderAction" data-route="discover" type="button">
           <span>Enter App</span>
           <span style="font-size:1.2rem; line-height:1;">→</span>
         </button>
@@ -48,11 +48,8 @@
     </div>
   </header>
 
-    </div>
-  </header>
-
   <!-- Pinned Right Edge Rail Badge -->
-  <aside class="cc-side-rail" aria-label="System status badge">
+  <aside class="cc-side-rail liquid-glass-badge" aria-label="System status badge">
     <div class="side-rail-dot"></div>
     <span>Attraction Algorithm v2.4</span>
   </aside>
@@ -92,12 +89,12 @@
 
         <!-- Roomy Tactile White Pill Button -->
         <div style="display:flex; gap:1.25rem; flex-wrap:wrap; justify-content:center;">
-          <button class="pill-btn pill-white" id="btnHeroLaunch" type="button">
+          <button class="pill-btn pill-white liquid-glass-btn" id="btnHeroLaunch" type="button">
             <span>Explore The Deck Now</span>
             <span style="font-size:1.3rem;">→</span>
           </button>
           
-          <button class="pill-btn pill-black" id="btnHeroSignIn" type="button">
+          <button class="pill-btn pill-black liquid-glass-btn" id="btnHeroSignIn" type="button">
             <span>Google One-Tap Sync</span>
           </button>
         </div>
@@ -158,7 +155,7 @@
               </ul>
             </div>
 
-            <button class="pill-btn pill-pink" onclick="window.crazyApp.navigateTo('discover')" type="button">
+            <button class="pill-btn pill-pink liquid-glass-btn" onclick="window.crazyApp.navigateTo('discover')" type="button">
               Launch Curated Deck →
             </button>
           </article>
@@ -192,7 +189,7 @@
               </ul>
             </div>
 
-            <button class="pill-btn pill-black" onclick="window.crazyApp.navigateTo('chats')" type="button">
+            <button class="pill-btn pill-black liquid-glass-btn" onclick="window.crazyApp.navigateTo('chats')" type="button">
               Enter Midnight Room →
             </button>
           </article>
@@ -217,13 +214,13 @@
         <p class="dark-stage-sub">A stage-like environment for unhurried, magnetic correspondence. Powered by responsive client-side state.</p>
 
         <!-- Interactive Theatrical Chat Box -->
-        <div class="theatrical-chat-box">
+        <div class="theatrical-chat-box liquid-glass-panel-dark">
           
           <!-- Left Sidebar Threads -->
           <div class="theatrical-sidebar">
             <div class="theatrical-sidebar-head">
               <strong style="font-size:1.2rem; letter-spacing:-0.02em;">Connections</strong>
-              <span style="background:var(--accent-lime); color:#000; font-size:0.75rem; font-weight:900; padding:0.2rem 0.6rem; border-radius:9999px;">LIVE</span>
+              <span class="live-badge">LIVE</span>
             </div>
 
             <div id="theatricalThreads" style="overflow-y:auto; flex:1;">
@@ -243,7 +240,7 @@
                 </div>
               </div>
 
-              <button class="pill-btn pill-sm pill-white" onclick="window.crazyApp.showCardDetails()" type="button">
+              <button class="pill-btn pill-sm pill-white liquid-glass-btn" onclick="window.crazyApp.showCardDetails()" type="button">
                 Inspect Vibe
               </button>
             </div>
@@ -254,14 +251,14 @@
             </div>
 
             <!-- Icebreaker Pills -->
-            <div id="theatricalIcebreakers" style="padding:0.75rem 1.5rem; background:#111; display:flex; gap:0.5rem; overflow-x:auto;">
+            <div id="theatricalIcebreakers" class="icebreaker-tray">
               <!-- Rendered by app.js -->
             </div>
 
             <!-- Message Input -->
             <div class="theatrical-input-bar">
-              <input type="text" class="theatrical-input" id="theatricalInput" placeholder="Drop an electric icebreaker or reply...">
-              <button class="pill-btn pill-lime pill-sm" id="btnTheatricalSend" type="button">
+              <input type="text" class="theatrical-input liquid-glass-input" id="theatricalInput" placeholder="Drop an electric icebreaker or reply...">
+              <button class="pill-btn pill-lime pill-sm liquid-glass-btn" id="btnTheatricalSend" type="button">
                 Send ⚡
               </button>
             </div>
@@ -285,37 +282,37 @@
             Here is the raw truth behind our algorithms, identity verification, and matchmaking privacy.
           </p>
 
-          <button class="pill-btn pill-pink" onclick="window.crazyApp.navigateTo('discover')" style="margin-top:2.5rem;" type="button">
+          <button class="pill-btn pill-pink liquid-glass-btn" onclick="window.crazyApp.navigateTo('discover')" style="margin-top:2.5rem;" type="button">
             Take The Test Drive →
           </button>
         </div>
 
         <div class="faq-rows-stack">
           
-          <div class="faq-item-row open">
+          <div class="faq-item-row liquid-glass-faq open">
             <div class="faq-q-title">
               <span>How does Crazy Love differ from mainstream apps?</span>
-              <span style="font-size:1.5rem; font-weight:900;">+</span>
+              <span class="faq-toggle">+</span>
             </div>
             <div class="faq-a-body">
               We eliminate endless gamification algorithms designed to keep you single. Every card represents a fully-vetted human with authentic taste benchmarks, verified identity, and direct real-time communication.
             </div>
           </div>
 
-          <div class="faq-item-row">
+          <div class="faq-item-row liquid-glass-faq">
             <div class="faq-q-title">
               <span>Is my location and personal data safe?</span>
-              <span style="font-size:1.5rem; font-weight:900;">+</span>
+              <span class="faq-toggle">+</span>
             </div>
             <div class="faq-a-body">
               Yes. We do not sell behavioural telemetry or broker user coordinates. All session records are stored locally with client-side cryptographic keys.
             </div>
           </div>
 
-          <div class="faq-item-row">
+          <div class="faq-item-row liquid-glass-faq">
             <div class="faq-q-title">
               <span>How does Google One-Tap authentication work?</span>
-              <span style="font-size:1.5rem; font-weight:900;">+</span>
+              <span class="faq-toggle">+</span>
             </div>
             <div class="faq-a-body">
               We verify your Google profile to confirm human identity, eliminate duplicate bots, and keep communication high-standard.
@@ -331,9 +328,9 @@
          STAGE 5: THE CLOSING FLAME CARD & LIME CTA
          ==================================================================== -->
     <section class="stage-closing-flame">
-      <div class="closing-black-card">
+      <div class="closing-black-card liquid-glass-panel-dark">
         
-        <div style="display:inline-flex; align-items:center; gap:0.5rem; background:rgba(255,255,255,0.15); padding:0.4rem 1.25rem; border-radius:9999px; font-weight:800; font-size:0.875rem; letter-spacing:0.04em; text-transform:uppercase; margin-bottom:1.5rem;">
+        <div class="closing-eyebrow-badge">
           <span>⚡ READY FOR REAL CONNECTION?</span>
         </div>
 
@@ -345,7 +342,7 @@
           Your next partner is waiting in the discovery deck. Step inside the theatrical room and find your match.
         </p>
 
-        <button class="pill-btn pill-lime" id="btnFlameLaunch" type="button">
+        <button class="pill-btn pill-lime liquid-glass-btn" id="btnFlameLaunch" type="button">
           <span>Launch Discovery Deck Now</span>
           <span style="font-size:1.4rem;">⚡</span>
         </button>
@@ -360,41 +357,50 @@
        DISCOVERY DECK INTERACTIVE VIEW
        ======================================================================== -->
   <section class="cc-view" id="viewDiscover">
-    <div class="deck-arena-container">
+    <div class="dashboard-canvas">
       
-      <div style="text-align:center; margin-bottom:1rem;">
-        <span style="color:var(--canvas-pink); font-weight:900; letter-spacing:0.05em; font-size:0.85rem; text-transform:uppercase;">● SWIPE ARENA</span>
-        <h2 style="font-size:3rem; font-weight:800; text-transform:uppercase; line-height:1; letter-spacing:-0.02em; margin-top:0.25rem;">Curated Candidates</h2>
+      <!-- Ambient background orbs -->
+      <div class="ambient-orb orb-pink"></div>
+      <div class="ambient-orb orb-cyan"></div>
+      <div class="ambient-orb orb-lime"></div>
+      
+      <div class="deck-arena-container">
+        
+        <div class="deck-header-glass liquid-glass-panel">
+          <span class="deck-header-dot">●</span>
+          <span class="deck-header-label">SWIPE ARENA</span>
+          <h2 class="deck-header-title">Curated Candidates</h2>
+        </div>
+
+        <!-- 3D Card Stack Arena -->
+        <div class="cc-swipe-stage" id="ccSwipeStage">
+          <!-- Rendered by app.js -->
+        </div>
+
+        <!-- Tactile Action Controls -->
+        <div class="cc-action-controls">
+          <button class="cc-btn-circle cc-btn-rewind liquid-glass-circle" id="btnRewind" title="Rewind (ArrowDown)" type="button">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          </button>
+
+          <button class="cc-btn-circle cc-btn-pass liquid-glass-circle" id="btnPass" title="Pass (ArrowLeft)" type="button">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+
+          <button class="cc-btn-circle cc-btn-like liquid-glass-circle" id="btnLike" title="Match (ArrowRight)" type="button">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+
+          <button class="cc-btn-circle cc-btn-info liquid-glass-circle" id="btnInfo" title="Inspect (Space)" type="button">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          </button>
+        </div>
+
+        <div class="deck-shortcuts-label">
+          Shortcuts: [←] Pass · [→] Connect · [↓] Rewind · [Space] Inspect
+        </div>
+
       </div>
-
-      <!-- 3D Card Stack Arena -->
-      <div class="cc-swipe-stage" id="ccSwipeStage">
-        <!-- Rendered by app.js -->
-      </div>
-
-      <!-- Tactile Action Controls -->
-      <div class="cc-action-controls">
-        <button class="cc-btn-circle cc-btn-rewind" id="btnRewind" title="Rewind (ArrowDown)" type="button">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-        </button>
-
-        <button class="cc-btn-circle cc-btn-pass" id="btnPass" title="Pass (ArrowLeft)" type="button">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-
-        <button class="cc-btn-circle cc-btn-like" id="btnLike" title="Match (ArrowRight)" type="button">
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-        </button>
-
-        <button class="cc-btn-circle cc-btn-info" id="btnInfo" title="Inspect (Space)" type="button">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-        </button>
-      </div>
-
-      <div style="font-size:0.875rem; font-weight:800; color:var(--muted-gray); margin-top:0.5rem;">
-        Shortcuts: [←] Pass · [→] Connect · [↓] Rewind · [Space] Inspect
-      </div>
-
     </div>
   </section>
 
@@ -403,65 +409,73 @@
        CHATS VIEW
        ======================================================================== -->
   <section class="cc-view" id="viewChats">
-    <div style="max-width:1100px; margin:2rem auto; padding:0 1.5rem;">
+    <div class="dashboard-canvas">
       
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-        <div>
-          <span style="color:var(--canvas-pink); font-weight:900; letter-spacing:0.05em; font-size:0.85rem; text-transform:uppercase;">● DIRECT MESSAGES</span>
-          <h2 style="font-size:2.5rem; font-weight:800; text-transform:uppercase;">Active Conversations</h2>
-        </div>
-        <button class="pill-btn pill-pink pill-sm" data-route="discover" type="button">
-          ← Back to Deck
-        </button>
-      </div>
-
-      <!-- Theatrical Box Repurposed -->
-      <div class="theatrical-chat-box" style="box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <!-- Ambient background orbs -->
+      <div class="ambient-orb orb-purple"></div>
+      <div class="ambient-orb orb-pink-soft"></div>
+      
+      <div class="chats-arena-container">
         
-        <div class="theatrical-sidebar">
-          <div class="theatrical-sidebar-head">
-            <strong style="font-size:1.2rem;">Connections</strong>
-            <span style="background:var(--accent-lime); color:#000; font-size:0.75rem; font-weight:900; padding:0.2rem 0.6rem; border-radius:9999px;">LIVE</span>
+        <div class="chats-top-bar">
+          <div>
+            <span class="deck-header-dot">●</span>
+            <span class="deck-header-label">DIRECT MESSAGES</span>
+            <h2 class="chats-page-title">Active Conversations</h2>
           </div>
-
-          <div id="theatricalThreads_page" style="overflow-y:auto; flex:1;">
-            <!-- Rendered by app.js -->
-          </div>
+          <button class="pill-btn pill-pink pill-sm liquid-glass-btn" data-route="discover" type="button">
+            ← Back to Deck
+          </button>
         </div>
 
-        <div class="theatrical-chat-pane">
-          <div class="theatrical-chat-header">
-            <div style="display:flex; align-items:center; gap:1rem;">
-              <img id="theatricalChatAvatar_page" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" style="width:2.75rem; height:2.75rem; border-radius:50%; object-fit:cover; border:2px solid var(--accent-lime);" alt="Partner">
-              <div>
-                <div id="theatricalChatName_page" style="font-size:1.25rem; font-weight:800;">Anya Chen</div>
-                <div style="font-size:0.8rem; color:var(--accent-lime); font-weight:700;">● Active in Studio</div>
-              </div>
+        <!-- Theatrical Box Repurposed -->
+        <div class="theatrical-chat-box liquid-glass-chat-box">
+          
+          <div class="theatrical-sidebar">
+            <div class="theatrical-sidebar-head">
+              <strong style="font-size:1.2rem;">Connections</strong>
+              <span class="live-badge">LIVE</span>
             </div>
 
-            <button class="pill-btn pill-sm pill-white" onclick="window.crazyApp.showCardDetails()" type="button">
-              Inspect Vibe
-            </button>
+            <div id="theatricalThreads_page" style="overflow-y:auto; flex:1;">
+              <!-- Rendered by app.js -->
+            </div>
           </div>
 
-          <div class="theatrical-messages-stream" id="theatricalMessages_page">
-            <!-- Rendered by app.js -->
+          <div class="theatrical-chat-pane">
+            <div class="theatrical-chat-header">
+              <div style="display:flex; align-items:center; gap:1rem;">
+                <img id="theatricalChatAvatar_page" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" style="width:2.75rem; height:2.75rem; border-radius:50%; object-fit:cover; border:2px solid var(--accent-lime);" alt="Partner">
+                <div>
+                  <div id="theatricalChatName_page" style="font-size:1.25rem; font-weight:800;">Anya Chen</div>
+                  <div style="font-size:0.8rem; color:var(--accent-lime); font-weight:700;">● Active in Studio</div>
+                </div>
+              </div>
+
+              <button class="pill-btn pill-sm pill-white liquid-glass-btn" onclick="window.crazyApp.showCardDetails()" type="button">
+                Inspect Vibe
+              </button>
+            </div>
+
+            <div class="theatrical-messages-stream" id="theatricalMessages_page">
+              <!-- Rendered by app.js -->
+            </div>
+
+            <div id="theatricalIcebreakers_page" class="icebreaker-tray">
+              <!-- Rendered by app.js -->
+            </div>
+
+            <div class="theatrical-input-bar">
+              <input type="text" class="theatrical-input liquid-glass-input" id="theatricalInput_page" placeholder="Drop an electric icebreaker or reply...">
+              <button class="pill-btn pill-lime pill-sm liquid-glass-btn" id="btnTheatricalSend_page" type="button">
+                Send ⚡
+              </button>
+            </div>
           </div>
 
-          <div id="theatricalIcebreakers_page" style="padding:0.75rem 1.5rem; background:#111; display:flex; gap:0.5rem; overflow-x:auto;">
-            <!-- Rendered by app.js -->
-          </div>
-
-          <div class="theatrical-input-bar">
-            <input type="text" class="theatrical-input" id="theatricalInput_page" placeholder="Drop an electric icebreaker or reply...">
-            <button class="pill-btn pill-lime pill-sm" id="btnTheatricalSend_page" type="button">
-              Send ⚡
-            </button>
-          </div>
         </div>
 
       </div>
-
     </div>
   </section>
 
@@ -472,29 +486,27 @@
 
   <!-- Match Celebration Modal -->
   <div class="cc-modal-backdrop" id="ccMatchModal">
-    <div class="cc-modal-box">
-      <button class="cc-modal-close" data-close-modal type="button">✕</button>
+    <div class="cc-modal-box liquid-glass-modal">
+      <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
 
-      <div style="display:inline-flex; align-items:center; justify-content:center; width:4rem; height:4rem; background:var(--accent-lime); border-radius:50%; font-size:2rem; font-weight:900; margin-bottom:1rem;">
-        ⚡
-      </div>
+      <div class="modal-icon-circle modal-icon-lime">⚡</div>
 
-      <h2 style="font-size:2.5rem; font-weight:800; text-transform:uppercase; line-height:1; letter-spacing:-0.02em;">IT'S A MATCH!</h2>
-      <p style="font-size:1.15rem; color:var(--muted-gray); font-weight:600; margin-top:0.5rem;">
+      <h2 class="modal-title">IT'S A MATCH!</h2>
+      <p class="modal-subtitle">
         You and <span id="ccMatchName" style="color:var(--canvas-pink); font-weight:800;">Anya Chen</span> felt the attraction.
       </p>
 
-      <div style="display:flex; justify-content:center; align-items:center; margin:2rem 0;">
-        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80" style="width:5rem; height:5rem; border-radius:50%; border:3px solid var(--ink-dark); object-fit:cover;" alt="Me">
-        <div style="width:2.5rem; height:4px; background:var(--accent-lime); margin:0 -0.5rem; z-index:2;"></div>
-        <img id="ccMatchAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" style="width:5rem; height:5rem; border-radius:50%; border:3px solid var(--ink-dark); object-fit:cover;" alt="Partner">
+      <div class="match-avatars-row">
+        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80" class="match-avatar-img" alt="Me">
+        <div class="match-connector-bar"></div>
+        <img id="ccMatchAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" class="match-avatar-img" alt="Partner">
       </div>
 
       <div style="display:flex; flex-direction:column; gap:0.85rem;">
-        <button class="pill-btn pill-lime" id="btnMatchChat" type="button">
+        <button class="pill-btn pill-lime liquid-glass-btn" id="btnMatchChat" type="button">
           Open Chat Console ⚡
         </button>
-        <button class="pill-btn pill-black" id="btnMatchClose" type="button">
+        <button class="pill-btn pill-black liquid-glass-btn" id="btnMatchClose" type="button">
           Keep Swiping
         </button>
       </div>
@@ -504,30 +516,28 @@
 
   <!-- Google Auth Modal -->
   <div class="cc-modal-backdrop" id="ccAuthModal">
-    <div class="cc-modal-box">
-      <button class="cc-modal-close" data-close-modal type="button">✕</button>
+    <div class="cc-modal-box liquid-glass-modal">
+      <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
 
-      <div style="display:inline-flex; align-items:center; justify-content:center; width:3.5rem; height:3.5rem; background:var(--canvas-pink); color:#FFF; border-radius:50%; font-size:1.75rem; font-weight:900; margin-bottom:1rem;">
-        ★
-      </div>
+      <div class="modal-icon-circle modal-icon-pink">★</div>
 
-      <h2 style="font-size:2.25rem; font-weight:800; text-transform:uppercase; line-height:1.1;">Google Identity Sync</h2>
-      <p style="font-size:1.05rem; color:var(--muted-gray); font-weight:600; margin-top:0.5rem;">
+      <h2 class="modal-title">Google Identity Sync</h2>
+      <p class="modal-subtitle">
         Authenticate with your Google account to confirm identity and unlock matching queues.
       </p>
 
-      <div style="background:#FFF0F7; border:2px solid var(--canvas-pink); border-radius:1rem; padding:1.25rem; margin:1.5rem 0; text-align:left;">
-        <div style="font-size:0.8rem; font-weight:800; color:var(--canvas-pink); text-transform:uppercase;">Connected Account:</div>
-        <div style="font-size:1.1rem; font-weight:800; margin-top:0.25rem;">armaan123009@gmail.com</div>
-        <div style="font-size:0.85rem; color:var(--muted-gray); font-weight:600;">Armaan Yadav · Verified Profile</div>
+      <div class="auth-info-card">
+        <div class="auth-info-label">Connected Account:</div>
+        <div class="auth-info-email">armaan123009@gmail.com</div>
+        <div class="auth-info-name">Armaan Yadav · Verified Profile</div>
       </div>
 
       <div style="display:flex; flex-direction:column; gap:0.85rem;">
-        <button class="pill-btn pill-pink" id="googleAuthBtn" type="button">
+        <button class="pill-btn pill-pink liquid-glass-btn" id="googleAuthBtn" type="button">
           <span>Authorize Google Profile</span>
           <span>→</span>
         </button>
-        <button class="pill-btn pill-black" id="guestAuthBtn" type="button">
+        <button class="pill-btn pill-black liquid-glass-btn" id="guestAuthBtn" type="button">
           Continue as Guest
         </button>
       </div>
@@ -537,8 +547,8 @@
 
   <!-- Profile Inspector Modal -->
   <div class="cc-modal-backdrop" id="ccInfoModal">
-    <div class="cc-modal-box" style="max-height:85vh; overflow-y:auto;">
-      <button class="cc-modal-close" data-close-modal type="button">✕</button>
+    <div class="cc-modal-box liquid-glass-modal" style="max-height:85vh; overflow-y:auto;">
+      <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
       <div id="infoModalBody">
         <!-- Rendered by app.js -->
       </div>

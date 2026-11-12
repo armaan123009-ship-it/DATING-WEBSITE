@@ -187,4 +187,13 @@ export class LiquidNavbar {
     this.updateMeniscusPosition(index);
     this.onChange(index, this.items[index]);
   }
+
+  setTone(tone) {
+    if (this.tone === tone) return;
+    this.container.classList.remove(`tone-${this.tone}`);
+    this.tone = tone;
+    this.container.classList.add(`tone-${this.tone}`);
+    this.updateMeniscusPosition();
+  }
 }
+
