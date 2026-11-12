@@ -5,14 +5,49 @@
 
 import { PROFILES, CATEGORIES } from './data/profiles.js';
 import { INITIAL_MATCHES, INITIAL_MESSAGES, ICEBREAKER_PROMPTS, BOT_RESPONSES } from './data/chats.js';
+import { LiquidNavbar, NimbusIcons } from './components/ui/liquid-glass-navbar.js';
 
 class CrazyCreativeApp {
   constructor() {
     this.storageKey = 'cc_dating_state_v1';
     this.initState();
     this.initDOM();
+    this.initLiquidNavbar();
     this.bindEvents();
     this.renderCurrentView();
+  }
+
+  // --------------------------------------------------------------------------
+  // LIQUID GLASS NAVBAR INTEGRATION (Guglielmo Giannattasio Specification)
+  // --------------------------------------------------------------------------
+  initLiquidNavbar() {
+    const mountContainer = document.getElementById('liquidNavbarMount');
+    if (!mountContainer) return;
+
+    this.liquidNav = new LiquidNavbar({
+      target: mountContainer,
+      tone: "light",
+      defaultActive: 0,
+      sound: false,
+      items: [
+        { label: "Home", icon: NimbusIcons.home, fx: "glow", route: "home" },
+        { label: "Explore", icon: NimbusIcons.globe, fx: "spin", route: "explore" },
+        { label: "Discover", icon: NimbusIcons.plane, fx: "plane", route: "discover" },
+        { label: "Chats", icon: NimbusIcons.drop, fx: "drop", route: "chats" },
+        { label: "Profile", icon: NimbusIcons.user, fx: "wave", route: "profile" }
+      ],
+      onChange: (index, item) => {
+        if (item.route === "explore") {
+          this.navigateTo("home");
+          const whiteStage = document.querySelector('.stage-white-cards');
+          if (whiteStage) whiteStage.scrollIntoView({ behavior: 'smooth' });
+        } else if (item.route === "profile") {
+          this.openAuthModal();
+        } else {
+          this.navigateTo(item.route);
+        }
+      }
+    });
   }
 
   // --------------------------------------------------------------------------
@@ -221,6 +256,13 @@ class CrazyCreativeApp {
   navigateTo(viewName) {
     this.currentView = viewName;
     document.body.classList.toggle('in-dashboard', viewName !== 'home');
+
+    // Sync Liquid Navbar state
+    if (this.liquidNav) {
+      if (viewName === 'home') this.liquidNav.setActive(0);
+      else if (viewName === 'discover') this.liquidNav.setActive(2);
+      else if (viewName === 'chats') this.liquidNav.setActive(3);
+    }
 
     Object.keys(this.views).forEach(key => {
       if (this.views[key]) {

@@ -18,7 +18,7 @@
 <body>
 
   <!-- ========================================================================
-       TOP HEADER & EDGE CHROME (CRAZY CREATIVE SPECIFICATION)
+       TOP HEADER & LIQUID GLASS NAVBAR (GUGLIELMO GIANNATTASIO SPECIFICATION)
        ======================================================================== -->
   <header class="cc-header">
     <div class="cc-header-container">
@@ -29,12 +29,13 @@
         <span>Crazy Love</span>
       </a>
 
-      <!-- Centered Navigation Menu -->
-      <nav class="cc-nav-menu" aria-label="Main Navigation">
-        <a href="#home" class="cc-nav-item active" data-route="home">Billboard</a>
-        <a href="#discover" class="cc-nav-item" data-route="discover">Discovery Deck</a>
-        <a href="#chats" class="cc-nav-item" data-route="chats">Theatrical Chat</a>
-      </nav>
+      <!-- Liquid Glass Navbar Center Mount -->
+      <div id="liquidNavbarMount" style="display:flex; flex-direction:column; align-items:center;">
+        <!-- Rendered dynamically by LiquidNavbar in app.js -->
+        <span class="liquid-attribution-tag" style="margin-top:4px;">
+          by <a href="https://guglielmogiannattasio.it" target="_blank" rel="noopener noreferrer">guglielmogiannattasio.it</a>
+        </span>
+      </div>
 
       <!-- Action Pill CTA -->
       <div class="cc-header-actions">
@@ -43,6 +44,9 @@
           <span style="font-size:1.2rem; line-height:1;">→</span>
         </button>
       </div>
+
+    </div>
+  </header>
 
     </div>
   </header>
@@ -126,7 +130,7 @@
         <div class="cc-cards-grid">
           
           <!-- Card 1 -->
-          <article class="cc-broad-card">
+          <article class="cc-broad-card liquid-glass-card">
             <div>
               <div class="card-top-eyebrow">
                 <span>★ TIER 01</span>
@@ -160,7 +164,7 @@
           </article>
 
           <!-- Card 2 -->
-          <article class="cc-broad-card" style="background:#FFF0F7; border-color:var(--canvas-pink);">
+          <article class="cc-broad-card liquid-glass-card" style="background:rgba(255,240,247,0.7) !important; border-color:var(--canvas-pink) !important;">
             <div>
               <div class="card-top-eyebrow" style="color:var(--canvas-dark);">
                 <span>⚡ TIER 02</span>

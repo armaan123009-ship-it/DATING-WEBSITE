@@ -1061,3 +1061,275 @@ body.in-dashboard .cc-header {
   .cc-nav-menu { display: none; }
   .cc-side-rail { display: none; }
 }
+
+
+/* ==========================================================================
+   LIQUID GLASS DESIGN SYSTEM (Guglielmo Giannattasio / 21st.dev Specification)
+   Water-drop physics, fluid gooey meniscus, specular sheen, and NimbusIcons
+   ========================================================================== */
+
+/* Main Liquid Glass Dock */
+.liquid-navbar-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.liquid-navbar-wrapper * {
+  pointer-events: auto;
+}
+
+/* Glass Capsule Shell */
+.liquid-glass-capsule {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(28px) saturate(210%) brightness(1.05);
+  -webkit-backdrop-filter: blur(28px) saturate(210%) brightness(1.05);
+  transition: all 0.3s var(--smooth-ease);
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.18),
+    0 8px 24px rgba(0, 0, 0, 0.1),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.85),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.12);
+}
+
+/* Light Tone (Apple Frosted Crystal) */
+.tone-light .liquid-glass-capsule {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+/* Dark Tone (Smoked Obsidian Glass) */
+.tone-dark .liquid-glass-capsule {
+  background: rgba(18, 18, 22, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 
+    0 24px 60px rgba(0, 0, 0, 0.55),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.35),
+    inset 0 -1.5px 2px rgba(0, 0, 0, 0.45);
+}
+
+/* Specular Sheen (Curved Optical Light Reflection) */
+.liquid-specular-sheen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  border-top-left-radius: var(--radius-pill);
+  border-top-right-radius: var(--radius-pill);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.05) 85%, transparent 100%);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* The Fluid Gooey Meniscus Pill (Liquid Droplet Active Indicator) */
+.liquid-meniscus-pill {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  left: 0;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.08),
+    inset 0 1.5px 1.5px #FFFFFF;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tone-dark .liquid-meniscus-pill {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.5);
+}
+
+/* Nav Items Track */
+.liquid-items-track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+}
+
+/* Interactive Navigation Button */
+.liquid-nav-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-poster);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0B132B;
+  transition: color 0.25s ease, transform 0.2s var(--spring-bounce);
+  overflow: hidden;
+}
+
+.tone-dark .liquid-nav-btn {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.liquid-nav-btn.active {
+  color: var(--canvas-pink);
+  font-weight: 800;
+}
+
+.tone-dark .liquid-nav-btn.active {
+  color: #FFFFFF;
+}
+
+.liquid-nav-btn:hover {
+  transform: translateY(-1px);
+}
+
+.liquid-nav-btn:active {
+  transform: scale(0.96) translateY(1px);
+}
+
+/* Nimbus Icon Vector Styles */
+.liquid-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  transition: transform 0.3s var(--spring-bounce);
+}
+
+.nimbus-icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: all 0.3s var(--spring-bounce);
+}
+
+/* Nimbus Icon Signature Micro-Animations */
+/* 1. FX: Glow Pulse */
+.fx-glow:hover .nimbus-home,
+.liquid-nav-btn.active.fx-glow .nimbus-home {
+  filter: drop-shadow(0 0 8px rgba(255, 46, 147, 0.8));
+  animation: nimbusPulse 1.2s infinite alternate;
+}
+
+@keyframes nimbusPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.18); }
+}
+
+/* 2. FX: Globe Spin */
+.fx-spin:hover .nimbus-globe,
+.liquid-nav-btn.active.fx-spin .nimbus-globe {
+  animation: nimbusSpin 1.8s linear infinite;
+}
+
+@keyframes nimbusSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 3. FX: Plane Flight Lift */
+.fx-plane:hover .nimbus-plane,
+.liquid-nav-btn.active.fx-plane .nimbus-plane {
+  animation: nimbusFly 1s infinite alternate ease-in-out;
+}
+
+@keyframes nimbusFly {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(2px, -3px) rotate(8deg); }
+}
+
+/* 4. FX: Drop Splash Bounce */
+.fx-drop:hover .nimbus-drop,
+.liquid-nav-btn.active.fx-drop .nimbus-drop {
+  animation: nimbusDrop 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes nimbusDrop {
+  0% { transform: scale(1) translateY(0); }
+  50% { transform: scale(0.85, 1.2) translateY(-4px); }
+  100% { transform: scale(1.15, 0.9) translateY(2px); }
+}
+
+/* 5. FX: User Wave */
+.fx-wave:hover .nimbus-user,
+.liquid-nav-btn.active.fx-wave .nimbus-user {
+  animation: nimbusWave 0.7s infinite alternate ease-in-out;
+}
+
+@keyframes nimbusWave {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(14deg); }
+}
+
+/* Liquid Ripple Drop Splash Effect */
+.liquid-ripple-drop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 46, 147, 0.4) 0%, rgba(255, 255, 255, 0.8) 50%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  opacity: 0;
+}
+
+.liquid-ripple-drop.animate-ripple {
+  animation: liquidDropRipple 0.6s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes liquidDropRipple {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0.9; }
+  60% { transform: translate(-50%, -50%) scale(2.2); opacity: 0.4; }
+  100% { transform: translate(-50%, -50%) scale(3.2); opacity: 0; }
+}
+
+/* Liquid Glass Attribution Subtitle */
+.liquid-attribution-tag {
+  font: 500 12px/1 ui-sans-serif, -apple-system, 'Segoe UI', system-ui, sans-serif;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  margin-top: 0.2rem;
+  user-select: none;
+}
+
+.liquid-attribution-tag a {
+  color: var(--accent-lime);
+  font-weight: 700;
+  text-decoration: underline;
+  transition: opacity 0.2s ease;
+}
+
+.liquid-attribution-tag a:hover {
+  opacity: 0.8;
+}
+
+/* Liquid Glass Cards Across The Website */
+.liquid-glass-card {
+  background: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(24px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.08),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.9) !important;
+}
+
+.stage-hero-pink {
+  padding-top: 7rem; /* Make room for floating liquid glass navbar */
+}
