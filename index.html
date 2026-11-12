@@ -3,571 +3,539 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Jan Dating — High-contrast editorial dating system built on Swiss typography, strict privacy, and verified intentional connections.">
-  <title>Jan Dating — Intentional Connections. Open Architecture.</title>
+  <meta name="description" content="Crazy Love — A loud, poster-like studio dating experience built on monumental typography, saturated color stages, and real human attraction.">
+  <title>Crazy Love — Dating Without The Boring Parts.</title>
 
-  <!-- Google Fonts: Plus Jakarta Sans & Space Grotesk -->
+  <!-- Google Fonts: Bricolage Grotesque & Caveat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;500;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 
-  <!-- Core Jan.ai Editorial Stylesheet -->
+  <!-- Core Crazy Creative Stylesheet -->
   <link rel="stylesheet" href="app.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22black%22 stroke-width=%222.5%22><path d=%22M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z%22/></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body>
 
   <!-- ========================================================================
-       TOP APPLICATION NAVIGATION BAR (JAN.AI SPECIFICATION)
+       TOP HEADER & EDGE CHROME (CRAZY CREATIVE SPECIFICATION)
        ======================================================================== -->
-  <header class="site-nav">
-    <div class="nav-container">
+  <header class="cc-header">
+    <div class="cc-header-container">
       
-      <!-- Brand Logo -->
-      <a href="#home" class="nav-brand" data-route="home">
-        <div class="brand-icon-box">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        </div>
-        <span>Jan Dating</span>
+      <!-- Studio Logo -->
+      <a href="#home" class="cc-brand-logo" data-route="home">
+        <div class="cc-logo-badge">★</div>
+        <span>Crazy Love</span>
       </a>
 
-      <!-- Primary View Switcher Navigation -->
-      <nav class="nav-links" aria-label="Main Navigation">
-        <a href="#home" class="nav-link active" data-route="home">Overview</a>
-        <a href="#dashboard" class="nav-link" data-route="dashboard">Dashboard</a>
-        <a href="#login" class="nav-link" data-route="login">Authentication</a>
+      <!-- Centered Navigation Menu -->
+      <nav class="cc-nav-menu" aria-label="Main Navigation">
+        <a href="#home" class="cc-nav-item active" data-route="home">Billboard</a>
+        <a href="#discover" class="cc-nav-item" data-route="discover">Discovery Deck</a>
+        <a href="#chats" class="cc-nav-item" data-route="chats">Theatrical Chat</a>
       </nav>
 
-      <!-- Action Triggers -->
-      <div class="nav-actions">
-        <button class="btn btn-secondary btn-sm" data-route="login" type="button">
-          Sign In
-        </button>
-        <button class="btn btn-primary btn-sm" data-route="dashboard" type="button">
-          <span>Launch App</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      <!-- Action Pill CTA -->
+      <div class="cc-header-actions">
+        <button class="pill-btn pill-white pill-sm" id="btnHeaderAction" data-route="discover" type="button">
+          <span>Enter App</span>
+          <span style="font-size:1.2rem; line-height:1;">→</span>
         </button>
       </div>
 
     </div>
   </header>
 
+  <!-- Pinned Right Edge Rail Badge -->
+  <aside class="cc-side-rail" aria-label="System status badge">
+    <div class="side-rail-dot"></div>
+    <span>Attraction Algorithm v2.4</span>
+  </aside>
+
   <!-- ========================================================================
-       1. LANDING / HOME VIEW (JAN.AI MARKETING SPECIFICATION)
+       STAGE 1: THE FULL-BLEED PINK BILLBOARD HERO (HOME VIEW)
        ======================================================================== -->
-  <main class="view-section active" id="viewHome">
+  <main class="cc-view active" id="viewHome">
     
-    <!-- Hero Section with Swiss Typography and Statistics -->
-    <section class="home-hero">
-      <div class="hero-content">
+    <section class="stage-hero-pink">
+      
+      <!-- Floating Confetti & Shapes -->
+      <div class="confetti-spark" style="top:18%; left:8%; font-size:2.5rem; color:var(--accent-lime);">✦</div>
+      <div class="confetti-spark" style="top:25%; right:10%; font-size:2.8rem; color:var(--accent-cyan); animation-delay:1.5s;">★</div>
+      <div class="confetti-spark" style="bottom:22%; left:12%; font-size:2.2rem; color:var(--accent-yellow); animation-delay:0.8s;">⚡</div>
+      <div class="confetti-spark" style="bottom:28%; right:14%; font-size:2rem; color:var(--canvas-white); animation-delay:2.2s;">✦</div>
+
+      <div class="hero-poster-stack">
         
-        <div class="hero-pill-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          <span>Open Architecture · Intentional Connections</span>
+        <!-- Handwritten Script Accent -->
+        <div class="hero-script-wow">
+          <span>wow!</span>
+          <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="3">
+            <path d="M2 12C12 4 28 4 38 12M30 6L38 12L30 18"/>
+          </svg>
         </div>
 
-        <h1 class="hero-headline">
-          Dating engineered for clarity,<br>not endless dopamine loops.
+        <!-- Giant Monumental Headline -->
+        <h1 class="hero-poster-title">
+          DATING WITHOUT<br>THE BORING PARTS.
         </h1>
 
-        <p class="hero-subhead">
-          An open-source alternative to gamified dating apps. Built on verified human identity, cryptographic privacy, and curated intellectual compatibility.
+        <!-- Supporting Descriptive Line -->
+        <p class="hero-poster-sub">
+          A theatrical, studio-grade dating experience built for electric sparks, high-chemistry conversations, and unapologetic humans.
         </p>
 
-        <div class="hero-buttons">
-          <button class="btn btn-primary" data-route="dashboard" type="button">
-            <span>Explore Discovery Deck</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        <!-- Roomy Tactile White Pill Button -->
+        <div style="display:flex; gap:1.25rem; flex-wrap:wrap; justify-content:center;">
+          <button class="pill-btn pill-white" id="btnHeroLaunch" type="button">
+            <span>Explore The Deck Now</span>
+            <span style="font-size:1.3rem;">→</span>
           </button>
-          <button class="btn btn-secondary" data-route="login" type="button">
-            <span>Account Portal</span>
-          </button>
-        </div>
-
-        <!-- 3 Platform Stat Cards (Jan.ai signature component) -->
-        <div class="hero-stats-grid">
           
-          <div class="stat-card card-dark">
-            <div class="stat-top">
-              <span>ACTIVE MEMBERS</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            </div>
-            <div class="stat-value">41.2K</div>
-            <div class="stat-label">Verified community profiles</div>
-          </div>
-
-          <div class="stat-card card-blue">
-            <div class="stat-top">
-              <span>INTEGRITY RATE</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            </div>
-            <div class="stat-value">99.4%</div>
-            <div class="stat-label">Zero bot toleration benchmark</div>
-          </div>
-
-          <div class="stat-card card-yellow">
-            <div class="stat-top">
-              <span>DATA BROKERING</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            </div>
-            <div class="stat-value">0.0%</div>
-            <div class="stat-label">Local encrypted state architecture</div>
-          </div>
-
+          <button class="pill-btn pill-black" id="btnHeroSignIn" type="button">
+            <span>Google One-Tap Sync</span>
+          </button>
         </div>
 
       </div>
+
+      <!-- Mascot Peeking Into Frame From Bottom -->
+      <div class="mascot-peek-wrapper" aria-hidden="true">
+        <div class="mascot-character-art">
+          <div class="mascot-eyes">
+            <div class="mascot-eye"></div>
+            <div class="mascot-eye"></div>
+          </div>
+        </div>
+      </div>
+
     </section>
 
-    <!-- Feature Enumeration (Circled Numbers: 1, 2, 3) -->
-    <section class="home-features">
-      
-      <div class="section-head-wrap">
-        <div class="section-eyebrow">SYSTEM CAPABILITIES</div>
-        <h2 class="section-headline">Everything needed for authentic connection</h2>
-      </div>
-
-      <div class="feature-enumeration">
+    <!-- ====================================================================
+         STAGE 2: THE WHITE STAGE (CHOOSE YOUR FREQUENCY)
+         ==================================================================== -->
+    <section class="stage-white-cards">
+      <div class="white-stage-container">
         
-        <!-- Feature 1 -->
-        <article class="feature-row">
-          <div class="feature-left">
-            <div class="circled-number">1</div>
-            <h3 class="feature-title">Compatibility driven by focus areas, not vanity filters</h3>
-            <p class="feature-desc">
-              Discover individuals grouped by aesthetic values, intellectual pursuits, and lifestyle rhythms. Profiles showcase real projects, design philosophies, and personal principles.
-            </p>
+        <div class="section-claim-header">
+          <h2 class="section-claim-title">PICK YOUR DATING FREQUENCY.</h2>
+          <p class="section-claim-sub">Two deliberate ways to experience high-voltage chemistry. No micro-transactions, no dark patterns.</p>
+        </div>
+
+        <div class="cc-cards-grid">
+          
+          <!-- Card 1 -->
+          <article class="cc-broad-card">
             <div>
-              <button class="btn btn-secondary btn-sm" data-route="dashboard" type="button">
-                View Sample Matches →
-              </button>
-            </div>
-          </div>
-
-          <div style="background:#FAFAFA; border:2px solid var(--ink); border-radius:var(--radius-md); padding:1.75rem; box-shadow:var(--shadow-md);">
-            <div style="font-size:0.8125rem; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; margin-bottom:1rem; color:var(--muted);">Category Taxonomies</div>
-            <div style="display:flex; flex-direction:column; gap:0.75rem;">
-              <div style="display:flex; justify-content:space-between; align-items:center; background:var(--canvas); border:1.5px solid var(--ink); padding:0.75rem 1rem; border-radius:var(--radius-sm); font-weight:700;">
-                <span>Creative &amp; Editorial</span>
-                <span style="font-family:var(--font-mono); font-size:0.8125rem; background:var(--accent-purple); padding:0.2rem 0.5rem; border:1px solid var(--ink); border-radius:4px;">96% MATCH</span>
+              <div class="card-top-eyebrow">
+                <span>★ TIER 01</span>
+                <span>·</span>
+                <span>ACTIVE DISCOVERY</span>
               </div>
-              <div style="display:flex; justify-content:space-between; align-items:center; background:var(--canvas); border:1.5px solid var(--ink); padding:0.75rem 1rem; border-radius:var(--radius-sm); font-weight:700;">
-                <span>Thoughtful &amp; Grounded</span>
-                <span style="font-family:var(--font-mono); font-size:0.8125rem; background:var(--accent-cream); padding:0.2rem 0.5rem; border:1px solid var(--ink); border-radius:4px;">93% MATCH</span>
-              </div>
-              <div style="display:flex; justify-content:space-between; align-items:center; background:var(--canvas); border:1.5px solid var(--ink); padding:0.75rem 1rem; border-radius:var(--radius-sm); font-weight:700;">
-                <span>Active &amp; Exploratory</span>
-                <span style="font-family:var(--font-mono); font-size:0.8125rem; background:var(--accent-blue); color:#FFF; padding:0.2rem 0.5rem; border:1px solid var(--ink); border-radius:4px;">89% MATCH</span>
-              </div>
-            </div>
-          </div>
-        </article>
+              <h3 class="card-big-name">Curated Chemistry</h3>
+              <p style="font-size:1.15rem; color:var(--muted-gray); font-weight:600; margin-top:0.5rem;">
+                Handpicked profiles based on creative energy, shared tastes, and authentic intentions.
+              </p>
 
-        <!-- Feature 2 -->
-        <article class="feature-row">
-          <div class="feature-left">
-            <div class="circled-number">2</div>
-            <h3 class="feature-title">Real-time messaging with deliberate conversational pacing</h3>
-            <p class="feature-desc">
-              Clean editorial interface designed for meaningful correspondence. Includes curated icebreaker prompts, zero read-receipt stress, and responsive dialogue automation.
-            </p>
-            <div>
-              <button class="btn btn-secondary btn-sm" data-route="dashboard" type="button">
-                Inspect Messaging Console →
-              </button>
-            </div>
-          </div>
-
-          <div style="background:var(--canvas); border:2px solid var(--ink); border-radius:var(--radius-md); padding:1.5rem; box-shadow:var(--shadow-md); display:flex; flex-direction:column; gap:0.75rem;">
-            <div class="editorial-bubble them" style="max-width:85%;">
-              "Noticed your appreciation for clean systems. What's your current favorite cafe or reading sanctuary?"
-            </div>
-            <div class="editorial-bubble me" style="max-width:85%; align-self:flex-end;">
-              "A quiet filter-coffee atelier in Shibuya with floor-to-ceiling concrete and zero background music."
-            </div>
-            <div style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.75rem; color:var(--muted); font-weight:700; margin-top:0.25rem;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Encrypted Direct Message Thread</span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Feature 3: Layered Sticky Note Card (Jan.ai Signature Card) -->
-        <article class="feature-row">
-          <div class="feature-left">
-            <div class="circled-number">3</div>
-            <h3 class="feature-title">The Memory Card: Preferences and boundaries respected</h3>
-            <p class="feature-desc">
-              Physical card-stack presentation documenting communication rhythms, creative interests, and personal boundaries. No hidden algorithms altering your visibility.
-            </p>
-            <div>
-              <button class="btn btn-yellow btn-sm" data-route="login" type="button">
-                Create Your Profile Card →
-              </button>
-            </div>
-          </div>
-
-          <!-- Sticky Note Layered Card Stack -->
-          <div class="sticky-card-stack">
-            <div class="stack-layer layer-purple"></div>
-            <div class="stack-layer layer-green"></div>
-            
-            <div class="sticky-front-card">
-              <div class="sticky-header">
-                <img class="sticky-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" alt="Anya">
-                <div>
-                  <div class="sticky-name">Anya Chen, 24</div>
-                  <div class="sticky-sub">Product Designer · Tokyo</div>
-                </div>
-              </div>
-
-              <ul class="sticky-bullet-list">
+              <ul class="card-bullet-list">
                 <li>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Weekend risograph publishing &amp; typography</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Unlimited intentional card swipes</span>
                 </li>
                 <li>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Appreciates intentional pacing &amp; direct honesty</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Instant mutual match celebration</span>
                 </li>
                 <li>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Prefers specialty coffee over crowded nightlife</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Zero advertising or data tracking</span>
                 </li>
               </ul>
             </div>
-          </div>
-        </article>
 
-      </div>
-    </section>
-
-    <!-- Partner Integrations Section -->
-    <section class="ecosystem-section">
-      <div class="ecosystem-container">
-        <div class="section-eyebrow">STANDARDS &amp; INTEGRATIONS</div>
-        <h3 style="font-size:2rem; font-weight:800; letter-spacing:-0.03em;">Engineered with transparent modern tooling</h3>
-
-        <div class="partners-grid">
-          <div class="partner-box">
-            <svg width="24" height="24" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
-              <path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 17c1.8 3.6 5.6 6.5 10.1 6.5z"/>
-              <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/>
-              <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/>
-            </svg>
-            <div>Google Identity</div>
-            <span style="font-size:0.75rem; color:var(--muted); font-weight:500;">OAuth 2.0 Verification</span>
-          </div>
-
-          <div class="partner-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <div>Zero-Knowledge</div>
-            <span style="font-size:0.75rem; color:var(--muted); font-weight:500;">Client-Side Cryptography</span>
-          </div>
-
-          <div class="partner-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-            <div>Supabase Cloud</div>
-            <span style="font-size:0.75rem; color:var(--muted); font-weight:500;">Realtime Synchronization</span>
-          </div>
-
-          <div class="partner-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-            <div>W3C Standards</div>
-            <span style="font-size:0.75rem; color:var(--muted); font-weight:500;">Semantic Web Architecture</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-
-  <!-- ========================================================================
-       2. LOGIN & AUTHENTICATION PORTAL VIEW (JAN.AI SPECIFICATION)
-       ======================================================================== -->
-  <main class="view-section" id="viewLogin">
-    <div class="auth-page-container">
-      
-      <div class="auth-card">
-        
-        <div class="auth-card-head">
-          <div style="display:inline-flex; align-items:center; justify-content:center; width:3rem; height:3rem; background:var(--accent-yellow); border:2px solid var(--ink); border-radius:var(--radius-sm); box-shadow:var(--shadow-sm); margin-bottom:1rem;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-          </div>
-          <h2>Authentication Portal</h2>
-          <p>Access your verified matching queue and dialogue history.</p>
-        </div>
-
-        <div class="auth-methods">
-          
-          <!-- Official Google Authentication Trigger -->
-          <button class="google-auth-btn" id="googleAuthBtn" type="button">
-            <svg width="18" height="18" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
-              <path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2-6.4-4.8L1.9 17c1.8 3.6 5.6 6.5 10.1 6.5z"/>
-              <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.1-1.6.4-2.3L1.9 7.3C.7 9.7 0 12.3 0 15.2s.7 5.5 1.9 7.9l3.7-2.9z"/>
-              <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/>
-            </svg>
-            <span>Continue with Google</span>
-          </button>
-
-          <div class="divider-rule">OR EMAIL AUTHENTICATION</div>
-
-          <div class="auth-form-group">
-            <label class="auth-label" for="authEmailInput">Work or Personal Email</label>
-            <input type="email" class="auth-input" id="authEmailInput" placeholder="armaan123009@gmail.com" value="armaan123009@gmail.com">
-          </div>
-
-          <div class="auth-form-group">
-            <label class="auth-label" for="authPassInput">Passkey or Password</label>
-            <input type="password" class="auth-input" id="authPassInput" placeholder="••••••••••••" value="password123">
-          </div>
-
-          <button class="btn btn-primary" id="guestLoginBtn" style="margin-top:0.5rem;" type="button">
-            <span>Authorize &amp; Launch Dashboard</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-  </main>
-
-
-  <!-- ========================================================================
-       3. DASHBOARD APPLICATION VIEW (DISCOVER, CHATS, PREFERENCES)
-       ======================================================================== -->
-  <main class="view-section" id="viewDashboard">
-    <div class="dashboard-layout">
-      
-      <!-- Subnavigation Toolbar -->
-      <nav class="dashboard-subnav">
-        
-        <div class="dash-tabs">
-          <button class="dash-tab-btn active" data-dash-tab="discover" type="button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 19 21 12 17 5 21 12 2"></polygon></svg>
-            <span>Discovery Deck</span>
-          </button>
-          
-          <button class="dash-tab-btn" data-dash-tab="chats" type="button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-            <span>Active Connections</span>
-            <span style="background:var(--accent-coral); color:#FFF; font-size:0.6875rem; font-weight:800; padding:0.1rem 0.45rem; border-radius:4px; font-family:var(--font-mono);" id="dashMatchesBadge">2</span>
-          </button>
-          
-          <button class="dash-tab-btn" data-dash-tab="profile" type="button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span>My Settings</span>
-          </button>
-        </div>
-
-        <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.8125rem; font-weight:700;">
-          <span style="color:#059669;">●</span>
-          <span>Verified Session: Armaan Yadav</span>
-        </div>
-
-      </nav>
-
-      <!-- SUBTAB 1: DISCOVERY DECK -->
-      <section class="dash-tab-pane active" id="dashTab_discover">
-        <div class="deck-workspace">
-          
-          <!-- Category Filter Bar -->
-          <div class="category-filter-row" id="categoryFilterRow">
-            <!-- Rendered by app.js -->
-          </div>
-
-          <!-- Jan.ai 3D Card Stack Arena -->
-          <div class="jan-card-arena" id="janCardArena">
-            <!-- Rendered by app.js -->
-          </div>
-
-          <!-- Bottom Action Buttons (Jan.ai Neo-Brutalist Hard Shadow Controls) -->
-          <div class="deck-action-bar">
-            
-            <button class="action-trigger trigger-rewind" id="btnDeckRewind" title="Rewind Last Profile (ArrowDown)" type="button">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+            <button class="pill-btn pill-pink" onclick="window.crazyApp.navigateTo('discover')" type="button">
+              Launch Curated Deck →
             </button>
+          </article>
 
-            <button class="action-trigger trigger-reject" id="btnDeckPass" title="Pass / Decline (ArrowLeft)" type="button">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
+          <!-- Card 2 -->
+          <article class="cc-broad-card" style="background:#FFF0F7; border-color:var(--canvas-pink);">
+            <div>
+              <div class="card-top-eyebrow" style="color:var(--canvas-dark);">
+                <span>⚡ TIER 02</span>
+                <span>·</span>
+                <span>THEATRICAL</span>
+              </div>
+              <h3 class="card-big-name">The Midnight Club</h3>
+              <p style="font-size:1.15rem; color:var(--muted-gray); font-weight:600; margin-top:0.5rem;">
+                Direct access to verified creative directors, artists, and nocturnal conversationalists.
+              </p>
 
-            <button class="action-trigger trigger-accept" id="btnDeckLike" title="Connect / Like (ArrowRight)" type="button">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            </button>
-
-            <button class="action-trigger trigger-info" id="btnDeckInfo" title="View Full Details (Space)" type="button">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            </button>
-
-          </div>
-
-          <div style="font-size:0.8125rem; font-weight:700; color:var(--muted); font-family:var(--font-mono);">
-            Key Shortcuts: [←] Pass · [→] Connect · [↓] Rewind · [Space] Inspect Details
-          </div>
-
-        </div>
-      </section>
-
-      <!-- SUBTAB 2: MATCHES & MESSAGING CONSOLE -->
-      <section class="dash-tab-pane" id="dashTab_chats">
-        <div class="chat-workspace-grid">
-          
-          <!-- Left Threads Sidebar -->
-          <aside class="chat-threads-sidebar">
-            <div class="threads-sidebar-header">
-              <h3>Connections</h3>
-              <span style="font-size:0.75rem; font-weight:800; font-family:var(--font-mono); background:var(--accent-yellow); padding:0.2rem 0.5rem; border:1px solid var(--ink); border-radius:4px;">VERIFIED</span>
+              <ul class="card-bullet-list">
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Encrypted real-time messaging console</span>
+                </li>
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Curated conversation starter icebreakers</span>
+                </li>
+                <li>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Verified Google identity badge</span>
+                </li>
+              </ul>
             </div>
 
-            <div class="threads-list" id="threadsList">
+            <button class="pill-btn pill-black" onclick="window.crazyApp.navigateTo('chats')" type="button">
+              Enter Midnight Room →
+            </button>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         STAGE 3: THE THEATRICAL DARK STAGE
+         ==================================================================== -->
+    <section class="stage-dark-theatrical">
+      
+      <!-- Symmetrical Star Accents -->
+      <div style="position:absolute; top:10%; left:15%; color:var(--accent-lime); font-size:2rem;">✦</div>
+      <div style="position:absolute; top:10%; right:15%; color:var(--accent-cyan); font-size:2rem;">✦</div>
+
+      <div class="dark-stage-container">
+        
+        <h2 class="dark-stage-title">THE CONVERSATION ROOM.</h2>
+        <p class="dark-stage-sub">A stage-like environment for unhurried, magnetic correspondence. Powered by responsive client-side state.</p>
+
+        <!-- Interactive Theatrical Chat Box -->
+        <div class="theatrical-chat-box">
+          
+          <!-- Left Sidebar Threads -->
+          <div class="theatrical-sidebar">
+            <div class="theatrical-sidebar-head">
+              <strong style="font-size:1.2rem; letter-spacing:-0.02em;">Connections</strong>
+              <span style="background:var(--accent-lime); color:#000; font-size:0.75rem; font-weight:900; padding:0.2rem 0.6rem; border-radius:9999px;">LIVE</span>
+            </div>
+
+            <div id="theatricalThreads" style="overflow-y:auto; flex:1;">
               <!-- Rendered by app.js -->
             </div>
-          </aside>
+          </div>
 
-          <!-- Right Conversation Area -->
-          <div class="chat-conversation-area">
+          <!-- Right Conversation Pane -->
+          <div class="theatrical-chat-pane">
             
-            <div class="conversation-header">
-              <div class="conversation-partner-meta">
-                <img class="conversation-avatar" id="chatPartnerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" alt="Partner">
+            <div class="theatrical-chat-header">
+              <div style="display:flex; align-items:center; gap:1rem;">
+                <img id="theatricalChatAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" style="width:2.75rem; height:2.75rem; border-radius:50%; object-fit:cover; border:2px solid var(--accent-lime);" alt="Partner">
                 <div>
-                  <div class="conversation-partner-name" id="chatPartnerName">Anya Chen</div>
-                  <div class="conversation-status-indicator">
-                    <span>●</span>
-                    <span>Encrypted Session Active</span>
-                  </div>
+                  <div id="theatricalChatName" style="font-size:1.25rem; font-weight:800;">Anya Chen</div>
+                  <div style="font-size:0.8rem; color:var(--accent-lime); font-weight:700;">● Active in Studio</div>
                 </div>
               </div>
 
-              <button class="btn btn-secondary btn-sm" onclick="window.janApp.showCardDetails()" type="button">
-                <span>View Profile</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              <button class="pill-btn pill-sm pill-white" onclick="window.crazyApp.showCardDetails()" type="button">
+                Inspect Vibe
               </button>
             </div>
 
             <!-- Messages Stream -->
-            <div class="message-stream-body" id="messageStreamBody">
+            <div class="theatrical-messages-stream" id="theatricalMessages">
               <!-- Rendered by app.js -->
             </div>
 
-            <!-- Quick Icebreaker Prompts -->
-            <div class="conversation-icebreakers" id="conversationIcebreakers">
+            <!-- Icebreaker Pills -->
+            <div id="theatricalIcebreakers" style="padding:0.75rem 1.5rem; background:#111; display:flex; gap:0.5rem; overflow-x:auto;">
               <!-- Rendered by app.js -->
             </div>
 
-            <!-- Composer Toolbar -->
-            <div class="message-input-toolbar">
-              <input type="text" class="editorial-input" id="chatInput" placeholder="Write an intentional response or select a prompt above...">
-              <button class="btn btn-primary btn-sm" id="btnSendMessage" type="button">
-                <span>Send</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            <!-- Message Input -->
+            <div class="theatrical-input-bar">
+              <input type="text" class="theatrical-input" id="theatricalInput" placeholder="Drop an electric icebreaker or reply...">
+              <button class="pill-btn pill-lime pill-sm" id="btnTheatricalSend" type="button">
+                Send ⚡
               </button>
             </div>
 
           </div>
 
         </div>
-      </section>
 
-      <!-- SUBTAB 3: USER PROFILE & SETTINGS -->
-      <section class="dash-tab-pane" id="dashTab_profile">
-        <div style="max-width:680px; margin:0 auto; background:var(--canvas); border:2px solid var(--ink); border-radius:var(--radius-md); box-shadow:var(--shadow-xl); padding:2.5rem; display:flex; flex-direction:column; gap:1.75rem;">
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         STAGE 4: THE FAQ & CONTACT BLOCK
+         ==================================================================== -->
+    <section class="stage-faq-white">
+      <div class="faq-grid-layout">
+        
+        <div class="faq-left-col">
+          <h3>ANY BURNING<br>QUESTIONS?</h3>
+          <p style="font-size:1.25rem; color:var(--muted-gray); font-weight:600; margin-top:1.5rem; max-width:400px;">
+            Here is the raw truth behind our algorithms, identity verification, and matchmaking privacy.
+          </p>
+
+          <button class="pill-btn pill-pink" onclick="window.crazyApp.navigateTo('discover')" style="margin-top:2.5rem;" type="button">
+            Take The Test Drive →
+          </button>
+        </div>
+
+        <div class="faq-rows-stack">
           
-          <div style="display:flex; align-items:center; gap:1.5rem;">
-            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80" style="width:5rem; height:5rem; border-radius:50%; border:2px solid var(--ink); box-shadow:var(--shadow-sm);" alt="Armaan">
-            <div>
-              <h2 style="font-size:1.75rem; font-weight:800; letter-spacing:-0.03em;">Armaan Yadav</h2>
-              <div style="color:var(--muted); font-size:0.875rem; font-weight:600;">armaan123009@gmail.com · Google Verified</div>
-              <div style="margin-top:0.4rem; display:inline-flex; align-items:center; gap:0.4rem; background:var(--accent-green); border:1.5px solid var(--ink); border-radius:var(--radius-sm); padding:0.15rem 0.6rem; font-size:0.75rem; font-weight:800;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span>IDENTITY VALIDATED</span>
-              </div>
+          <div class="faq-item-row open">
+            <div class="faq-q-title">
+              <span>How does Crazy Love differ from mainstream apps?</span>
+              <span style="font-size:1.5rem; font-weight:900;">+</span>
+            </div>
+            <div class="faq-a-body">
+              We eliminate endless gamification algorithms designed to keep you single. Every card represents a fully-vetted human with authentic taste benchmarks, verified identity, and direct real-time communication.
             </div>
           </div>
 
-          <div style="border-top:1px solid var(--border-subtle); padding-top:1.5rem; display:flex; flex-direction:column; gap:1.25rem;">
-            
-            <div class="auth-form-group">
-              <label class="auth-label" for="userSettingName">Display Name</label>
-              <input type="text" class="auth-input" id="userSettingName" value="Armaan Yadav">
+          <div class="faq-item-row">
+            <div class="faq-q-title">
+              <span>Is my location and personal data safe?</span>
+              <span style="font-size:1.5rem; font-weight:900;">+</span>
             </div>
-
-            <div class="auth-form-group">
-              <label class="auth-label" for="userSettingCity">Primary Base / City</label>
-              <input type="text" class="auth-input" id="userSettingCity" value="Tokyo">
+            <div class="faq-a-body">
+              Yes. We do not sell behavioural telemetry or broker user coordinates. All session records are stored locally with client-side cryptographic keys.
             </div>
+          </div>
 
-            <div class="auth-form-group">
-              <label class="auth-label" for="userSettingBio">Biography &amp; Intentions</label>
-              <textarea class="auth-input" id="userSettingBio" rows="3">Focusing on distributed interfaces, editorial typography, and quiet specialty coffee roasters.</textarea>
+          <div class="faq-item-row">
+            <div class="faq-q-title">
+              <span>How does Google One-Tap authentication work?</span>
+              <span style="font-size:1.5rem; font-weight:900;">+</span>
             </div>
-
-            <div class="auth-form-group">
-              <label class="auth-label">Discovery Radius: <span id="radiusEcho" style="font-family:var(--font-mono); color:var(--ink);">25 km</span></label>
-              <input type="range" min="5" max="100" value="25" oninput="document.getElementById('radiusEcho').textContent = this.value + ' km';">
+            <div class="faq-a-body">
+              We verify your Google profile to confirm human identity, eliminate duplicate bots, and keep communication high-standard.
             </div>
-
-            <button class="btn btn-primary" id="btnSaveSettings" style="align-self:flex-start;" type="button">
-              Save Account Configuration
-            </button>
-
           </div>
 
         </div>
-      </section>
 
-    </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         STAGE 5: THE CLOSING FLAME CARD & LIME CTA
+         ==================================================================== -->
+    <section class="stage-closing-flame">
+      <div class="closing-black-card">
+        
+        <div style="display:inline-flex; align-items:center; gap:0.5rem; background:rgba(255,255,255,0.15); padding:0.4rem 1.25rem; border-radius:9999px; font-weight:800; font-size:0.875rem; letter-spacing:0.04em; text-transform:uppercase; margin-bottom:1.5rem;">
+          <span>⚡ READY FOR REAL CONNECTION?</span>
+        </div>
+
+        <h2 class="closing-headline">
+          STOP SWIPING ENDLESSLY.<br>START MEETING HUMANS.
+        </h2>
+
+        <p style="font-size:1.35rem; color:rgba(255,255,255,0.85); max-width:620px; margin:0 auto 3rem; font-weight:500;">
+          Your next partner is waiting in the discovery deck. Step inside the theatrical room and find your match.
+        </p>
+
+        <button class="pill-btn pill-lime" id="btnFlameLaunch" type="button">
+          <span>Launch Discovery Deck Now</span>
+          <span style="font-size:1.4rem;">⚡</span>
+        </button>
+
+      </div>
+    </section>
+
   </main>
 
 
   <!-- ========================================================================
-       MODALS (MUTUAL CONNECTION & PROFILE INSPECTION)
+       DISCOVERY DECK INTERACTIVE VIEW
+       ======================================================================== -->
+  <section class="cc-view" id="viewDiscover">
+    <div class="deck-arena-container">
+      
+      <div style="text-align:center; margin-bottom:1rem;">
+        <span style="color:var(--canvas-pink); font-weight:900; letter-spacing:0.05em; font-size:0.85rem; text-transform:uppercase;">● SWIPE ARENA</span>
+        <h2 style="font-size:3rem; font-weight:800; text-transform:uppercase; line-height:1; letter-spacing:-0.02em; margin-top:0.25rem;">Curated Candidates</h2>
+      </div>
+
+      <!-- 3D Card Stack Arena -->
+      <div class="cc-swipe-stage" id="ccSwipeStage">
+        <!-- Rendered by app.js -->
+      </div>
+
+      <!-- Tactile Action Controls -->
+      <div class="cc-action-controls">
+        <button class="cc-btn-circle cc-btn-rewind" id="btnRewind" title="Rewind (ArrowDown)" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+        </button>
+
+        <button class="cc-btn-circle cc-btn-pass" id="btnPass" title="Pass (ArrowLeft)" type="button">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+
+        <button class="cc-btn-circle cc-btn-like" id="btnLike" title="Match (ArrowRight)" type="button">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+        </button>
+
+        <button class="cc-btn-circle cc-btn-info" id="btnInfo" title="Inspect (Space)" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        </button>
+      </div>
+
+      <div style="font-size:0.875rem; font-weight:800; color:var(--muted-gray); margin-top:0.5rem;">
+        Shortcuts: [←] Pass · [→] Connect · [↓] Rewind · [Space] Inspect
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================================================
+       CHATS VIEW
+       ======================================================================== -->
+  <section class="cc-view" id="viewChats">
+    <div style="max-width:1100px; margin:2rem auto; padding:0 1.5rem;">
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+        <div>
+          <span style="color:var(--canvas-pink); font-weight:900; letter-spacing:0.05em; font-size:0.85rem; text-transform:uppercase;">● DIRECT MESSAGES</span>
+          <h2 style="font-size:2.5rem; font-weight:800; text-transform:uppercase;">Active Conversations</h2>
+        </div>
+        <button class="pill-btn pill-pink pill-sm" data-route="discover" type="button">
+          ← Back to Deck
+        </button>
+      </div>
+
+      <!-- Theatrical Box Repurposed -->
+      <div class="theatrical-chat-box" style="box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+        
+        <div class="theatrical-sidebar">
+          <div class="theatrical-sidebar-head">
+            <strong style="font-size:1.2rem;">Connections</strong>
+            <span style="background:var(--accent-lime); color:#000; font-size:0.75rem; font-weight:900; padding:0.2rem 0.6rem; border-radius:9999px;">LIVE</span>
+          </div>
+
+          <div id="theatricalThreads_page" style="overflow-y:auto; flex:1;">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+
+        <div class="theatrical-chat-pane">
+          <div class="theatrical-chat-header">
+            <div style="display:flex; align-items:center; gap:1rem;">
+              <img id="theatricalChatAvatar_page" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" style="width:2.75rem; height:2.75rem; border-radius:50%; object-fit:cover; border:2px solid var(--accent-lime);" alt="Partner">
+              <div>
+                <div id="theatricalChatName_page" style="font-size:1.25rem; font-weight:800;">Anya Chen</div>
+                <div style="font-size:0.8rem; color:var(--accent-lime); font-weight:700;">● Active in Studio</div>
+              </div>
+            </div>
+
+            <button class="pill-btn pill-sm pill-white" onclick="window.crazyApp.showCardDetails()" type="button">
+              Inspect Vibe
+            </button>
+          </div>
+
+          <div class="theatrical-messages-stream" id="theatricalMessages_page">
+            <!-- Rendered by app.js -->
+          </div>
+
+          <div id="theatricalIcebreakers_page" style="padding:0.75rem 1.5rem; background:#111; display:flex; gap:0.5rem; overflow-x:auto;">
+            <!-- Rendered by app.js -->
+          </div>
+
+          <div class="theatrical-input-bar">
+            <input type="text" class="theatrical-input" id="theatricalInput_page" placeholder="Drop an electric icebreaker or reply...">
+            <button class="pill-btn pill-lime pill-sm" id="btnTheatricalSend_page" type="button">
+              Send ⚡
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================================================
+       MODALS
        ======================================================================== -->
 
-  <!-- Mutual Match Dialog -->
-  <div class="modal-backdrop" id="matchModal">
-    <div class="modal-window" style="text-align:center;">
-      <button class="modal-close-trigger" data-close-modal type="button">✕</button>
+  <!-- Match Celebration Modal -->
+  <div class="cc-modal-backdrop" id="ccMatchModal">
+    <div class="cc-modal-box">
+      <button class="cc-modal-close" data-close-modal type="button">✕</button>
 
-      <div style="display:inline-flex; align-items:center; justify-content:center; width:3.5rem; height:3.5rem; background:var(--accent-yellow); border:2px solid var(--ink); border-radius:50%; box-shadow:var(--shadow-sm); margin-bottom:1rem;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      <div style="display:inline-flex; align-items:center; justify-content:center; width:4rem; height:4rem; background:var(--accent-lime); border-radius:50%; font-size:2rem; font-weight:900; margin-bottom:1rem;">
+        ⚡
       </div>
 
-      <h2 style="font-size:2rem; font-weight:800; letter-spacing:-0.03em;">Mutual Connection Confirmed</h2>
-      <p style="color:var(--muted); font-size:0.95rem; margin-top:0.4rem;">You and <span id="matchPartnerName" style="color:var(--ink); font-weight:800;">Anya Chen</span> both selected connect.</p>
+      <h2 style="font-size:2.5rem; font-weight:800; text-transform:uppercase; line-height:1; letter-spacing:-0.02em;">IT'S A MATCH!</h2>
+      <p style="font-size:1.15rem; color:var(--muted-gray); font-weight:600; margin-top:0.5rem;">
+        You and <span id="ccMatchName" style="color:var(--canvas-pink); font-weight:800;">Anya Chen</span> felt the attraction.
+      </p>
 
-      <div style="display:flex; justify-content:center; align-items:center; margin:1.75rem 0;">
-        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80" style="width:4.5rem; height:4.5rem; border-radius:50%; border:2px solid var(--ink); object-fit:cover; box-shadow:var(--shadow-sm);" alt="Me">
-        <div style="width:2rem; height:2px; background:var(--ink); margin:0 -0.5rem; z-index:2;"></div>
-        <img id="matchPartnerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" style="width:4.5rem; height:4.5rem; border-radius:50%; border:2px solid var(--ink); object-fit:cover; box-shadow:var(--shadow-sm);" alt="Partner">
+      <div style="display:flex; justify-content:center; align-items:center; margin:2rem 0;">
+        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80" style="width:5rem; height:5rem; border-radius:50%; border:3px solid var(--ink-dark); object-fit:cover;" alt="Me">
+        <div style="width:2.5rem; height:4px; background:var(--accent-lime); margin:0 -0.5rem; z-index:2;"></div>
+        <img id="ccMatchAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" style="width:5rem; height:5rem; border-radius:50%; border:3px solid var(--ink-dark); object-fit:cover;" alt="Partner">
       </div>
 
-      <div style="display:flex; flex-direction:column; gap:0.75rem;">
-        <button class="btn btn-primary" id="btnMatchChat" type="button">
-          Open Dialogue Console →
+      <div style="display:flex; flex-direction:column; gap:0.85rem;">
+        <button class="pill-btn pill-lime" id="btnMatchChat" type="button">
+          Open Chat Console ⚡
         </button>
-        <button class="btn btn-secondary" id="btnMatchContinue" type="button">
-          Continue Reviewing Queue
+        <button class="pill-btn pill-black" id="btnMatchClose" type="button">
+          Keep Swiping
         </button>
       </div>
 
     </div>
   </div>
 
-  <!-- Detailed Profile Modal -->
-  <div class="modal-backdrop" id="profileDetailModal">
-    <div class="modal-window" style="max-height:85vh; overflow-y:auto;">
-      <button class="modal-close-trigger" data-close-modal type="button">✕</button>
-      <div id="profileModalContent">
+  <!-- Google Auth Modal -->
+  <div class="cc-modal-backdrop" id="ccAuthModal">
+    <div class="cc-modal-box">
+      <button class="cc-modal-close" data-close-modal type="button">✕</button>
+
+      <div style="display:inline-flex; align-items:center; justify-content:center; width:3.5rem; height:3.5rem; background:var(--canvas-pink); color:#FFF; border-radius:50%; font-size:1.75rem; font-weight:900; margin-bottom:1rem;">
+        ★
+      </div>
+
+      <h2 style="font-size:2.25rem; font-weight:800; text-transform:uppercase; line-height:1.1;">Google Identity Sync</h2>
+      <p style="font-size:1.05rem; color:var(--muted-gray); font-weight:600; margin-top:0.5rem;">
+        Authenticate with your Google account to confirm identity and unlock matching queues.
+      </p>
+
+      <div style="background:#FFF0F7; border:2px solid var(--canvas-pink); border-radius:1rem; padding:1.25rem; margin:1.5rem 0; text-align:left;">
+        <div style="font-size:0.8rem; font-weight:800; color:var(--canvas-pink); text-transform:uppercase;">Connected Account:</div>
+        <div style="font-size:1.1rem; font-weight:800; margin-top:0.25rem;">armaan123009@gmail.com</div>
+        <div style="font-size:0.85rem; color:var(--muted-gray); font-weight:600;">Armaan Yadav · Verified Profile</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:0.85rem;">
+        <button class="pill-btn pill-pink" id="googleAuthBtn" type="button">
+          <span>Authorize Google Profile</span>
+          <span>→</span>
+        </button>
+        <button class="pill-btn pill-black" id="guestAuthBtn" type="button">
+          Continue as Guest
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Profile Inspector Modal -->
+  <div class="cc-modal-backdrop" id="ccInfoModal">
+    <div class="cc-modal-box" style="max-height:85vh; overflow-y:auto;">
+      <button class="cc-modal-close" data-close-modal type="button">✕</button>
+      <div id="infoModalBody">
         <!-- Rendered by app.js -->
       </div>
     </div>
@@ -575,53 +543,21 @@
 
 
   <!-- ========================================================================
-       FOOTER (JAN.AI MULTI-COLUMN EDITORIAL SPECIFICATION)
+       FOOTER
        ======================================================================== -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      
-      <div class="footer-brand-column">
-        <div class="footer-heading">Jan Dating</div>
-        <p class="footer-sub">
-          A high-contrast editorial dating system pairing rigorous Swiss typography with human intentionality.
-        </p>
-        <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
-          <a href="#github" class="btn btn-secondary btn-sm" aria-label="GitHub">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-            <span>GitHub</span>
-          </a>
-          <a href="#discord" class="btn btn-secondary btn-sm" aria-label="Discord">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h.01"></path><path d="M16 12h.01"></path></svg>
-            <span>Community</span>
-          </a>
-        </div>
+  <footer class="cc-footer">
+    <div class="cc-footer-inner">
+      <div style="font-size:2rem; font-weight:900; letter-spacing:-0.03em;">Crazy Love</div>
+      <p style="color:rgba(255,255,255,0.7); max-width:450px; font-weight:600; font-size:1rem;">
+        A poster-like studio dating experience built on monumental typography and saturated color stages.
+      </p>
+      <div style="font-size:0.875rem; color:rgba(255,255,255,0.4); font-weight:700;">
+        © 2026 Crazy Love Studio. All rights reserved.
       </div>
-
-      <div class="footer-links-group">
-        <div class="footer-links-title">Product &amp; System</div>
-        <a href="#home" class="footer-link-item" data-route="home">Overview</a>
-        <a href="#dashboard" class="footer-link-item" data-route="dashboard">Discovery Deck</a>
-        <a href="#chats" class="footer-link-item" data-route="dashboard">Encrypted Chats</a>
-        <a href="#login" class="footer-link-item" data-route="login">Auth Portal</a>
-      </div>
-
-      <div class="footer-links-group">
-        <div class="footer-links-title">Security &amp; Standards</div>
-        <a href="#privacy" class="footer-link-item">Zero-Knowledge Policy</a>
-        <a href="#verification" class="footer-link-item">Identity Proofing</a>
-        <a href="#terms" class="footer-link-item">Terms of Connection</a>
-        <a href="#code" class="footer-link-item">Open Repository</a>
-      </div>
-
-    </div>
-
-    <div class="footer-bottom-row">
-      <span>© 2026 Jan Dating. All rights reserved.</span>
-      <span>Designed with Swiss Grotesque &amp; Hard-Shadow Aesthetics</span>
     </div>
   </footer>
 
-  <!-- Core Controller Module Script -->
+  <!-- Application Module Script -->
   <script type="module" src="app.js"></script>
 </body>
 </html>

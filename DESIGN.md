@@ -1,44 +1,39 @@
 <!-- MIT licensed. Copyright and license: https://opendesignmd.com/licenses/ -->
 
-# How Jan.ai Design System is Applied
+# How CrazyCreative.design is Designed & Applied to Jan Dating
 
 ## Overview
 
-Jan presents an open-source, developer-grade aesthetic that pairs rigorous Swiss-style grotesque typography with stark monochrome contrast and neo-brutalist graphic depth. The interface utilizes pure black against pure white for chrome and primary actions, with vibrant pastel color fields (`#FFD21E`, `#BBF7D0`, `#E9D5FF`, `#458EDF`) reserved for feature cards, tags, and status badges.
-
-All emojis are strictly replaced with clean, minimalist geometric SVG icons. Depth is achieved entirely through hard, flat cut-paper shadows (`box-shadow: 4px 4px 0 #000000`) and solid 2px black outlines (`border: 2px solid #000000`), completely avoiding blurry gradients or soft drop shadows.
+Crazy Creative is a poster-like, theatrical studio aesthetic built around a singular bold gesture: a saturated hot pink canvas carrying monumental white typography (`Bricolage Grotesque`), tactile white pill CTAs, playful sticker accents, and theatrical section pacing. The design avoids corporate sterility through contrast jumps: full-bleed hot pink billboard stages, crisp white card rooms, and a deep charcoal illustrated night stage.
 
 ## Color Tokens
 
 | token | value | use |
 |---|---|---|
-| ink | #000000 | Primary text, borders, primary button fills, hard shadows |
-| ink-secondary | #1F2937 | Body text on light backgrounds, secondary headings |
-| ink-tertiary | #374151 | Muted text, captions, metadata |
-| muted | #4B5563 | De-emphasized labels, subtitles |
-| canvas | #FFFFFF | Background, inverted text on dark surfaces |
-| surface | #2C2C2C | Dark stat cards, terminal containers |
-| surface-secondary | #404040 | Secondary dark UI components |
-| accent-blue | #458EDF | Verified badges, primary system accents |
-| accent-indigo | #5765F2 | Integration accents |
-| accent-yellow | #FFD21E | Highlight cards, compatibility badges |
-| accent-green | #BBF7D0 | Active status, match success indicators |
-| accent-purple | #E9D5FF | Layered offset cards, category chips |
-| accent-cream | #FEF08A | Profile note backgrounds, sticky cards |
+| canvas-pink | #FF2E93 | Primary brand billboard canvas, flame dividers, hero stage |
+| canvas-white | #FFFFFF | Secondary reset sections, white cards, hero typography, pill buttons |
+| canvas-dark | #0D0D0D | Theatrical dark stage, closing anchor card, contrast headings |
+| ink-dark | #111111 | Primary text on white sections, borders, card body copy |
+| accent-lime | #D4FF00 | High-voltage action buttons, match celebration badge |
+| accent-cyan | #00F0FF | Confetti stars, secondary stickers, verified badge |
+| accent-yellow | #FFE600 | Handwritten "wow" accents, highlight tags, sparkles |
+| accent-purple | #9D4EDD | Ornamental badges, illustration details |
+| muted-gray | #6B7280 | Muted timestamps, metadata |
 
 ## Typography
 
-Built using geometric grotesques (`Plus Jakarta Sans` / `Inter` / `Space Grotesk`) with tight tracking at display sizes and neutral tracking for body text:
+Built using **Bricolage Grotesque** with optical size scaling and extreme display size impact:
 
-- **Hero Display:** 3.5rem - 4.5rem, Weight: 800, Tracking: -0.04em
-- **Section Heading:** 2.25rem, Weight: 700, Tracking: -0.03em
-- **Feature Title:** 1.5rem, Weight: 700, Tracking: -0.02em
-- **Body & Controls:** 0.95rem - 1rem, Weight: 400 & 500, Leading: 1.5
-- **Labels & Tags:** 0.8125rem, Weight: 600, Uppercase or Title Case
+- **Hero Display:** 6.5rem - 8.125rem, Weight: 800, Leading: 0.88, Tracking: -0.02em
+- **Section Display:** 4rem - 5.5rem, Weight: 800, Leading: 0.92, Tracking: -0.02em
+- **Supporting Headline:** 1.5rem - 1.75rem, Weight: 600, Leading: 1.35
+- **Pill CTA Label:** 1.125rem, Weight: 800, Letter-spacing: -0.01em
+- **Handwritten Accent:** Caveat / Script, 2.5rem, Rotated (-8deg), Yellow/Gold
 
-## Key Principles
+## Signature Architectural Chapters
 
-1. **Zero Emojis:** All UI indicators, statuses, and navigation items use high-contrast monochrome and two-tone SVG line icons.
-2. **2px Solid Borders:** Every card, button, input, and modal features crisp `2px solid #000000` boundaries.
-3. **Hard 4px Shadows:** Flat `4px 4px 0px #000000` shadows with hover transform `translate(-2px, -2px)` and shadow expansion `6px 6px 0px #000000`.
-4. **Information Architecture:** Seamless flow between Landing Page, Login / Authentication portal, and the full Discovery & Chat Dashboard.
+1. **The Pink Billboard Stage:** Saturated hot pink background, top edge chrome with award badge, centered oversized poster statement, handwritten "wow" sticker, white pill CTA, and peek-in mascot.
+2. **The White Stage (Discovery Deck & Membership):** Crisp white canvas with giant black typography and broad rounded cards (`border-radius: 2.25rem`).
+3. **The Theatrical Dark Stage (Connections & Realtime Chat):** Deep charcoal canvas with glowing starry accents, active encrypted dialogue streams, and animated typing indicators.
+4. **The FAQ & Contact Block:** Two-column editorial structure with large question heading and tactile accordion rows.
+5. **The Closing Flame Card:** Wave/flame pink frame wrapping a giant black card with an electric lime pill CTA.
