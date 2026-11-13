@@ -18,7 +18,7 @@
 <body>
 
   <!-- ========================================================================
-       TOP HEADER & LIQUID GLASS NAVBAR
+       TOP HEADER & LIQUID GLASS NAVBAR (NO WATERMARKS)
        ======================================================================== -->
   <header class="cc-header">
     <div class="cc-header-container">
@@ -32,17 +32,11 @@
       <!-- Liquid Glass Navbar Center Mount -->
       <div id="liquidNavbarMount" style="display:flex; flex-direction:column; align-items:center;">
         <!-- Rendered dynamically by LiquidNavbar in app.js -->
-        <span class="liquid-attribution-tag" style="margin-top:4px;">
-          by <a href="https://guglielmogiannattasio.it" target="_blank" rel="noopener noreferrer">guglielmogiannattasio.it</a>
-        </span>
       </div>
 
-      <!-- Action Pill CTA -->
-      <div class="cc-header-actions">
-        <button class="pill-btn pill-white pill-sm liquid-glass-btn" id="btnHeaderAction" data-route="discover" type="button">
-          <span>Enter App</span>
-          <span style="font-size:1.2rem; line-height:1;">→</span>
-        </button>
+      <!-- User Authentication & Action CTA -->
+      <div class="cc-header-actions" id="headerUserSlot">
+        <!-- Rendered dynamically based on logged in/out state -->
       </div>
 
     </div>
@@ -51,11 +45,11 @@
   <!-- Pinned Right Edge Rail Badge -->
   <aside class="cc-side-rail liquid-glass-badge" aria-label="System status badge">
     <div class="side-rail-dot"></div>
-    <span>Attraction Algorithm v2.4</span>
+    <span id="sideRailStatus">AI Attraction Engine v3.0</span>
   </aside>
 
   <!-- ========================================================================
-       STAGE 1: THE FULL-BLEED PINK BILLBOARD HERO (HOME VIEW)
+       STAGE 1: THE FULL-BLEED PINK BILLBOARD HERO (HOME LANDING VIEW)
        ======================================================================== -->
   <main class="cc-view active" id="viewHome">
     
@@ -84,7 +78,7 @@
 
         <!-- Supporting Descriptive Line -->
         <p class="hero-poster-sub">
-          A theatrical, studio-grade dating experience built for electric sparks, high-chemistry conversations, and unapologetic humans.
+          A theatrical, studio-grade dating experience built for electric sparks, high-chemistry conversations, shared creative hobbies, and unapologetic humans.
         </p>
 
         <!-- Roomy Tactile White Pill Button -->
@@ -121,7 +115,7 @@
         
         <div class="section-claim-header">
           <h2 class="section-claim-title">PICK YOUR DATING FREQUENCY.</h2>
-          <p class="section-claim-sub">Two deliberate ways to experience high-voltage chemistry. No micro-transactions, no dark patterns.</p>
+          <p class="section-claim-sub">Two deliberate ways to experience high-voltage chemistry. No micro-transactions, no corporate dark patterns.</p>
         </div>
 
         <div class="cc-cards-grid">
@@ -136,26 +130,26 @@
               </div>
               <h3 class="card-big-name">Curated Chemistry</h3>
               <p style="font-size:1.15rem; color:var(--muted-gray); font-weight:600; margin-top:0.5rem;">
-                Handpicked profiles based on creative energy, shared tastes, and authentic intentions.
+                Handpicked creator profiles based on shared hobbies, aesthetic tastes, and authentic intentions.
               </p>
 
               <ul class="card-bullet-list">
                 <li>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Unlimited intentional card swipes</span>
+                  <span>AI-driven interest &amp; hobby compatibility scoring</span>
                 </li>
                 <li>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Instant mutual match celebration</span>
+                  <span>Mutual chemistry triggers match celebrations</span>
                 </li>
                 <li>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Zero advertising or data tracking</span>
+                  <span>Zero advertising or data telemetry brokers</span>
                 </li>
               </ul>
             </div>
 
-            <button class="pill-btn pill-pink liquid-glass-btn" onclick="window.crazyApp.navigateTo('discover')" type="button">
+            <button class="pill-btn pill-pink liquid-glass-btn" onclick="window.crazyApp.handleGateRoute('discover')" type="button">
               Launch Curated Deck →
             </button>
           </article>
@@ -166,31 +160,31 @@
               <div class="card-top-eyebrow" style="color:var(--canvas-dark);">
                 <span>⚡ TIER 02</span>
                 <span>·</span>
-                <span>THEATRICAL</span>
+                <span>COMMUNITY &amp; CHATS</span>
               </div>
-              <h3 class="card-big-name">The Midnight Club</h3>
+              <h3 class="card-big-name">The Studio Room</h3>
               <p style="font-size:1.15rem; color:var(--muted-gray); font-weight:600; margin-top:0.5rem;">
-                Direct access to verified creative directors, artists, and nocturnal conversationalists.
+                Direct access to Instagram-style direct messages, community photo moments, and live creator stories.
               </p>
 
               <ul class="card-bullet-list">
                 <li>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Encrypted real-time messaging console</span>
+                  <span>Instagram-style chats with reaction emojis &amp; voice notes</span>
                 </li>
                 <li>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Curated conversation starter icebreakers</span>
+                  <span>Community moments feed with photo uploads &amp; comments</span>
                 </li>
                 <li>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Verified Google identity badge</span>
+                  <span>Verified creator status and genuine interactions</span>
                 </li>
               </ul>
             </div>
 
-            <button class="pill-btn pill-black liquid-glass-btn" onclick="window.crazyApp.navigateTo('chats')" type="button">
-              Enter Midnight Room →
+            <button class="pill-btn pill-black liquid-glass-btn" onclick="window.crazyApp.handleGateRoute('chats')" type="button">
+              Enter Studio Room →
             </button>
           </article>
 
@@ -200,7 +194,7 @@
     </section>
 
     <!-- ====================================================================
-         STAGE 3: THE THEATRICAL DARK STAGE
+         STAGE 3: THE THEATRICAL DARK STAGE (TEASER)
          ==================================================================== -->
     <section class="stage-dark-theatrical">
       
@@ -211,60 +205,22 @@
       <div class="dark-stage-container">
         
         <h2 class="dark-stage-title">THE CONVERSATION ROOM.</h2>
-        <p class="dark-stage-sub">A stage-like environment for unhurried, magnetic correspondence. Powered by responsive client-side state.</p>
+        <p class="dark-stage-sub">A stage-like environment for unhurried, magnetic correspondence with real creators. Voice notes, photo moments, and instant sparks.</p>
 
-        <!-- Interactive Theatrical Chat Box -->
-        <div class="theatrical-chat-box liquid-glass-panel-dark">
-          
-          <!-- Left Sidebar Threads -->
-          <div class="theatrical-sidebar">
-            <div class="theatrical-sidebar-head">
-              <strong style="font-size:1.2rem; letter-spacing:-0.02em;">Connections</strong>
-              <span class="live-badge">LIVE</span>
-            </div>
-
-            <div id="theatricalThreads" style="overflow-y:auto; flex:1;">
-              <!-- Rendered by app.js -->
-            </div>
+        <!-- Preview CTA Card -->
+        <div class="liquid-glass-panel-dark" style="max-width:850px; margin:0 auto; padding:3.5rem 2.5rem; text-align:center; border-radius:var(--radius-card);">
+          <div style="display:flex; justify-content:center; gap:1rem; margin-bottom:1.5rem;">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80" style="width:4.5rem; height:4.5rem; border-radius:50%; border:3px solid var(--accent-lime); object-fit:cover;" alt="Anya">
+            <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=120&h=120&q=80" style="width:4.5rem; height:4.5rem; border-radius:50%; border:3px solid var(--accent-cyan); object-fit:cover;" alt="Rin">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&h=120&q=80" style="width:4.5rem; height:4.5rem; border-radius:50%; border:3px solid var(--canvas-pink); object-fit:cover;" alt="Elena">
           </div>
-
-          <!-- Right Conversation Pane -->
-          <div class="theatrical-chat-pane">
-            
-            <div class="theatrical-chat-header">
-              <div style="display:flex; align-items:center; gap:1rem;">
-                <img id="theatricalChatAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" style="width:2.75rem; height:2.75rem; border-radius:50%; object-fit:cover; border:2px solid var(--accent-lime);" alt="Partner">
-                <div>
-                  <div id="theatricalChatName" style="font-size:1.25rem; font-weight:800;">Anya Chen</div>
-                  <div style="font-size:0.8rem; color:var(--accent-lime); font-weight:700;">● Active in Studio</div>
-                </div>
-              </div>
-
-              <button class="pill-btn pill-sm pill-white liquid-glass-btn" onclick="window.crazyApp.showCardDetails()" type="button">
-                Inspect Vibe
-              </button>
-            </div>
-
-            <!-- Messages Stream -->
-            <div class="theatrical-messages-stream" id="theatricalMessages">
-              <!-- Rendered by app.js -->
-            </div>
-
-            <!-- Icebreaker Pills -->
-            <div id="theatricalIcebreakers" class="icebreaker-tray">
-              <!-- Rendered by app.js -->
-            </div>
-
-            <!-- Message Input -->
-            <div class="theatrical-input-bar">
-              <input type="text" class="theatrical-input liquid-glass-input" id="theatricalInput" placeholder="Drop an electric icebreaker or reply...">
-              <button class="pill-btn pill-lime pill-sm liquid-glass-btn" id="btnTheatricalSend" type="button">
-                Send ⚡
-              </button>
-            </div>
-
-          </div>
-
+          <h3 style="font-size:2.25rem; font-weight:800; text-transform:uppercase; margin-bottom:1rem;">Over 1,200 High-Chemistry Conversations Active</h3>
+          <p style="color:rgba(255,255,255,0.75); font-size:1.15rem; max-width:550px; margin:0 auto 2rem; font-weight:500;">
+            Log in to unlock direct messaging, share your photo moments, and get matched with creative souls in Tokyo.
+          </p>
+          <button class="pill-btn pill-lime liquid-glass-btn" onclick="window.crazyApp.handleGateRoute('chats')" type="button">
+            Open Chat Room Now ⚡
+          </button>
         </div>
 
       </div>
@@ -279,10 +235,10 @@
         <div class="faq-left-col">
           <h3>ANY BURNING<br>QUESTIONS?</h3>
           <p style="font-size:1.25rem; color:var(--muted-gray); font-weight:600; margin-top:1.5rem; max-width:400px;">
-            Here is the raw truth behind our algorithms, identity verification, and matchmaking privacy.
+            Here is the raw truth behind our AI algorithms, photo uploads, identity verification, and matchmaking privacy.
           </p>
 
-          <button class="pill-btn pill-pink liquid-glass-btn" onclick="window.crazyApp.navigateTo('discover')" style="margin-top:2.5rem;" type="button">
+          <button class="pill-btn pill-pink liquid-glass-btn" onclick="window.crazyApp.handleGateRoute('discover')" style="margin-top:2.5rem;" type="button">
             Take The Test Drive →
           </button>
         </div>
@@ -291,31 +247,31 @@
           
           <div class="faq-item-row liquid-glass-faq open">
             <div class="faq-q-title">
-              <span>How does Crazy Love differ from mainstream apps?</span>
+              <span>How does the AI Hobby &amp; Interest matching work?</span>
               <span class="faq-toggle">+</span>
             </div>
             <div class="faq-a-body">
-              We eliminate endless gamification algorithms designed to keep you single. Every card represents a fully-vetted human with authentic taste benchmarks, verified identity, and direct real-time communication.
+              Our AI engine looks beyond superficial traits. It evaluates semantic vectors between creative passions—such as 35mm photography, brutalist architecture, specialty coffee, and analog audio—to match you with people whose lifestyles naturally interlock.
             </div>
           </div>
 
           <div class="faq-item-row liquid-glass-faq">
             <div class="faq-q-title">
-              <span>Is my location and personal data safe?</span>
+              <span>Can I upload my own photos and videos?</span>
               <span class="faq-toggle">+</span>
             </div>
             <div class="faq-a-body">
-              Yes. We do not sell behavioural telemetry or broker user coordinates. All session records are stored locally with client-side cryptographic keys.
+              Yes! Our community Moments feed allows members to upload high-res photos, add creative captions, receive instant likes, and interact through comments.
             </div>
           </div>
 
           <div class="faq-item-row liquid-glass-faq">
             <div class="faq-q-title">
-              <span>How does Google One-Tap authentication work?</span>
+              <span>How is my privacy protected?</span>
               <span class="faq-toggle">+</span>
             </div>
             <div class="faq-a-body">
-              We verify your Google profile to confirm human identity, eliminate duplicate bots, and keep communication high-standard.
+              All profile records and chat sessions stay client-side and encrypted. We never sell behavioral telemetry or share your coordinates.
             </div>
           </div>
 
@@ -339,7 +295,7 @@
         </h2>
 
         <p style="font-size:1.35rem; color:rgba(255,255,255,0.85); max-width:620px; margin:0 auto 3rem; font-weight:500;">
-          Your next partner is waiting in the discovery deck. Step inside the theatrical room and find your match.
+          Your next partner is waiting in the discovery deck. Step inside the studio room and find your match.
         </p>
 
         <button class="pill-btn pill-lime liquid-glass-btn" id="btnFlameLaunch" type="button">
@@ -354,7 +310,7 @@
 
 
   <!-- ========================================================================
-       DISCOVERY DECK INTERACTIVE VIEW
+       DISCOVERY DECK INTERACTIVE VIEW (SWIPE ARENA + AI MATCHMAKER)
        ======================================================================== -->
   <section class="cc-view" id="viewDiscover">
     <div class="dashboard-canvas">
@@ -366,10 +322,23 @@
       
       <div class="deck-arena-container">
         
+        <!-- Header & AI Matchmaker Trigger -->
         <div class="deck-header-glass liquid-glass-panel">
-          <span class="deck-header-dot">●</span>
-          <span class="deck-header-label">SWIPE ARENA</span>
-          <h2 class="deck-header-title">Curated Candidates</h2>
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+            <div>
+              <span class="deck-header-dot">●</span>
+              <span class="deck-header-label">SWIPE ARENA</span>
+              <h2 class="deck-header-title">Curated Candidates</h2>
+            </div>
+            <button class="pill-btn pill-lime pill-sm liquid-glass-btn" id="btnOpenAiMatch" type="button">
+              <span>⚡ AI Matchmaker Scan</span>
+            </button>
+          </div>
+
+          <!-- Interest Filter Category Pills -->
+          <div class="interest-filter-bar" id="interestFilterBar">
+            <!-- Rendered by app.js -->
+          </div>
         </div>
 
         <!-- 3D Card Stack Arena -->
@@ -406,7 +375,46 @@
 
 
   <!-- ========================================================================
-       CHATS VIEW
+       COMMUNITY MOMENTS & MEDIA FEED VIEW (INSTAGRAM / THREADS STYLE)
+       ======================================================================== -->
+  <section class="cc-view" id="viewFeed">
+    <div class="dashboard-canvas">
+      
+      <!-- Ambient background orbs -->
+      <div class="ambient-orb orb-pink-soft"></div>
+      <div class="ambient-orb orb-cyan"></div>
+
+      <div class="feed-arena-container">
+        
+        <!-- Feed Top Navigation & Action -->
+        <div class="feed-top-bar">
+          <div>
+            <span class="deck-header-dot">●</span>
+            <span class="deck-header-label">CREATOR HUB</span>
+            <h2 class="chats-page-title">Community Moments</h2>
+          </div>
+          <button class="pill-btn pill-pink pill-sm liquid-glass-btn" id="btnOpenUploadModal" type="button">
+            <span>+ Share A Moment</span>
+          </button>
+        </div>
+
+        <!-- Creator Stories Bar (Instagram Style) -->
+        <div class="stories-scroll-tray liquid-glass-panel" id="storiesTray">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+        <!-- Main Media Feed Stream -->
+        <div class="feed-stream-container" id="feedStream">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========================================================================
+       INSTAGRAM-STYLE DIRECT MESSAGES VIEW
        ======================================================================== -->
   <section class="cc-view" id="viewChats">
     <div class="dashboard-canvas">
@@ -420,7 +428,7 @@
         <div class="chats-top-bar">
           <div>
             <span class="deck-header-dot">●</span>
-            <span class="deck-header-label">DIRECT MESSAGES</span>
+            <span class="deck-header-label">INSTAGRAM DIRECT</span>
             <h2 class="chats-page-title">Active Conversations</h2>
           </div>
           <button class="pill-btn pill-pink pill-sm liquid-glass-btn" data-route="discover" type="button">
@@ -428,51 +436,167 @@
           </button>
         </div>
 
-        <!-- Theatrical Box Repurposed -->
+        <!-- Theatrical Instagram-Style Chat Box -->
         <div class="theatrical-chat-box liquid-glass-chat-box">
           
+          <!-- Left Sidebar: Conversations & Active Stories -->
           <div class="theatrical-sidebar">
             <div class="theatrical-sidebar-head">
-              <strong style="font-size:1.2rem;">Connections</strong>
-              <span class="live-badge">LIVE</span>
+              <strong style="font-size:1.2rem;">Messages</strong>
+              <span class="live-badge">ONLINE</span>
             </div>
 
+            <!-- Active Creators Mini-Tray in Chat -->
+            <div class="chat-stories-strip" id="chatStoriesStrip">
+              <!-- Rendered by app.js -->
+            </div>
+
+            <!-- Thread Search -->
+            <div style="padding:0.65rem 1rem;">
+              <input type="text" class="chat-search-input liquid-glass-input" id="chatSearchInput" placeholder="Search matches or hobbies...">
+            </div>
+
+            <!-- Thread List -->
             <div id="theatricalThreads_page" style="overflow-y:auto; flex:1;">
               <!-- Rendered by app.js -->
             </div>
           </div>
 
+          <!-- Right Conversation Pane -->
           <div class="theatrical-chat-pane">
+            
+            <!-- Chat Pane Header -->
             <div class="theatrical-chat-header">
               <div style="display:flex; align-items:center; gap:1rem;">
-                <img id="theatricalChatAvatar_page" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" style="width:2.75rem; height:2.75rem; border-radius:50%; object-fit:cover; border:2px solid var(--accent-lime);" alt="Partner">
+                <div style="position:relative;">
+                  <img id="theatricalChatAvatar_page" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80" style="width:3rem; height:3rem; border-radius:50%; object-fit:cover; border:2px solid var(--accent-lime);" alt="Partner">
+                  <span class="online-dot-beacon"></span>
+                </div>
                 <div>
-                  <div id="theatricalChatName_page" style="font-size:1.25rem; font-weight:800;">Anya Chen</div>
-                  <div style="font-size:0.8rem; color:var(--accent-lime); font-weight:700;">● Active in Studio</div>
+                  <div style="display:flex; align-items:center; gap:0.4rem;">
+                    <div id="theatricalChatName_page" style="font-size:1.25rem; font-weight:800;">Anya Chen</div>
+                    <span style="color:var(--accent-cyan); font-size:1rem;" title="Verified Creator">✓</span>
+                  </div>
+                  <div id="theatricalChatStatus_page" style="font-size:0.8rem; color:var(--accent-lime); font-weight:700;">● Active now</div>
                 </div>
               </div>
 
-              <button class="pill-btn pill-sm pill-white liquid-glass-btn" onclick="window.crazyApp.showCardDetails()" type="button">
-                Inspect Vibe
-              </button>
+              <!-- Quick Action Call Simulation & Info -->
+              <div style="display:flex; align-items:center; gap:0.6rem;">
+                <button class="chat-icon-action liquid-glass-btn" id="btnSimulateAudioCall" title="Start Audio Call" type="button">📞</button>
+                <button class="chat-icon-action liquid-glass-btn" id="btnSimulateVideoCall" title="Start Video Call" type="button">📹</button>
+                <button class="pill-btn pill-sm pill-white liquid-glass-btn" onclick="window.crazyApp.showCardDetails()" type="button">
+                  Inspect Vibe
+                </button>
+              </div>
             </div>
 
+            <!-- Messages Stream -->
             <div class="theatrical-messages-stream" id="theatricalMessages_page">
               <!-- Rendered by app.js -->
             </div>
 
+            <!-- Quick Emoji Reaction Bar (Instagram Style) -->
+            <div class="quick-emoji-bar">
+              <span class="quick-emoji-chip" data-emoji="❤️">❤️</span>
+              <span class="quick-emoji-chip" data-emoji="🔥">🔥</span>
+              <span class="quick-emoji-chip" data-emoji="⚡">⚡</span>
+              <span class="quick-emoji-chip" data-emoji="😍">😍</span>
+              <span class="quick-emoji-chip" data-emoji="😂">😂</span>
+              <span class="quick-emoji-chip" data-emoji="👏">👏</span>
+            </div>
+
+            <!-- Icebreaker Pills -->
             <div id="theatricalIcebreakers_page" class="icebreaker-tray">
               <!-- Rendered by app.js -->
             </div>
 
+            <!-- Interactive Message Input Bar (Media Attach & Voice) -->
             <div class="theatrical-input-bar">
-              <input type="text" class="theatrical-input liquid-glass-input" id="theatricalInput_page" placeholder="Drop an electric icebreaker or reply...">
+              <label class="chat-attach-btn liquid-glass-btn" title="Send Photo in Chat">
+                📷
+                <input type="file" id="chatPhotoUpload" accept="image/*" style="display:none;">
+              </label>
+
+              <button class="chat-attach-btn liquid-glass-btn" id="btnSendVoiceNote" title="Send Voice Memo" type="button">
+                🎙️
+              </button>
+
+              <input type="text" class="theatrical-input liquid-glass-input" id="theatricalInput_page" placeholder="Message or double-tap to react...">
+
               <button class="pill-btn pill-lime pill-sm liquid-glass-btn" id="btnTheatricalSend_page" type="button">
                 Send ⚡
               </button>
             </div>
           </div>
 
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ========================================================================
+       USER PROFILE & ACCOUNT SETTINGS VIEW
+       ======================================================================== -->
+  <section class="cc-view" id="viewProfile">
+    <div class="dashboard-canvas">
+      
+      <div class="ambient-orb orb-pink"></div>
+      <div class="ambient-orb orb-lime"></div>
+
+      <div class="profile-page-container">
+        
+        <div class="profile-hero-card liquid-glass-panel">
+          <div class="profile-cover-gradient"></div>
+          
+          <div class="profile-info-layout">
+            <div style="position:relative;">
+              <img id="userProfileAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=240&h=240&q=80" class="profile-large-avatar" alt="User">
+              <span class="profile-verified-badge">✓</span>
+            </div>
+
+            <div style="flex:1;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+                <div>
+                  <h2 id="userProfileName" style="font-size:2.5rem; font-weight:800; line-height:1.1;">Armaan Yadav</h2>
+                  <div id="userProfileHandle" style="color:var(--canvas-pink); font-size:1.1rem; font-weight:800; margin-top:0.25rem;">@armaan.yadav · Tokyo</div>
+                  <div id="userProfileRole" style="font-size:1rem; color:var(--muted-gray); font-weight:700; margin-top:0.2rem;">Creative Director &amp; Visual Storyteller</div>
+                </div>
+
+                <div style="display:flex; gap:0.75rem;">
+                  <button class="pill-btn pill-pink pill-sm liquid-glass-btn" id="btnProfileEdit" type="button">
+                    Edit Profile
+                  </button>
+                  <button class="pill-btn pill-black pill-sm liquid-glass-btn" id="btnLogoutProfile" type="button">
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+
+              <!-- Stats Row -->
+              <div class="profile-stats-row">
+                <div><strong>6</strong> <span>Matches</span></div>
+                <div><strong>18</strong> <span>Shared Moments</span></div>
+                <div><strong>96%</strong> <span>AI Chemistry Rating</span></div>
+              </div>
+
+              <!-- Bio -->
+              <p class="profile-bio-text" id="userProfileBio">
+                Architectural photography, collecting Japanese city-pop vinyl, and designing digital platforms with electric character.
+              </p>
+
+              <!-- Interest Tags -->
+              <div class="profile-tags-container" id="userProfileTags">
+                <span class="liquid-glass-badge">35mm Film</span>
+                <span class="liquid-glass-badge">Product Design</span>
+                <span class="liquid-glass-badge">Specialty Coffee</span>
+                <span class="liquid-glass-badge">Synthesizers</span>
+                <span class="liquid-glass-badge">Tokyo Architecture</span>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -514,31 +638,31 @@
     </div>
   </div>
 
-  <!-- Google Auth Modal -->
+  <!-- Google Auth & Log-in Modal -->
   <div class="cc-modal-backdrop" id="ccAuthModal">
     <div class="cc-modal-box liquid-glass-modal">
       <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
 
       <div class="modal-icon-circle modal-icon-pink">★</div>
 
-      <h2 class="modal-title">Google Identity Sync</h2>
+      <h2 class="modal-title">Studio Access</h2>
       <p class="modal-subtitle">
-        Authenticate with your Google account to confirm identity and unlock matching queues.
+        Log in to unlock the curated discovery deck, community moments, and Instagram-style direct chats.
       </p>
 
       <div class="auth-info-card">
-        <div class="auth-info-label">Connected Account:</div>
+        <div class="auth-info-label">Active Studio Profile:</div>
         <div class="auth-info-email">armaan123009@gmail.com</div>
-        <div class="auth-info-name">Armaan Yadav · Verified Profile</div>
+        <div class="auth-info-name">Armaan Yadav · Verified Creator</div>
       </div>
 
       <div style="display:flex; flex-direction:column; gap:0.85rem;">
         <button class="pill-btn pill-pink liquid-glass-btn" id="googleAuthBtn" type="button">
-          <span>Authorize Google Profile</span>
+          <span>Continue as Armaan Yadav</span>
           <span>→</span>
         </button>
         <button class="pill-btn pill-black liquid-glass-btn" id="guestAuthBtn" type="button">
-          Continue as Guest
+          Explore as Guest Member
         </button>
       </div>
 
@@ -555,6 +679,79 @@
     </div>
   </div>
 
+  <!-- AI Matchmaker Modal -->
+  <div class="cc-modal-backdrop" id="ccAiMatchModal">
+    <div class="cc-modal-box liquid-glass-modal" style="max-width:620px;">
+      <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
+      
+      <div class="modal-icon-circle modal-icon-lime">✦</div>
+      <h2 class="modal-title">AI Chemistry Scan</h2>
+      <p class="modal-subtitle">
+        Select the hobbies &amp; aesthetics you value most. Our algorithm will rank your top compatible creators.
+      </p>
+
+      <div class="ai-hobbies-picker" id="aiHobbiesPicker">
+        <!-- Rendered by app.js -->
+      </div>
+
+      <button class="pill-btn pill-lime liquid-glass-btn" id="btnRunAiMatchScan" style="margin-top:1.5rem;" type="button">
+        Find Best Matches ⚡
+      </button>
+
+      <div id="aiMatchResults" style="margin-top:1.5rem; text-align:left;">
+        <!-- Rendered by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Media Upload Modal -->
+  <div class="cc-modal-backdrop" id="ccUploadModal">
+    <div class="cc-modal-box liquid-glass-modal" style="max-width:580px;">
+      <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
+      
+      <div class="modal-icon-circle modal-icon-pink">📷</div>
+      <h2 class="modal-title">Share A Moment</h2>
+      <p class="modal-subtitle">
+        Upload a high-res photo from your camera roll or choose an aesthetic studio preset.
+      </p>
+
+      <!-- Upload Drop Zone -->
+      <div class="upload-dropzone" id="uploadDropzone">
+        <img id="uploadPreviewImg" style="display:none; width:100%; height:220px; object-fit:cover; border-radius:1rem; margin-bottom:0.75rem;" alt="Preview">
+        <label class="pill-btn pill-sm pill-white liquid-glass-btn" style="cursor:pointer;">
+          <span>Choose Photo from Device</span>
+          <input type="file" id="momentFileInput" accept="image/*" style="display:none;">
+        </label>
+        <span style="display:block; font-size:0.85rem; color:var(--muted-gray); margin-top:0.5rem;">Or pick an aesthetic studio preset below</span>
+      </div>
+
+      <!-- Preset Photos -->
+      <div class="upload-presets-row" id="uploadPresetsRow">
+        <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=200&q=80" class="upload-preset-thumb active" data-url="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1000&q=80" alt="Film coffee">
+        <img src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=200&q=80" class="upload-preset-thumb" data-url="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=80" alt="Ceramics">
+        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=200&q=80" class="upload-preset-thumb" data-url="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80" alt="Neon synth">
+        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=200&q=80" class="upload-preset-thumb" data-url="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1000&q=80" alt="Pastry">
+      </div>
+
+      <!-- Caption Input -->
+      <textarea class="theatrical-input liquid-glass-input" id="uploadCaption" rows="3" placeholder="Write an aesthetic story or observation..." style="border-radius:1rem; width:100%; margin-top:1rem;"></textarea>
+
+      <!-- Interest Category -->
+      <select class="theatrical-input liquid-glass-input" id="uploadInterest" style="border-radius:9999px; width:100%; margin-top:0.75rem;">
+        <option value="35mm Film">📸 35mm Film &amp; Photography</option>
+        <option value="Design">🏛️ Architecture &amp; Spatial Design</option>
+        <option value="Electronic Music">🎧 Electronic Music &amp; Vinyl</option>
+        <option value="Ceramics">🏺 Ceramics &amp; Studio Craft</option>
+        <option value="Coffee">☕ Specialty Coffee &amp; Culinary</option>
+      </select>
+
+      <button class="pill-btn pill-pink liquid-glass-btn" id="btnSubmitMoment" style="margin-top:1.25rem; width:100%;" type="button">
+        Post to Community Moments ⚡
+      </button>
+
+    </div>
+  </div>
+
 
   <!-- ========================================================================
        FOOTER
@@ -563,7 +760,7 @@
     <div class="cc-footer-inner">
       <div style="font-size:2rem; font-weight:900; letter-spacing:-0.03em;">Crazy Love</div>
       <p style="color:rgba(255,255,255,0.7); max-width:450px; font-weight:600; font-size:1rem;">
-        A poster-like studio dating experience built on monumental typography and saturated color stages.
+        A poster-like studio dating experience built on monumental typography, saturated color stages, and real human attraction.
       </p>
       <div style="font-size:0.875rem; color:rgba(255,255,255,0.4); font-weight:700;">
         © 2026 Crazy Love Studio. All rights reserved.

@@ -1,6 +1,6 @@
 // ============================================================================
-// LIQUID GLASS NAVBAR COMPONENT (Guglielmo Giannattasio / 21st.dev)
-// High-fidelity liquid glassmorphism, fluid gooey meniscus, animated NimbusIcons
+// CRAZY LOVE - LIQUID GLASS HIGH-FIDELITY NAVBAR
+// Fluid gooey meniscus, specular sheen, and animated NimbusIcons
 // ============================================================================
 
 export const NimbusIcons = {
@@ -20,6 +20,12 @@ export const NimbusIcons = {
   plane: `
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nimbus-icon nimbus-plane">
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+  `,
+  camera: `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nimbus-icon nimbus-camera">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+      <circle cx="12" cy="13" r="4"/>
     </svg>
   `,
   drop: `
