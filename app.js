@@ -1,24 +1,27 @@
 // ============================================================================
 // CRAZY LOVE / PAWANDATE - CORE APPLICATION CONTROLLER
-// High-Impact Poster Layout, Editorial Swipe Deck, Sound FX,
-// Instagram Direct Chat, Moments Feed, and Rich App Settings
+// High-Impact Poster Layout, Editorial Swipe Deck, Web Audio FX,
+// Instagram Direct Chat, Moments Feed, AI Wingman Openers,
+// Video Vibe Checks, Anti-Ghosting Timers, Safety Suite, VIP Perks & Architecture Specs
 // Reference: https://crazycreative.design/
 // ============================================================================
 
-import { PROFILES, CATEGORIES } from './data/profiles.js';
-import { INITIAL_MATCHES, INITIAL_MESSAGES, ICEBREAKER_PROMPTS, BOT_RESPONSES } from './data/chats.js';
+import { PROFILES, CATEGORIES, SECRET_ADMIRERS } from './data/profiles.js';
+import { INITIAL_MATCHES, INITIAL_MESSAGES, ICEBREAKER_PROMPTS, BOT_RESPONSES, AI_WINGMAN_OPENERS, SAFETY_REASONS } from './data/chats.js';
 import { INITIAL_FEED_POSTS } from './data/feed.js';
 import { LiquidNavbar, NimbusIcons } from './components/ui/liquid-glass-navbar.js';
 
 class CrazyCreativeApp {
   constructor() {
-    this.storageKey = 'cc_dating_state_v3';
+    this.storageKey = 'cc_dating_state_v4';
     this.cardPhotoIndices = {}; // track photo index per profile
     this.initState();
     this.initSoundFX();
     this.initDOM();
+    this.initLiveClock();
     this.initLiquidNavbar();
     this.bindEvents();
+    this.initExtendedFeatures();
     this.updateHeaderAuthState();
     this.renderCurrentView();
   }
@@ -108,6 +111,10 @@ class CrazyCreativeApp {
         this.swiped = parsed.swiped || {};
         this.activeCategory = parsed.activeCategory || 'all';
         this.selectedAiHobbies = parsed.selectedAiHobbies || ["35mm Film", "Brutalist Architecture", "Specialty Coffee"];
+        this.superLikesRemaining = parsed.superLikesRemaining !== undefined ? parsed.superLikesRemaining : 3;
+        this.boostActive = parsed.boostActive || false;
+        this.secretAdmirers = parsed.secretAdmirers || SECRET_ADMIRERS;
+        this.blockedUserIds = new Set(parsed.blockedUserIds || []);
       } catch (e) {
         this.resetDefaultState();
       }
@@ -119,6 +126,10 @@ class CrazyCreativeApp {
     this.activeChatId = this.matches.length > 0 ? this.matches[0].profileId : (PROFILES[0] ? PROFILES[0].id : null);
     this.pendingGateRoute = null;
     this.selectedPresetUploadUrl = "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=1000&q=80";
+    this.onboardingStep = 1;
+    this.admirersRevealed = false;
+    this.boostTimer = null;
+    this.boostSecondsRemaining = 1800; // 30 minutes
   }
 
   resetDefaultState() {
@@ -131,6 +142,10 @@ class CrazyCreativeApp {
     this.swiped = {};
     this.activeCategory = 'all';
     this.selectedAiHobbies = ["35mm Film", "Brutalist Architecture", "Specialty Coffee"];
+    this.superLikesRemaining = 3;
+    this.boostActive = false;
+    this.secretAdmirers = SECRET_ADMIRERS;
+    this.blockedUserIds = new Set();
     this.saveState();
   }
 
@@ -143,8 +158,17 @@ class CrazyCreativeApp {
       role: "Creative Director & Visual Storyteller",
       avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=240&h=240&q=80",
       verified: true,
+      photoVerified: true,
       bio: "Architectural photography, collecting Japanese city-pop vinyl, and designing digital platforms with electric character.",
-      hobbies: ["35mm Film", "Product Design", "Specialty Coffee", "Synthesizers", "Tokyo Architecture"]
+      hobbies: ["35mm Film", "Product Design", "Specialty Coffee", "Synthesizers", "Tokyo Architecture"],
+      values: ["Creative Freedom", "Deep Ambition", "Anti-Ghosting"],
+      lifestyle: ["Night Owl & Early Matcha", "High Output"],
+      socials: {
+        instagram: "@armaan.lens",
+        spotify: "Bicep • Glue",
+        twitter: "@armaanyadav",
+        github: "armaanyadav"
+      }
     };
   }
 
@@ -155,7 +179,8 @@ class CrazyCreativeApp {
       aiSensitivity: "balanced",
       soundFx: true,
       stealthMode: false,
-      readReceipts: true
+      readReceipts: true,
+      photoBlur: true
     };
   }
 
@@ -169,9 +194,28 @@ class CrazyCreativeApp {
       feedPosts: this.feedPosts,
       swiped: this.swiped,
       activeCategory: this.activeCategory,
-      selectedAiHobbies: this.selectedAiHobbies
+      selectedAiHobbies: this.selectedAiHobbies,
+      superLikesRemaining: this.superLikesRemaining,
+      boostActive: this.boostActive,
+      secretAdmirers: this.secretAdmirers,
+      blockedUserIds: Array.from(this.blockedUserIds)
     };
     localStorage.setItem(this.storageKey, JSON.stringify(data));
+  }
+
+  // --------------------------------------------------------------------------
+  // LIVE TOKYO STUDIO CLOCK (CRAZY CREATIVE LATE NIGHT WIDGET)
+  // --------------------------------------------------------------------------
+  initLiveClock() {
+    const clockEl = document.getElementById('liveClockTime');
+    if (!clockEl) return;
+    const updateTime = () => {
+      const now = new Date();
+      const options = { timeZone: 'Asia/Tokyo', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+      clockEl.textContent = new Intl.DateTimeFormat('en-US', options).format(now);
+    };
+    updateTime();
+    setInterval(updateTime, 1000);
   }
 
   // --------------------------------------------------------------------------
@@ -201,72 +245,103 @@ class CrazyCreativeApp {
   }
 
   // --------------------------------------------------------------------------
-  // AUTHENTICATION GATEWAY
+  // ROUTING & AUTHENTICATION GATING
   // --------------------------------------------------------------------------
-  handleGateRoute(route) {
-    if (route === 'home') {
+  handleGateRoute(targetRoute) {
+    if (targetRoute === 'home') {
       this.navigateTo('home');
       return;
     }
 
     if (!this.isAuthenticated) {
-      this.pendingGateRoute = route;
+      this.pendingGateRoute = targetRoute;
       this.openAuthModal();
       return;
     }
 
-    this.navigateTo(route);
+    this.navigateTo(targetRoute);
+  }
+
+  navigateTo(viewName) {
+    this.currentView = viewName;
+    window.currentView = viewName;
+
+    // Toggle body classes for navbar visibility:
+    // Nav bar is hidden on home view and when logged out
+    const isDashboardView = ['discover', 'feed', 'chats', 'settings'].includes(viewName);
+    
+    if (this.isAuthenticated && isDashboardView) {
+      document.body.classList.remove('logged-out');
+      document.body.classList.add('in-dashboard');
+    } else {
+      document.body.classList.add('logged-out');
+      document.body.classList.remove('in-dashboard');
+    }
+
+    // Toggle active view sections
+    Object.keys(this.views).forEach(key => {
+      if (this.views[key]) {
+        this.views[key].classList.toggle('active', key === viewName);
+      }
+    });
+
+    // Update active nav button
+    const routeIndexMap = { discover: 0, feed: 1, chats: 2, settings: 3 };
+    if (this.liquidNav && routeIndexMap[viewName] !== undefined) {
+      this.liquidNav.setActive(routeIndexMap[viewName]);
+    }
+
+    // Window scroll reset
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Render corresponding view data
+    this.renderCurrentView();
+  }
+
+  renderCurrentView() {
+    if (this.currentView === 'discover') {
+      this.renderCategoryFilterBar();
+      this.renderDeck();
+    } else if (this.currentView === 'feed') {
+      this.renderStories();
+      this.renderFeed();
+    } else if (this.currentView === 'chats') {
+      this.renderChatThreads();
+      this.renderActiveMessages();
+    } else if (this.currentView === 'settings') {
+      this.renderSettings();
+    }
   }
 
   updateHeaderAuthState() {
     const slot = document.getElementById('headerUserSlot');
     if (!slot) return;
 
-    // Body class for CSS control of navbar visibility
     if (this.isAuthenticated) {
-      document.body.classList.remove('logged-out');
       slot.innerHTML = `
-        <div class="header-user-badge" id="headerProfileTrigger" title="App Settings">
-          <img src="${this.user.avatar}" class="user-avatar-sm" alt="${this.user.name}">
-          <span>${this.user.name.split(' ')[0]}</span>
-          <span style="color:var(--accent-lime); font-size:0.8rem;">★</span>
-          <button class="btn-header-logout" id="btnQuickLogout" title="Sign Out" type="button">✕</button>
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <div class="user-status-pill ${this.boostActive ? 'boost-active-pill' : ''}" style="cursor:pointer;" title="View Profile" onclick="window.crazyApp.handleGateRoute('settings')">
+            <img src="${this.user.avatar}" class="user-avatar-tiny" alt="${this.user.name}">
+            <span style="font-size:0.875rem; font-weight:800; color:#FFF;">${this.user.name.split(' ')[0]}</span>
+            ${this.user.photoVerified ? '<span style="color:var(--accent-cyan); font-size:0.9rem;" title="Verified Creator">✓</span>' : ''}
+          </div>
+          <button class="btn-header-logout" id="btnQuickLogout" title="Sign out" type="button">✕</button>
         </div>
       `;
-
-      const trigger = document.getElementById('headerProfileTrigger');
-      if (trigger) {
-        trigger.addEventListener('click', (e) => {
-          if (e.target.closest('#btnQuickLogout')) return;
-          this.playSound('pop');
-          this.navigateTo('settings');
-        });
-      }
-
       const logoutBtn = document.getElementById('btnQuickLogout');
-      if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          this.logoutUser();
-        });
-      }
+      if (logoutBtn) logoutBtn.addEventListener('click', () => this.logoutUser());
     } else {
-      document.body.classList.add('logged-out');
       slot.innerHTML = `
-        <button class="pill-btn pill-white pill-sm" id="btnHeaderActionLogin" type="button">
-          <span>Sign In</span>
-          <span style="font-size:1.1rem; line-height:1;">→</span>
+        <button class="pill-btn pill-white pill-sm" id="btnHeaderSignIn" type="button">
+          <span>Log In</span>
         </button>
       `;
-      const btn = document.getElementById('btnHeaderActionLogin');
-      if (btn) btn.addEventListener('click', () => {
-        this.playSound('pop');
-        this.openAuthModal();
-      });
+      const signInBtn = document.getElementById('btnHeaderSignIn');
+      if (signInBtn) signInBtn.addEventListener('click', () => this.openAuthModal());
     }
   }
 
-  loginUser(name = "Armaan Yadav", email = "armaan123009@gmail.com") {
+  loginUser(name, email) {
     this.isAuthenticated = true;
     this.user.name = name;
     this.user.email = email;
@@ -368,6 +443,7 @@ class CrazyCreativeApp {
     this.toggleSoundFx = document.getElementById('toggleSoundFx');
     this.toggleStealth = document.getElementById('toggleStealth');
     this.toggleReadReceipts = document.getElementById('toggleReadReceipts');
+    this.togglePhotoBlur = document.getElementById('togglePhotoBlur');
     this.btnResetAllSwipes = document.getElementById('btnResetAllSwipes');
     this.btnLogoutFromSettings = document.getElementById('btnLogoutFromSettings');
     this.settingsBioInput = document.getElementById('settingsBioInput');
@@ -378,6 +454,14 @@ class CrazyCreativeApp {
 
     // Interactive Mascot
     this.mascotPeek = document.getElementById('mascotPeek');
+
+    // Extended Modals & Triggers
+    this.onboardingModal = document.getElementById('ccOnboardingModal');
+    this.vipModal = document.getElementById('ccVipModal');
+    this.safetyModal = document.getElementById('ccSafetyModal');
+    this.videoCallModal = document.getElementById('ccVideoCallModal');
+    this.archModal = document.getElementById('ccArchitectureModal');
+    this.aiWingmanTray = document.getElementById('aiWingmanTray');
   }
 
   // --------------------------------------------------------------------------
@@ -427,8 +511,7 @@ class CrazyCreativeApp {
       this.swipeTopCard('like');
     });
     if (this.btnSuperlike) this.btnSuperlike.addEventListener('click', () => {
-      this.playSound('superlike');
-      this.swipeTopCard('like');
+      this.triggerSuperLikeAction();
     });
     if (this.btnRewind) this.btnRewind.addEventListener('click', () => {
       this.playSound('pop');
@@ -454,6 +537,9 @@ class CrazyCreativeApp {
         if (e.key === 'ArrowRight') {
           this.playSound('like');
           this.swipeTopCard('like');
+        }
+        if (e.key === 'ArrowUp') {
+          this.triggerSuperLikeAction();
         }
         if (e.key === 'ArrowDown') {
           this.playSound('pop');
@@ -486,29 +572,31 @@ class CrazyCreativeApp {
     }
 
     // Quick Emoji Bar
-    document.querySelectorAll('.quick-emoji-chip').forEach(chip => {
+    document.querySelectorAll('.quick-emoji-bar .quick-emoji-chip').forEach(chip => {
       chip.addEventListener('click', () => {
-        this.playSound('like');
         const emoji = chip.dataset.emoji;
-        this.sendChatMessage(emoji);
+        if (emoji) {
+          this.playSound('pop');
+          this.sendChatMessage(emoji);
+        }
       });
     });
 
-    // Audio/Video Call Simulation
+    // Audio Call Simulation
     const audioCallBtn = document.getElementById('btnSimulateAudioCall');
     if (audioCallBtn) {
       audioCallBtn.addEventListener('click', () => {
         this.playSound('superlike');
         const partner = PROFILES.find(p => p.id === this.activeChatId);
-        alert(`📞 Connecting studio encrypted audio line with ${partner ? partner.name : 'match'}... (Microphone active)`);
+        alert(`📞 Encrypted audio connection active with ${partner ? partner.name : 'match'}... (Microphone active)`);
       });
     }
+
+    // Video Call Simulation
     const videoCallBtn = document.getElementById('btnSimulateVideoCall');
     if (videoCallBtn) {
       videoCallBtn.addEventListener('click', () => {
-        this.playSound('superlike');
-        const partner = PROFILES.find(p => p.id === this.activeChatId);
-        alert(`📹 Starting HD video call with ${partner ? partner.name : 'match'}... (Camera preview active)`);
+        this.openVideoCallModal();
       });
     }
 
@@ -598,10 +686,13 @@ class CrazyCreativeApp {
       });
     }
     if (this.btnMatchClose) {
-      this.btnMatchClose.addEventListener('click', () => this.closeModals());
+      this.btnMatchClose.addEventListener('click', () => {
+        this.playSound('pop');
+        this.closeModals();
+      });
     }
 
-    // Modal Close
+    // Close Modals on click outside or close buttons
     document.querySelectorAll('[data-close-modal]').forEach(btn => {
       btn.addEventListener('click', () => {
         this.playSound('pop');
@@ -609,7 +700,16 @@ class CrazyCreativeApp {
       });
     });
 
-    // FAQ Accordion Handlers
+    document.querySelectorAll('.cc-modal-backdrop').forEach(backdrop => {
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) {
+          this.playSound('pop');
+          this.closeModals();
+        }
+      });
+    });
+
+    // Accordions
     document.querySelectorAll('.faq-item-row').forEach(row => {
       row.addEventListener('click', () => {
         this.playSound('pop');
@@ -617,31 +717,19 @@ class CrazyCreativeApp {
       });
     });
 
-    // AI Chemistry Scan
-    if (this.btnRunAiMatchScan) {
-      this.btnRunAiMatchScan.addEventListener('click', () => {
-        this.playSound('superlike');
-        this.executeAiChemistryScan();
-      });
-    }
-
-    // Settings Controls
-    this.bindSettingsEvents();
-  }
-
-  bindSettingsEvents() {
-    if (this.sliderDistance && this.labelDistance) {
+    // Settings Inputs Listeners
+    if (this.sliderDistance) {
       this.sliderDistance.addEventListener('input', (e) => {
-        this.settings.maxDistance = e.target.value;
-        this.labelDistance.textContent = `${e.target.value} km`;
+        this.settings.maxDistance = parseInt(e.target.value);
+        if (this.labelDistance) this.labelDistance.textContent = `${this.settings.maxDistance} km`;
         this.saveState();
       });
     }
 
-    if (this.sliderAge && this.labelAgeRange) {
+    if (this.sliderAge) {
       this.sliderAge.addEventListener('input', (e) => {
-        this.settings.maxAge = e.target.value;
-        this.labelAgeRange.textContent = `18 – ${e.target.value}`;
+        this.settings.maxAge = parseInt(e.target.value);
+        if (this.labelAgeRange) this.labelAgeRange.textContent = `18 – ${this.settings.maxAge}`;
         this.saveState();
       });
     }
@@ -675,21 +763,31 @@ class CrazyCreativeApp {
       });
     }
 
+    if (this.togglePhotoBlur) {
+      this.togglePhotoBlur.addEventListener('change', (e) => {
+        this.settings.photoBlur = e.target.checked;
+        this.saveState();
+      });
+    }
+
+    if (this.btnSaveBio) {
+      this.btnSaveBio.addEventListener('click', () => {
+        this.playSound('like');
+        if (this.settingsBioInput) {
+          this.user.bio = this.settingsBioInput.value;
+          this.saveState();
+          alert('✓ Studio Bio saved successfully!');
+        }
+      });
+    }
+
     if (this.btnResetAllSwipes) {
       this.btnResetAllSwipes.addEventListener('click', () => {
         this.playSound('pop');
         this.swiped = {};
         this.saveState();
-        alert("Discovery Queue reset successfully! All profiles are now available to explore.");
-      });
-    }
-
-    if (this.btnSaveBio && this.settingsBioInput) {
-      this.btnSaveBio.addEventListener('click', () => {
-        this.user.bio = this.settingsBioInput.value.trim();
-        this.saveState();
-        this.playSound('like');
-        alert("Studio bio updated successfully!");
+        alert('↺ Swiped queue reset! All candidates returned to your discovery deck.');
+        if (this.currentView === 'discover') this.renderDeck();
       });
     }
 
@@ -701,50 +799,375 @@ class CrazyCreativeApp {
   }
 
   // --------------------------------------------------------------------------
-  // ROUTING & VIEW CONTROLLER
+  // EXTENDED FEATURES: ONBOARDING, AI WINGMAN, VIP PERKS, SAFETY & ARCHITECTURE
   // --------------------------------------------------------------------------
-  navigateTo(viewName) {
-    this.currentView = viewName;
-    document.body.classList.toggle('in-dashboard', viewName !== 'home');
+  initExtendedFeatures() {
+    // 1. Onboarding Triggers & Flow
+    const launchOnboardingHome = document.getElementById('btnLaunchOnboardingHome');
+    const settingsOnboarding = document.getElementById('btnSettingsOnboarding');
+    if (launchOnboardingHome) launchOnboardingHome.addEventListener('click', () => this.openOnboardingModal());
+    if (settingsOnboarding) settingsOnboarding.addEventListener('click', () => this.openOnboardingModal());
 
-    // Sync Navigation Dock
-    if (this.liquidNav) {
-      const routeToIndex = { discover: 0, feed: 1, chats: 2, settings: 3 };
-      if (routeToIndex[viewName] !== undefined) {
-        this.liquidNav.setActive(routeToIndex[viewName]);
-      }
+    const btnSendSms = document.getElementById('btnSendSmsCode');
+    const btnVerifySms = document.getElementById('btnVerifySmsCode');
+    const smsCodeRow = document.getElementById('smsCodeRow');
+
+    if (btnSendSms) {
+      btnSendSms.addEventListener('click', () => {
+        this.playSound('pop');
+        if (smsCodeRow) smsCodeRow.style.display = 'block';
+        btnSendSms.style.display = 'none';
+        if (btnVerifySms) btnVerifySms.style.display = 'block';
+      });
     }
 
-    Object.keys(this.views).forEach(key => {
-      if (this.views[key]) {
-        this.views[key].classList.toggle('active', key === viewName);
-      }
-    });
-
-    this.navLinks.forEach(link => {
-      link.classList.toggle('active', link.dataset.route === viewName);
-    });
-
-    if (viewName === 'discover') {
-      this.renderCategoryFilterBar();
-      this.renderDeck();
-    } else if (viewName === 'feed') {
-      this.renderFeedView();
-    } else if (viewName === 'chats') {
-      this.renderTheatricalChat();
-    } else if (viewName === 'settings') {
-      this.renderSettingsView();
+    if (btnVerifySms) {
+      btnVerifySms.addEventListener('click', () => {
+        this.playSound('like');
+        this.setOnboardingStep(2);
+      });
     }
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+    const btnCaptureSelfie = document.getElementById('btnCaptureSelfie');
+    const btnStep2Next = document.getElementById('btnStep2Next');
+    const verificationResultBox = document.getElementById('verificationResultBox');
 
-  renderCurrentView() {
-    this.navigateTo(this.currentView);
+    if (btnCaptureSelfie) {
+      btnCaptureSelfie.addEventListener('click', () => {
+        this.playSound('superlike');
+        if (verificationResultBox) verificationResultBox.style.display = 'block';
+        btnCaptureSelfie.style.display = 'none';
+        if (btnStep2Next) btnStep2Next.style.display = 'block';
+        this.user.photoVerified = true;
+        this.saveState();
+      });
+    }
+
+    if (btnStep2Next) {
+      btnStep2Next.addEventListener('click', () => {
+        this.playSound('pop');
+        this.setOnboardingStep(3);
+      });
+    }
+
+    const btnStep3Next = document.getElementById('btnStep3Next');
+    if (btnStep3Next) {
+      btnStep3Next.addEventListener('click', () => {
+        this.playSound('pop');
+        this.setOnboardingStep(4);
+      });
+    }
+
+    // Values Tag Toggle in Step 4
+    const valuesPicker = document.getElementById('onboardingValuesPicker');
+    if (valuesPicker) {
+      valuesPicker.addEventListener('click', (e) => {
+        const tag = e.target.closest('.ai-hobby-tag');
+        if (!tag) return;
+        this.playSound('pop');
+        tag.classList.toggle('active');
+      });
+    }
+
+    const btnCompleteOnboarding = document.getElementById('btnCompleteOnboarding');
+    if (btnCompleteOnboarding) {
+      btnCompleteOnboarding.addEventListener('click', () => {
+        this.playSound('superlike');
+        this.closeModals();
+        this.loginUser(this.user.name, this.user.email);
+        alert('🎉 Onboarding Complete! Your profile is 100% verified with blue badge.');
+      });
+    }
+
+    // 2. VIP Perks Modal & Boost Actions
+    const btnOpenVipHome = document.getElementById('btnOpenVipPerksHome');
+    const btnDeckVip = document.getElementById('btnDeckVipPerks');
+    if (btnOpenVipHome) btnOpenVipHome.addEventListener('click', () => this.openVipModal());
+    if (btnDeckVip) btnDeckVip.addEventListener('click', () => this.openVipModal());
+
+    const btnDeckBoost = document.getElementById('btnDeckBoost');
+    const btnActivateBoost = document.getElementById('btnActivateBoostAction');
+    if (btnDeckBoost) btnDeckBoost.addEventListener('click', () => this.activateBoost());
+    if (btnActivateBoost) btnActivateBoost.addEventListener('click', () => this.activateBoost());
+
+    const btnTestSuperLike = document.getElementById('btnSendTestSuperLike');
+    if (btnTestSuperLike) btnTestSuperLike.addEventListener('click', () => this.triggerSuperLikeAction());
+
+    const btnRevealAll = document.getElementById('btnRevealAllAdmirers');
+    if (btnRevealAll) {
+      btnRevealAll.addEventListener('click', () => {
+        this.playSound('superlike');
+        this.admirersRevealed = true;
+        document.querySelectorAll('.admirer-card').forEach(c => c.classList.add('revealed'));
+        btnRevealAll.textContent = '✓ All Admirers Revealed';
+      });
+    }
+
+    // 3. Safety & Moderation
+    const btnDeckSafety = document.getElementById('btnDeckSafety');
+    const btnChatSafety = document.getElementById('btnChatSafety');
+    if (btnDeckSafety) btnDeckSafety.addEventListener('click', () => this.openSafetyModal());
+    if (btnChatSafety) btnChatSafety.addEventListener('click', () => this.openSafetyModal());
+
+    const btnSubmitReport = document.getElementById('btnSubmitReportAction');
+    if (btnSubmitReport) {
+      btnSubmitReport.addEventListener('click', () => {
+        this.playSound('pop');
+        this.closeModals();
+        alert('🛡️ Report submitted to Crazy Love Trust & Safety. Our moderation team reviews all flagged content within 15 minutes.');
+      });
+    }
+
+    const btnBlockUser = document.getElementById('btnBlockUserAction');
+    if (btnBlockUser) {
+      btnBlockUser.addEventListener('click', () => {
+        this.playSound('pass');
+        const activeProfile = this.getActiveTargetProfile();
+        if (activeProfile) {
+          this.blockedUserIds.add(activeProfile.id);
+          this.swiped[activeProfile.id] = 'pass';
+          this.saveState();
+          this.closeModals();
+          alert(`🚫 ${activeProfile.name} has been blocked and removed from your queue and chats.`);
+          if (this.currentView === 'discover') this.renderDeck();
+          if (this.currentView === 'chats') this.renderChatThreads();
+        }
+      });
+    }
+
+    // 4. Video Call Simulation
+    const btnCallHangup = document.getElementById('btnCallHangup');
+    const btnCallMute = document.getElementById('btnCallMute');
+    const btnCallFlip = document.getElementById('btnCallFlip');
+
+    if (btnCallHangup) {
+      btnCallHangup.addEventListener('click', () => {
+        this.playSound('pass');
+        if (this.videoCallModal) this.videoCallModal.style.display = 'none';
+      });
+    }
+
+    if (btnCallMute) {
+      btnCallMute.addEventListener('click', () => {
+        this.playSound('pop');
+        btnCallMute.classList.toggle('active');
+        btnCallMute.style.background = btnCallMute.classList.contains('active') ? '#EF4444' : '#27272A';
+      });
+    }
+
+    if (btnCallFlip) {
+      btnCallFlip.addEventListener('click', () => {
+        this.playSound('pop');
+        const stream = document.getElementById('videoCallStreamImg');
+        if (stream) stream.style.transform = stream.style.transform === 'scaleX(-1)' ? 'none' : 'scaleX(-1)';
+      });
+    }
+
+    // 5. AI Wingman Opener Drawer
+    const btnToggleWingman = document.getElementById('btnToggleAiWingman');
+    if (btnToggleWingman) {
+      btnToggleWingman.addEventListener('click', () => {
+        this.playSound('pop');
+        this.toggleAiWingmanDrawer();
+      });
+    }
+
+    // 6. System Architecture Blueprint
+    const btnOpenArchHome = document.getElementById('btnOpenArchitectureHome');
+    const btnSettingsArch = document.getElementById('btnSettingsArch');
+    if (btnOpenArchHome) btnOpenArchHome.addEventListener('click', () => this.openArchitectureModal());
+    if (btnSettingsArch) btnSettingsArch.addEventListener('click', () => this.openArchitectureModal());
   }
 
   // --------------------------------------------------------------------------
-  // BRAND NEW EDITORIAL DISCOVERY DECK (SWIPE ARENA)
+  // MODALS LAUNCHERS
+  // --------------------------------------------------------------------------
+  openAuthModal() {
+    this.authModal.classList.add('active');
+  }
+
+  openOnboardingModal() {
+    this.setOnboardingStep(1);
+    if (this.onboardingModal) this.onboardingModal.classList.add('active');
+  }
+
+  setOnboardingStep(stepNum) {
+    this.onboardingStep = stepNum;
+    for (let i = 1; i <= 4; i++) {
+      const stepEl = document.getElementById(`onboardingStep${i}`);
+      const dotEl = document.getElementById(`stepDot${i}`);
+      if (stepEl) stepEl.style.display = i === stepNum ? 'block' : 'none';
+      if (dotEl) {
+        dotEl.classList.toggle('active', i === stepNum);
+        dotEl.classList.toggle('done', i < stepNum);
+      }
+    }
+  }
+
+  openVipModal() {
+    this.renderAdmirersGrid();
+    if (this.vipModal) this.vipModal.classList.add('active');
+  }
+
+  openSafetyModal() {
+    if (this.safetyModal) this.safetyModal.classList.add('active');
+  }
+
+  openArchitectureModal() {
+    if (this.archModal) this.archModal.classList.add('active');
+  }
+
+  openVideoCallModal() {
+    const partner = this.getActiveTargetProfile();
+    if (!partner) return;
+
+    this.playSound('superlike');
+    const partnerNameEl = document.getElementById('videoCallPartnerName');
+    const streamImgEl = document.getElementById('videoCallStreamImg');
+
+    if (partnerNameEl) partnerNameEl.textContent = `${partner.name} (Live Video)`;
+    if (streamImgEl) streamImgEl.src = partner.photos && partner.photos[1] ? partner.photos[1] : partner.photos[0];
+
+    if (this.videoCallModal) this.videoCallModal.style.display = 'flex';
+  }
+
+  getActiveTargetProfile() {
+    if (this.currentView === 'chats' && this.activeChatId) {
+      return PROFILES.find(p => p.id === this.activeChatId);
+    }
+    const deck = this.getActiveDeck();
+    return deck.length > 0 ? deck[0] : PROFILES[0];
+  }
+
+  activateBoost() {
+    if (this.boostActive) {
+      alert(`⚡ 10x Radar Boost already active! ${Math.floor(this.boostSecondsRemaining / 60)} minutes remaining.`);
+      return;
+    }
+
+    this.playSound('superlike');
+    this.boostActive = true;
+    this.boostSecondsRemaining = 1800; // 30 mins
+    this.saveState();
+    this.updateHeaderAuthState();
+
+    const deckSummary = document.getElementById('deckVipSummary');
+    if (deckSummary) deckSummary.innerHTML = `⚡ <span style="color:var(--accent-lime);">10x BOOST ACTIVE</span> (30m) · 3 Secret Admirers`;
+
+    alert('🚀 10x Profile Boost Activated! Your profile is now prioritized in discovery for all local creators in Tokyo.');
+  }
+
+  triggerSuperLikeAction() {
+    if (this.superLikesRemaining <= 0) {
+      alert('★ You have used all 3 Super Likes for today! Refills in 24 hours.');
+      return;
+    }
+
+    this.playSound('superlike');
+    this.superLikesRemaining--;
+    this.saveState();
+
+    const balText = document.getElementById('superLikeBalanceText');
+    if (balText) balText.textContent = `${this.superLikesRemaining} Available`;
+
+    // Trigger deck swipe
+    this.swipeTopCard('like');
+  }
+
+  renderAdmirersGrid() {
+    const grid = document.getElementById('admirersGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    SECRET_ADMIRERS.forEach(admirer => {
+      const card = document.createElement('div');
+      card.className = `admirer-card ${this.admirersRevealed ? 'revealed' : ''}`;
+      card.innerHTML = `
+        <div class="admirer-img-wrap">
+          <img src="${admirer.photos[0]}" class="admirer-img" alt="${admirer.name}">
+          <span class="admirer-badge-superlike">★ ${admirer.action}</span>
+        </div>
+        <div style="padding:0.85rem 1rem;">
+          <strong style="color:#FFF; font-size:1.05rem; display:block;">${admirer.name}, ${admirer.age}</strong>
+          <span style="font-size:0.8rem; color:var(--accent-lime); font-weight:700;">${admirer.occupation}</span>
+          <p style="font-size:0.75rem; color:#A1A1AA; margin:0.35rem 0 0.75rem;">${admirer.previewVibe}</p>
+          <button class="pill-btn pill-lime pill-xs" style="width:100%;" type="button">
+            Match Instantly ⚡
+          </button>
+        </div>
+      `;
+
+      card.querySelector('button').addEventListener('click', () => {
+        this.playSound('like');
+        this.closeModals();
+        this.triggerMatch({
+          id: admirer.id,
+          name: admirer.name,
+          age: admirer.age,
+          avatar: admirer.photos[0],
+          photos: admirer.photos,
+          occupation: admirer.occupation,
+          city: admirer.city,
+          compatibility: admirer.compatibility,
+          initialMessage: "Hey! Loved your aesthetic on the radar. What are you building right now?"
+        });
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  toggleAiWingmanDrawer() {
+    if (!this.aiWingmanTray) return;
+    const isHidden = this.aiWingmanTray.style.display === 'none' || !this.aiWingmanTray.style.display;
+    
+    if (isHidden) {
+      this.renderAiWingmanOpeners();
+      this.aiWingmanTray.style.display = 'block';
+    } else {
+      this.aiWingmanTray.style.display = 'none';
+    }
+  }
+
+  renderAiWingmanOpeners() {
+    if (!this.aiWingmanTray) return;
+    const profile = PROFILES.find(p => p.id === this.activeChatId) || PROFILES[0];
+    const openers = AI_WINGMAN_OPENERS[profile.id] || [
+      `What is your quintessential weekend unwinding ritual?`,
+      `I noticed your taste in design—what's your favorite creative spot in Tokyo?`,
+      `Coffee or evening listening bar?`
+    ];
+
+    this.aiWingmanTray.innerHTML = `
+      <div class="ai-wingman-header">
+        <div class="ai-wingman-title">
+          <span>⚡</span>
+          <span>AI Wingman Opener Radar</span>
+        </div>
+        <span style="font-size:0.75rem; color:var(--muted-gray); font-weight:700;">Based on ${profile.name}'s hobbies</span>
+      </div>
+      <div class="ai-wingman-openers-grid">
+        ${openers.map((op, idx) => `
+          <div class="ai-opener-card" data-opener-index="${idx}">
+            <span>"${op}"</span>
+            <button class="opener-tap-btn" type="button">Fire ⚡</button>
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    this.aiWingmanTray.querySelectorAll('.ai-opener-card').forEach((card, idx) => {
+      card.addEventListener('click', () => {
+        this.playSound('superlike');
+        const text = openers[idx];
+        this.sendChatMessage(text);
+        this.aiWingmanTray.style.display = 'none';
+      });
+    });
+  }
+
+  // --------------------------------------------------------------------------
+  // DECK / DISCOVERY CARDS WITH RICH PROMPTS, VALUES & LINKED SOCIALS
   // --------------------------------------------------------------------------
   renderCategoryFilterBar() {
     if (!this.interestFilterBar) return;
@@ -767,7 +1190,9 @@ class CrazyCreativeApp {
 
   getActiveDeck() {
     return PROFILES.filter(p => {
+      if (this.blockedUserIds && this.blockedUserIds.has(p.id)) return false;
       if (this.swiped[p.id]) return false;
+      if (this.settings.maxAge && p.age > this.settings.maxAge) return false;
       if (this.activeCategory === 'all') return true;
       return p.category === this.activeCategory;
     });
@@ -851,11 +1276,14 @@ class CrazyCreativeApp {
           <div class="cc-card-title-row">
             <div>
               <span class="cc-name-heading">${profile.name}, ${profile.age}</span>
-              <span style="color:var(--accent-cyan); font-size:1.15rem; margin-left:0.35rem;" title="Verified Creator">✓</span>
+              ${profile.photoVerified ? '<span style="color:var(--accent-cyan); font-size:1.15rem; margin-left:0.35rem;" title="100% Photo Verified">✓</span>' : ''}
             </div>
-            <span style="font-size:0.9rem; font-weight:800; color:var(--canvas-pink);">
-              ${this.settings.stealthMode ? profile.city : profile.distance}
-            </span>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span class="anti-ghost-badge" title="48h Anti-Ghosting Window">⏳ 48h</span>
+              <span style="font-size:0.9rem; font-weight:800; color:var(--canvas-pink);">
+                ${this.settings.stealthMode ? profile.city : profile.distance}
+              </span>
+            </div>
           </div>
           <div style="font-size:0.95rem; font-weight:700; color:var(--accent-lime); margin-top:0.2rem;">
             ${profile.occupation} · ${profile.city}
@@ -863,6 +1291,32 @@ class CrazyCreativeApp {
           <p class="cc-bio-snippet">
             ${profile.bio}
           </p>
+        </div>
+
+        <!-- Linked Socials Row -->
+        <div class="social-links-row">
+          ${profile.socials && profile.socials.spotify ? `
+            <span class="social-badge spotify" title="Anthem: ${profile.socials.spotify}">
+              <span>♫</span>
+              <span>${profile.socials.spotify.split('•')[0].trim()}</span>
+              <span class="soundwave-bars">
+                <span class="soundwave-bar"></span>
+                <span class="soundwave-bar"></span>
+                <span class="soundwave-bar"></span>
+              </span>
+            </span>
+          ` : ''}
+          ${profile.socials && profile.socials.instagram ? `
+            <span class="social-badge instagram" title="Instagram: ${profile.socials.instagram}">
+              <span>📸</span>
+              <span>${profile.socials.instagram}</span>
+            </span>
+          ` : ''}
+          ${profile.videoCheck ? `
+            <span class="social-badge" style="border-color:var(--accent-yellow); color:var(--accent-yellow);" title="${profile.videoCheck.title}">
+              <span>📹 Video Vibe (${profile.videoCheck.duration})</span>
+            </span>
+          ` : ''}
         </div>
 
         <div>
@@ -911,44 +1365,43 @@ class CrazyCreativeApp {
     let currentY = 0;
     let isDragging = false;
 
-    const stampLike = cardEl.querySelector('.cc-stamp-like');
-    const stampPass = cardEl.querySelector('.cc-stamp-pass');
+    const likeStamp = cardEl.querySelector('.cc-stamp-like');
+    const passStamp = cardEl.querySelector('.cc-stamp-pass');
 
-    const onStart = (e) => {
-      // Don't drag if clicking photo tap zones directly
-      if (e.target.classList.contains('card-tap-zone')) return;
+    const onPointerDown = (e) => {
+      if (e.target.closest('.card-tap-zone')) return;
       isDragging = true;
-      const point = e.touches ? e.touches[0] : e;
-      startX = point.clientX;
-      startY = point.clientY;
+      startX = e.clientX || (e.touches && e.touches[0].clientX);
+      startY = e.clientY || (e.touches && e.touches[0].clientY);
       cardEl.style.transition = 'none';
     };
 
-    const onMove = (e) => {
+    const onPointerMove = (e) => {
       if (!isDragging) return;
-      const point = e.touches ? e.touches[0] : e;
-      currentX = point.clientX - startX;
-      currentY = point.clientY - startY;
+      const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+      const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+      currentX = clientX - startX;
+      currentY = clientY - startY;
 
       const rotate = currentX * 0.08;
       cardEl.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) rotate(${rotate}deg)`;
 
-      if (currentX > 30) {
-        stampLike.style.opacity = Math.min((currentX - 30) / 90, 1);
-        stampPass.style.opacity = 0;
-      } else if (currentX < -30) {
-        stampPass.style.opacity = Math.min((Math.abs(currentX) - 30) / 90, 1);
-        stampLike.style.opacity = 0;
+      if (currentX > 35) {
+        if (likeStamp) likeStamp.style.opacity = Math.min((currentX - 35) / 80, 1);
+        if (passStamp) passStamp.style.opacity = 0;
+      } else if (currentX < -35) {
+        if (passStamp) passStamp.style.opacity = Math.min((-currentX - 35) / 80, 1);
+        if (likeStamp) likeStamp.style.opacity = 0;
       } else {
-        stampLike.style.opacity = 0;
-        stampPass.style.opacity = 0;
+        if (likeStamp) likeStamp.style.opacity = 0;
+        if (passStamp) passStamp.style.opacity = 0;
       }
     };
 
-    const onEnd = () => {
+    const onPointerUp = () => {
       if (!isDragging) return;
       isDragging = false;
-      cardEl.style.transition = 'transform 0.25s var(--smooth-ease), opacity 0.2s ease';
+      cardEl.style.transition = 'transform 0.4s var(--spring-bounce), opacity 0.3s ease';
 
       const threshold = 110;
       if (currentX > threshold) {
@@ -959,18 +1412,18 @@ class CrazyCreativeApp {
         this.executeSwipe(cardEl, 'pass');
       } else {
         cardEl.style.transform = '';
-        stampLike.style.opacity = 0;
-        stampPass.style.opacity = 0;
+        if (likeStamp) likeStamp.style.opacity = 0;
+        if (passStamp) passStamp.style.opacity = 0;
       }
     };
 
-    cardEl.addEventListener('mousedown', onStart);
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onEnd);
+    cardEl.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
 
-    cardEl.addEventListener('touchstart', onStart, { passive: true });
-    window.addEventListener('touchmove', onMove, { passive: true });
-    window.addEventListener('touchend', onEnd);
+    cardEl.addEventListener('touchstart', onPointerDown, { passive: true });
+    window.addEventListener('touchmove', onPointerMove, { passive: true });
+    window.addEventListener('touchend', onPointerUp);
   }
 
   swipeTopCard(action) {
@@ -1020,7 +1473,8 @@ class CrazyCreativeApp {
         matchedAt: "Just now",
         unread: true,
         lastMessage: profile.initialMessage,
-        lastTime: "Just now"
+        lastTime: "Just now",
+        antiGhostTimer: "48h 00m"
       });
 
       if (!this.chats[profile.id]) {
@@ -1049,261 +1503,250 @@ class CrazyCreativeApp {
   // AI CHEMISTRY RADAR SCANNER
   // --------------------------------------------------------------------------
   openAiMatchModal() {
-    this.aiHobbiesPicker.innerHTML = '';
-    const allHobbies = [
-      "Analog Photography", "35mm Film", "Brutalist Architecture", "Record Collecting",
-      "Specialty Coffee", "Modular Synthesizers", "Clay Sculpting", "Sourdough Baking",
-      "Natural Wines", "French Cinema", "Bouldering", "Independent Zines", "Botanical Gardening",
-      "Vintage Fashion Archiving", "Tokyo Architecture", "Techno"
+    this.renderAiHobbiesPicker();
+    this.aiMatchModal.classList.add('active');
+  }
+
+  renderAiHobbiesPicker() {
+    const ALL_RADAR_HOBBIES = [
+      "35mm Film", "Brutalist Architecture", "Specialty Coffee",
+      "Analog Photography", "Modular Synthesizers", "Pastry Architecture",
+      "Ceramic Art", "Bouldering", "Independent Books",
+      "Vintage Fashion", "Botanical Gardening", "Techno Records"
     ];
 
-    allHobbies.forEach(hobby => {
-      const chip = document.createElement('div');
+    this.aiHobbiesPicker.innerHTML = '';
+    ALL_RADAR_HOBBIES.forEach(hobby => {
+      const tag = document.createElement('span');
       const isSelected = this.selectedAiHobbies.includes(hobby);
-      chip.className = `ai-hobby-chip ${isSelected ? 'selected' : ''}`;
-      chip.textContent = hobby;
-      chip.addEventListener('click', () => {
+      tag.className = `ai-hobby-tag ${isSelected ? 'active' : ''}`;
+      tag.textContent = hobby;
+      tag.addEventListener('click', () => {
         this.playSound('pop');
         if (this.selectedAiHobbies.includes(hobby)) {
           this.selectedAiHobbies = this.selectedAiHobbies.filter(h => h !== hobby);
         } else {
           this.selectedAiHobbies.push(hobby);
         }
-        chip.classList.toggle('selected');
+        tag.classList.toggle('active');
         this.saveState();
       });
-      this.aiHobbiesPicker.appendChild(chip);
+      this.aiHobbiesPicker.appendChild(tag);
     });
 
-    this.aiMatchResults.innerHTML = '';
-    this.aiMatchModal.classList.add('active');
-  }
-
-  executeAiChemistryScan() {
-    if (this.selectedAiHobbies.length === 0) {
-      alert("Please select at least one hobby or creative passion!");
-      return;
+    if (this.btnRunAiMatchScan) {
+      this.btnRunAiMatchScan.onclick = () => {
+        this.runAiMatchScan();
+      };
     }
+  }
 
-    const scored = PROFILES.map(p => {
-      const shared = p.hobbies.filter(h => this.selectedAiHobbies.includes(h));
-      const matchScore = Math.min(Math.round(75 + (shared.length * 8)), 99);
-      return { profile: p, shared, score: matchScore };
-    });
+  runAiMatchScan() {
+    this.playSound('superlike');
+    this.btnRunAiMatchScan.textContent = "Analyzing Vectors...";
+    this.btnRunAiMatchScan.disabled = true;
 
-    scored.sort((a, b) => b.score - a.score);
-    const topThree = scored.slice(0, 3);
+    setTimeout(() => {
+      this.btnRunAiMatchScan.textContent = "Find Best Matches ⚡";
+      this.btnRunAiMatchScan.disabled = false;
 
-    this.aiMatchResults.innerHTML = `
-      <div style="font-size:0.85rem; font-weight:800; color:var(--accent-lime); text-transform:uppercase; margin-bottom:0.75rem;">
-        ⚡ AI Radar Identified ${topThree.length} Top Matches:
-      </div>
-      ${topThree.map(item => `
-        <div class="ai-result-card">
-          <img src="${item.profile.avatar}" style="width:3.5rem; height:3.5rem; border-radius:50%; object-fit:cover; border:2px solid var(--accent-lime);" alt="${item.profile.name}">
-          <div style="flex:1;">
-            <div style="display:flex; justify-content:space-between; align-items:baseline;">
-              <strong style="font-size:1.1rem; color:#FFF;">${item.profile.name}, ${item.profile.age}</strong>
-              <span style="color:var(--accent-lime); font-weight:900; font-size:0.95rem;">⚡ ${item.score}%</span>
+      const scored = PROFILES.map(profile => {
+        let overlap = 0;
+        profile.hobbies.forEach(h => {
+          if (this.selectedAiHobbies.includes(h)) overlap++;
+        });
+        const matchScore = Math.min(80 + overlap * 5, 99);
+        return { profile, overlap, matchScore };
+      });
+
+      scored.sort((a, b) => b.matchScore - a.matchScore);
+      const topMatches = scored.slice(0, 3);
+
+      this.aiMatchResults.innerHTML = `
+        <h4 style="font-size:1.1rem; font-weight:800; color:var(--accent-lime); margin-bottom:0.75rem; text-transform:uppercase;">Top Compatible Creators:</h4>
+        <div style="display:flex; flex-direction:column; gap:0.75rem;">
+          ${topMatches.map(m => `
+            <div style="background:#18181B; border:2px solid #27272A; border-radius:1rem; padding:0.85rem; display:flex; justify-content:space-between; align-items:center;">
+              <div style="display:flex; align-items:center; gap:0.75rem;">
+                <img src="${m.profile.avatar}" style="width:2.75rem; height:2.75rem; border-radius:50%; object-fit:cover; border:2px solid var(--accent-lime);" alt="${m.profile.name}">
+                <div>
+                  <div style="font-size:1.05rem; font-weight:800; color:#FFF;">${m.profile.name}, ${m.profile.age}</div>
+                  <div style="font-size:0.8rem; color:var(--muted-gray); font-weight:600;">${m.overlap} Shared Passions · ${m.profile.city}</div>
+                </div>
+              </div>
+              <button class="pill-btn pill-lime pill-sm" onclick="window.crazyApp.quickMatchFromAi('${m.profile.id}')">
+                Connect ⚡
+              </button>
             </div>
-            <div style="font-size:0.8rem; color:var(--canvas-pink); font-weight:700;">${item.profile.occupation}</div>
-            <div style="font-size:0.75rem; color:#A1A1AA; margin-top:0.25rem;">
-              Shared passions: ${item.shared.length > 0 ? item.shared.join(', ') : item.profile.hobbies.slice(0, 2).join(', ')}
-            </div>
-          </div>
-          <button class="pill-btn pill-sm pill-pink" onclick="window.crazyApp.startChatWith('${item.profile.id}')" type="button">
-            Chat →
-          </button>
+          `).join('')}
         </div>
-      `).join('')}
-    `;
+      `;
+    }, 400);
   }
 
-  startChatWith(profileId) {
-    this.closeModals();
-    this.playSound('like');
+  quickMatchFromAi(profileId) {
     const profile = PROFILES.find(p => p.id === profileId);
-    if (profile) this.triggerMatch(profile);
-    this.navigateTo('chats');
+    if (!profile) return;
+    this.closeModals();
+    this.triggerMatch(profile);
   }
 
   // --------------------------------------------------------------------------
-  // COMMUNITY MOMENTS & MEDIA FEED (INSTAGRAM STYLE)
+  // FEED & COMMUNITY MOMENTS (INSTAGRAM / THREADS STYLE)
   // --------------------------------------------------------------------------
-  renderFeedView() {
-    this.renderStoriesTray();
-    this.renderFeedStream();
-  }
-
-  renderStoriesTray() {
+  renderStories() {
     if (!this.storiesTray) return;
     this.storiesTray.innerHTML = '';
 
-    const myStoryEl = document.createElement('div');
-    myStoryEl.className = 'story-bubble';
-    myStoryEl.innerHTML = `
-      <div class="story-ring-wrap" style="background:#27272A;">
-        <img src="${this.user.avatar}" class="story-avatar-img" alt="My Story">
+    const myStory = document.createElement('div');
+    myStory.className = 'story-avatar-item';
+    myStory.innerHTML = `
+      <div class="story-ring story-ring-unread" style="border-color:var(--canvas-pink);">
+        <img src="${this.user.avatar}" class="story-avatar-img" alt="${this.user.name}">
       </div>
-      <span class="story-name-label">Your Story +</span>
+      <span class="story-username">Your Vibe</span>
     `;
-    myStoryEl.addEventListener('click', () => {
+    myStory.addEventListener('click', () => {
       this.playSound('pop');
       this.openUploadModal();
     });
-    this.storiesTray.appendChild(myStoryEl);
+    this.storiesTray.appendChild(myStory);
 
     PROFILES.forEach(profile => {
-      const bubble = document.createElement('div');
-      bubble.className = 'story-bubble';
-      bubble.innerHTML = `
-        <div class="story-ring-wrap">
+      if (!profile.storyActive) return;
+      const item = document.createElement('div');
+      item.className = 'story-avatar-item';
+      item.innerHTML = `
+        <div class="story-ring story-ring-unread">
           <img src="${profile.avatar}" class="story-avatar-img" alt="${profile.name}">
         </div>
-        <span class="story-name-label">${profile.name.split(' ')[0]}</span>
+        <span class="story-username">${profile.name.split(' ')[0]}</span>
       `;
-      bubble.addEventListener('click', () => {
-        this.startChatWith(profile.id);
+      item.addEventListener('click', () => {
+        this.playSound('pop');
+        this.activeChatId = profile.id;
+        this.showCardDetails();
       });
-      this.storiesTray.appendChild(bubble);
+      this.storiesTray.appendChild(item);
     });
   }
 
-  renderFeedStream() {
+  renderFeed() {
     if (!this.feedStream) return;
     this.feedStream.innerHTML = '';
 
     this.feedPosts.forEach(post => {
       const card = document.createElement('article');
-      card.className = 'feed-card';
+      card.className = 'feed-moment-card';
       card.dataset.postId = post.id;
 
       card.innerHTML = `
-        <div class="feed-card-header">
-          <div class="feed-author-meta">
+        <div class="feed-author-header">
+          <div class="feed-author-info">
             <img src="${post.authorAvatar}" class="feed-author-avatar" alt="${post.authorName}">
             <div>
-              <div class="feed-author-name">${post.authorName}</div>
-              <div class="feed-location-text">${post.location}</div>
+              <div class="feed-author-name">
+                <span>${post.authorName}</span>
+                <span style="color:var(--accent-cyan); font-size:0.95rem;">✓</span>
+              </div>
+              <div class="feed-location-text">${post.location} · ${post.timeAgo}</div>
             </div>
           </div>
-          <button class="pill-btn pill-sm pill-white" style="padding:0.35rem 0.85rem; font-size:0.8rem;" onclick="window.crazyApp.startChatWith('${post.authorId}')" type="button">
-            Direct Message ⚡
-          </button>
+          <button class="chat-icon-action" style="font-size:1.1rem; border:none;" title="Options">•••</button>
         </div>
 
         <div class="feed-media-wrap">
-          <img src="${post.mediaUrl}" class="feed-media-img" alt="Moment Photo">
+          <img src="${post.mediaUrl}" class="feed-media-img ${this.settings.photoBlur ? 'photo-shield-blur' : ''}" alt="Post moment">
           <div class="heart-burst-icon">❤️</div>
         </div>
 
         <div class="feed-actions-bar">
-          <div class="feed-actions-left">
-            <button class="feed-action-btn btn-feed-like ${post.isLiked ? 'liked' : ''}" title="Like Moment" type="button">
-              <span>${post.isLiked ? '❤️' : '🤍'}</span>
-              <span class="feed-likes-count">${post.likesCount}</span>
-            </button>
-            <button class="feed-action-btn btn-feed-toggle-comments" title="Comments" type="button">
-              <span>💬</span>
-              <span style="font-size:0.95rem; font-weight:800; color:#FFF;">${post.comments.length}</span>
-            </button>
-          </div>
-          <span style="font-size:0.8rem; font-weight:700; color:var(--accent-lime);">${post.interest}</span>
+          <button class="feed-action-btn btn-like-moment" title="Like">
+            <span class="heart-symbol" style="color:${post.liked ? 'var(--canvas-pink)' : '#FFF'}; font-size:1.4rem;">${post.liked ? '❤️' : '🤍'}</span>
+            <span class="feed-count-badge">${post.likesCount}</span>
+          </button>
+          <button class="feed-action-btn btn-comment-moment" title="Comment">
+            <span style="font-size:1.3rem;">💬</span>
+            <span class="feed-count-badge">${post.comments.length}</span>
+          </button>
+          <button class="feed-action-btn btn-share-moment" title="Send to Chat">
+            <span style="font-size:1.3rem;">✈️</span>
+          </button>
         </div>
 
         <div class="feed-caption-block">
-          <div>
-            <span class="feed-caption-author">${post.authorName}</span>
-            <span>${post.caption}</span>
-          </div>
-          <div class="feed-tags-row">
-            ${post.tags.map(t => `<span class="feed-tag-pill">${t}</span>`).join('')}
-          </div>
-          <div class="feed-timestamp">${post.timestamp}</div>
+          <p class="feed-caption-text">
+            <strong>${post.authorName}</strong> ${post.caption}
+          </p>
+          <span style="color:var(--accent-lime); font-size:0.8rem; font-weight:800;">${post.interestTag}</span>
         </div>
 
-        <div class="feed-comments-section" style="display:${post.comments.length > 0 ? 'block' : 'none'};">
-          <div class="feed-comments-list">
-            ${post.comments.map(c => `
-              <div class="feed-comment-item">
-                <img src="${c.authorAvatar}" class="feed-comment-avatar" alt="${c.authorName}">
-                <div class="feed-comment-body">
-                  <span class="feed-comment-user">${c.authorName}</span>
-                  <span>${c.text}</span>
-                  <div style="font-size:0.7rem; color:var(--muted-gray); margin-top:0.2rem;">${c.time}</div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
+        <div class="feed-comments-container">
+          ${post.comments.slice(-2).map(c => `
+            <div class="feed-comment-row">
+              <strong>${c.author}</strong>: ${c.text}
+            </div>
+          `).join('')}
+        </div>
 
-          <div class="feed-comment-input-bar">
-            <input type="text" class="feed-comment-input" placeholder="Add a comment for ${post.authorName}...">
-            <button class="pill-btn pill-sm pill-pink btn-post-comment" type="button">Post</button>
-          </div>
+        <div class="feed-add-comment-row">
+          <input type="text" class="feed-comment-input" placeholder="Add a comment to this moment...">
+          <button class="feed-comment-post-btn" type="button">Post</button>
         </div>
       `;
 
-      // Double-click photo to trigger heart burst
+      // Tap on image to unblur or double tap to heart
       const mediaWrap = card.querySelector('.feed-media-wrap');
-      const burstHeart = card.querySelector('.heart-burst-icon');
-      const likeBtn = card.querySelector('.btn-feed-like');
-      const likesCountSpan = card.querySelector('.feed-likes-count');
+      const mediaImg = card.querySelector('.feed-media-img');
+      const heartIcon = card.querySelector('.heart-burst-icon');
 
-      mediaWrap.addEventListener('dblclick', () => {
-        this.playSound('like');
-        burstHeart.classList.remove('burst');
-        void burstHeart.offsetWidth;
-        burstHeart.classList.add('burst');
-
-        if (!post.isLiked) {
-          post.isLiked = true;
-          post.likesCount += 1;
-          likeBtn.classList.add('liked');
-          likeBtn.querySelector('span:first-child').textContent = '❤️';
-          likesCountSpan.textContent = post.likesCount;
-          this.saveState();
+      mediaWrap.addEventListener('click', () => {
+        if (mediaImg.classList.contains('photo-shield-blur')) {
+          mediaImg.classList.remove('photo-shield-blur');
         }
       });
 
+      mediaWrap.addEventListener('dblclick', () => {
+        this.playSound('like');
+        heartIcon.classList.add('burst');
+        setTimeout(() => heartIcon.classList.remove('burst'), 700);
+
+        if (!post.liked) {
+          post.liked = true;
+          post.likesCount++;
+          this.saveState();
+          this.renderFeed();
+        }
+      });
+
+      const likeBtn = card.querySelector('.btn-like-moment');
       likeBtn.addEventListener('click', () => {
-        post.isLiked = !post.isLiked;
-        post.likesCount += post.isLiked ? 1 : -1;
-        this.playSound(post.isLiked ? 'like' : 'pass');
-        likeBtn.classList.toggle('liked', post.isLiked);
-        likeBtn.querySelector('span:first-child').textContent = post.isLiked ? '❤️' : '🤍';
-        likesCountSpan.textContent = post.likesCount;
+        this.playSound('like');
+        post.liked = !post.liked;
+        post.likesCount += post.liked ? 1 : -1;
         this.saveState();
+        this.renderFeed();
       });
 
-      // Toggle comments
-      const commentToggleBtn = card.querySelector('.btn-feed-toggle-comments');
-      const commentsSection = card.querySelector('.feed-comments-section');
-      commentToggleBtn.addEventListener('click', () => {
-        this.playSound('pop');
-        commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
-      });
-
-      // Post comment
       const commentInput = card.querySelector('.feed-comment-input');
-      const postCommentBtn = card.querySelector('.btn-post-comment');
+      const commentPostBtn = card.querySelector('.feed-comment-post-btn');
 
       const handleAddComment = () => {
-        const text = commentInput.value.trim();
-        if (!text) return;
+        const val = commentInput.value.trim();
+        if (!val) return;
         this.playSound('pop');
-        const newC = {
+        post.comments.push({
           id: `c-${Date.now()}`,
-          authorName: this.user.name,
-          authorAvatar: this.user.avatar,
-          text: text,
-          time: "Just now"
-        };
-        post.comments.push(newC);
+          author: this.user.name.split(' ')[0],
+          text: val,
+          time: 'Just now'
+        });
+        commentInput.value = '';
         this.saveState();
-        this.renderFeedStream();
+        this.renderFeed();
       };
 
-      postCommentBtn.addEventListener('click', handleAddComment);
+      commentPostBtn.addEventListener('click', handleAddComment);
       commentInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') handleAddComment();
       });
@@ -1313,121 +1756,99 @@ class CrazyCreativeApp {
   }
 
   openUploadModal() {
-    this.uploadPreviewImg.src = this.selectedPresetUploadUrl;
-    this.uploadPreviewImg.style.display = 'block';
-    this.uploadCaption.value = '';
     this.uploadModal.classList.add('active');
   }
 
   submitNewMoment() {
-    const caption = this.uploadCaption.value.trim() || "Sharing a glimpse from the studio space.";
+    const caption = this.uploadCaption.value.trim() || "Sunday light across the studio gallery.";
     const interest = this.uploadInterest.value;
 
     const newPost = {
       id: `post-${Date.now()}`,
-      authorId: "me",
+      authorId: "user-me",
       authorName: this.user.name,
       authorHandle: this.user.handle,
       authorAvatar: this.user.avatar,
       location: "Tokyo Studio",
+      timeAgo: "Just now",
       mediaUrl: this.selectedPresetUploadUrl,
       caption: caption,
-      tags: ["#CrazyLove", `#${interest.replace(/\s+/g, '')}`, "#CreatorLife"],
-      interest: interest,
+      interestTag: `#${interest.replace(/\s+/g, '')}`,
       likesCount: 1,
-      isLiked: true,
-      timestamp: "Just now",
+      liked: true,
       comments: []
     };
 
     this.feedPosts.unshift(newPost);
     this.saveState();
+    this.uploadCaption.value = '';
     this.closeModals();
-    this.renderFeedView();
+    this.renderFeed();
+    this.playSound('superlike');
   }
 
   // --------------------------------------------------------------------------
-  // INSTAGRAM-STYLE DIRECT CHAT CONSOLE
+  // CHATS & DIRECT MESSAGING ENGINE
   // --------------------------------------------------------------------------
-  renderTheatricalChat() {
-    this.renderChatStoriesStrip();
-    this.renderChatSidebarThreads();
-    this.renderActiveMessages();
-  }
-
-  renderChatStoriesStrip() {
-    const strip = document.getElementById('chatStoriesStrip');
-    if (!strip) return;
-    strip.innerHTML = '';
-
-    PROFILES.forEach(profile => {
-      const avatar = document.createElement('img');
-      avatar.src = profile.avatar;
-      avatar.className = 'chat-story-avatar';
-      avatar.title = `${profile.name} (${profile.lastActive})`;
-      avatar.addEventListener('click', () => {
-        this.startChatWith(profile.id);
-      });
-      strip.appendChild(avatar);
-    });
-  }
-
-  renderChatSidebarThreads(filterQuery = '') {
+  renderChatThreads() {
     const container = document.getElementById('theatricalThreads_page');
     if (!container) return;
     container.innerHTML = '';
 
-    const filteredMatches = this.matches.filter(match => {
-      const profile = PROFILES.find(p => p.id === match.profileId);
-      if (!profile) return false;
-      if (!filterQuery) return true;
-      return profile.name.toLowerCase().includes(filterQuery) ||
-             profile.hobbies.some(h => h.toLowerCase().includes(filterQuery));
-    });
-
-    if (filteredMatches.length === 0) {
-      container.innerHTML = `<div style="padding:2rem 1rem; text-align:center; color:var(--muted-gray); font-size:0.9rem;">No matching conversations found.</div>`;
+    if (this.matches.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--muted-gray); font-size:0.95rem;">No active matches yet. Swipe on the Deck to trigger sparks!</div>`;
       return;
     }
 
-    filteredMatches.forEach(match => {
+    this.matches.forEach(match => {
+      if (this.blockedUserIds && this.blockedUserIds.has(match.profileId)) return;
       const profile = PROFILES.find(p => p.id === match.profileId);
       if (!profile) return;
 
-      const isActive = this.activeChatId === profile.id;
-      const thread = document.createElement('div');
-      thread.className = `theatrical-thread-item ${isActive ? 'active' : ''}`;
-      thread.innerHTML = `
+      const isActive = this.activeChatId === match.profileId;
+      const threadEl = document.createElement('div');
+      threadEl.className = `theatrical-thread-row ${isActive ? 'active' : ''}`;
+
+      threadEl.innerHTML = `
         <div style="position:relative;">
-          <img class="theatrical-thread-avatar" src="${profile.avatar}" alt="${profile.name}">
-          <span class="online-dot-beacon"></span>
+          <img src="${profile.avatar}" class="theatrical-thread-avatar" alt="${profile.name}">
+          ${match.unread ? '<span class="unread-dot-badge"></span>' : ''}
         </div>
-        <div style="flex:1; min-width:0;">
-          <div style="display:flex; justify-content:space-between; align-items:baseline;">
-            <strong style="font-size:1.05rem; font-weight:800; color:#FFF;">${profile.name}</strong>
-            <span style="font-size:0.75rem; color:var(--muted-gray);">${match.lastTime || match.matchedAt}</span>
+        <div style="flex:1; overflow:hidden;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-weight:800; font-size:1.05rem; color:#FFF; display:flex; align-items:center; gap:0.25rem;">
+              <span>${profile.name}</span>
+              ${profile.photoVerified ? '<span style="color:var(--accent-cyan); font-size:0.85rem;">✓</span>' : ''}
+            </div>
+            <span style="font-size:0.75rem; color:var(--muted-gray); font-weight:600;">${match.lastTime}</span>
           </div>
-          <div style="font-size:0.875rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#A1A1AA; margin-top:0.2rem;">
-            ${match.lastMessage || 'Connected!'}
+          <div style="font-size:0.85rem; color:${match.unread ? '#FFF' : 'var(--muted-gray)'}; font-weight:${match.unread ? '700' : '500'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:0.2rem;">
+            ${match.lastMessage}
+          </div>
+          <div style="margin-top:0.35rem;">
+            <span class="anti-ghost-badge" style="font-size:0.7rem; padding:0.15rem 0.5rem;">⏳ ${match.antiGhostTimer || '47h 58m'}</span>
           </div>
         </div>
-        ${match.unread ? `<span style="width:9px; height:9px; border-radius:50%; background:var(--canvas-pink);"></span>` : ''}
       `;
 
-      thread.addEventListener('click', () => {
+      threadEl.addEventListener('click', () => {
         this.playSound('pop');
+        this.activeChatId = match.profileId;
         match.unread = false;
-        this.activeChatId = profile.id;
         this.saveState();
-        this.renderTheatricalChat();
+        this.renderChatThreads();
+        this.renderActiveMessages();
       });
 
-      container.appendChild(thread);
+      container.appendChild(threadEl);
     });
   }
 
-  filterChatThreads(query) {
-    this.renderChatSidebarThreads(query);
+  filterChatThreads(keyword) {
+    document.querySelectorAll('.theatrical-thread-row').forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(keyword) ? 'flex' : 'none';
+    });
   }
 
   renderActiveMessages() {
@@ -1436,6 +1857,7 @@ class CrazyCreativeApp {
     const statusEl = this.theatricalChatStatus_page;
     const msgContainer = this.theatricalMessages_page;
     const icebreakerContainer = this.theatricalIcebreakers_page;
+    const antiGhostBadge = document.getElementById('chatAntiGhostBadge');
 
     if (!this.activeChatId) {
       if (nameEl) nameEl.textContent = "Select Connection";
@@ -1449,6 +1871,7 @@ class CrazyCreativeApp {
     if (avatarEl) avatarEl.src = profile.avatar;
     if (nameEl) nameEl.textContent = profile.name;
     if (statusEl) statusEl.textContent = `● ${profile.lastActive || 'Active now'}`;
+    if (antiGhostBadge) antiGhostBadge.textContent = `⏳ ${profile.antiGhostExpiresIn || '47h 58m'}`;
 
     const messages = this.chats[profile.id] || [];
 
@@ -1485,14 +1908,18 @@ class CrazyCreativeApp {
           }
         } else if (msg.type === 'image') {
           bubble.innerHTML = `
-            <img src="${msg.mediaUrl}" style="max-width:240px; border-radius:0.85rem; object-fit:cover; margin-bottom:0.35rem;" alt="Media">
+            <img src="${msg.mediaUrl}" class="${this.settings.photoBlur ? 'photo-shield-blur' : ''}" style="max-width:240px; border-radius:0.85rem; object-fit:cover; margin-bottom:0.35rem; cursor:pointer;" alt="Media">
             <div>${msg.text || ''}</div>
-            <div style="font-size:0.7rem; opacity:0.7; margin-top:0.35rem; text-align:right;">${msg.time} · Seen</div>
+            <div style="font-size:0.7rem; opacity:0.7; margin-top:0.35rem; text-align:right;">${msg.time} · Seen ✓✓</div>
           `;
+          const img = bubble.querySelector('img');
+          if (img) {
+            img.addEventListener('click', () => img.classList.remove('photo-shield-blur'));
+          }
         } else {
           bubble.innerHTML = `
             <div>${msg.text}</div>
-            <div style="font-size:0.7rem; opacity:0.7; margin-top:0.35rem; text-align:right;">${msg.time} ${msg.sender === 'me' && this.settings.readReceipts ? '· Seen ✓' : ''}</div>
+            <div style="font-size:0.7rem; opacity:0.7; margin-top:0.35rem; text-align:right;">${msg.time} ${msg.sender === 'me' && this.settings.readReceipts ? '· Seen ✓✓' : ''}</div>
           `;
         }
 
@@ -1528,10 +1955,11 @@ class CrazyCreativeApp {
       ICEBREAKER_PROMPTS.forEach(prompt => {
         const chip = document.createElement('button');
         chip.className = 'pill-btn pill-sm pill-white';
-        chip.style.padding = '0.35rem 0.85rem';
-        chip.style.fontSize = '0.8rem';
+        chip.style.fontSize = '0.85rem';
+        chip.style.padding = '0.45rem 1rem';
         chip.textContent = prompt;
         chip.addEventListener('click', () => {
+          this.playSound('pop');
           this.sendChatMessage(prompt);
         });
         icebreakerContainer.appendChild(chip);
@@ -1539,175 +1967,181 @@ class CrazyCreativeApp {
     }
   }
 
-  sendChatMessage(customText = null) {
-    const text = customText !== null ? customText.trim() : (this.theatricalInput_page ? this.theatricalInput_page.value.trim() : '');
-    if (!text || !this.activeChatId) return;
+  sendChatMessage(text) {
+    if (!text || !text.trim() || !this.activeChatId) return;
+    const clean = text.trim();
 
     this.playSound('pop');
-    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const userMsg = {
-      id: `msg-${Date.now()}`,
-      sender: "me",
-      type: "text",
-      text: text,
-      time: now,
-      reactions: [],
-      status: "seen"
-    };
 
     if (!this.chats[this.activeChatId]) {
       this.chats[this.activeChatId] = [];
     }
-    this.chats[this.activeChatId].push(userMsg);
 
-    const match = this.matches.find(m => m.profileId === this.activeChatId);
-    if (match) {
-      match.lastMessage = text;
-      match.lastTime = now;
-    }
-
-    if (this.theatricalInput_page) this.theatricalInput_page.value = '';
-    this.saveState();
-    this.renderActiveMessages();
-    this.renderChatSidebarThreads();
-
-    this.triggerBotResponse(this.activeChatId);
-  }
-
-  sendImageMessage(dataUrl) {
-    if (!this.activeChatId || !dataUrl) return;
-    this.playSound('like');
-    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const userMsg = {
+    const newMsg = {
       id: `msg-${Date.now()}`,
       sender: "me",
-      type: "image",
-      mediaUrl: dataUrl,
-      text: "Sent an aesthetic capture",
-      time: now,
-      reactions: ["❤️"],
-      status: "seen"
+      type: "text",
+      text: clean,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      reactions: [],
+      status: "sent"
     };
 
-    if (!this.chats[this.activeChatId]) this.chats[this.activeChatId] = [];
-    this.chats[this.activeChatId].push(userMsg);
+    this.chats[this.activeChatId].push(newMsg);
 
     const match = this.matches.find(m => m.profileId === this.activeChatId);
     if (match) {
-      match.lastMessage = "📷 Sent a photo";
-      match.lastTime = now;
+      match.lastMessage = `You: ${clean}`;
+      match.lastTime = "Just now";
+      match.unread = false;
     }
 
     this.saveState();
+    this.renderChatThreads();
     this.renderActiveMessages();
-    this.renderChatSidebarThreads();
-    this.triggerBotResponse(this.activeChatId);
+
+    // Automated Bot Reply Simulation with Active Typing
+    setTimeout(() => {
+      this.simulatePartnerReply(this.activeChatId);
+    }, 1100);
+  }
+
+  simulatePartnerReply(profileId) {
+    const profile = PROFILES.find(p => p.id === profileId);
+    if (!profile) return;
+
+    if (this.theatricalChatStatus_page && this.activeChatId === profileId) {
+      this.theatricalChatStatus_page.textContent = `● typing...`;
+      this.theatricalChatStatus_page.style.color = "var(--accent-yellow)";
+    }
+
+    setTimeout(() => {
+      const possibleReplies = BOT_RESPONSES[profileId] || [
+        "That resonates with me completely! What are you exploring this weekend?",
+        "I love your clarity. What else is inspiring your creative routine right now?",
+        "Let's coordinate a visit to that gallery or specialty coffee spot soon!"
+      ];
+
+      const replyText = possibleReplies[Math.floor(Math.random() * possibleReplies.length)];
+
+      if (!this.chats[profileId]) this.chats[profileId] = [];
+
+      this.chats[profileId].push({
+        id: `msg-${Date.now()}`,
+        sender: "them",
+        type: "text",
+        text: replyText,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        reactions: ["⚡"],
+        status: "seen"
+      });
+
+      const match = this.matches.find(m => m.profileId === profileId);
+      if (match) {
+        match.lastMessage = replyText;
+        match.lastTime = "Just now";
+        if (this.activeChatId !== profileId) match.unread = true;
+      }
+
+      this.saveState();
+      this.playSound('like');
+
+      if (this.theatricalChatStatus_page && this.activeChatId === profileId) {
+        this.theatricalChatStatus_page.textContent = `● Active now`;
+        this.theatricalChatStatus_page.style.color = "var(--accent-lime)";
+      }
+
+      this.renderChatThreads();
+      if (this.activeChatId === profileId) {
+        this.renderActiveMessages();
+      }
+    }, 1500);
   }
 
   sendVoiceNoteMessage() {
     if (!this.activeChatId) return;
-    this.playSound('superlike');
-    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const userMsg = {
+    this.playSound('like');
+
+    if (!this.chats[this.activeChatId]) this.chats[this.activeChatId] = [];
+
+    this.chats[this.activeChatId].push({
       id: `msg-${Date.now()}`,
       sender: "me",
       type: "voice",
       duration: "0:14",
-      time: now,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       reactions: ["🔥"],
-      status: "seen"
-    };
-
-    if (!this.chats[this.activeChatId]) this.chats[this.activeChatId] = [];
-    this.chats[this.activeChatId].push(userMsg);
+      status: "sent"
+    });
 
     const match = this.matches.find(m => m.profileId === this.activeChatId);
     if (match) {
-      match.lastMessage = "🎙️ Voice memo (0:14)";
-      match.lastTime = now;
+      match.lastMessage = "You sent a voice memo 🎙️";
+      match.lastTime = "Just now";
     }
 
     this.saveState();
+    this.renderChatThreads();
     this.renderActiveMessages();
-    this.renderChatSidebarThreads();
-    this.triggerBotResponse(this.activeChatId);
+
+    setTimeout(() => this.simulatePartnerReply(this.activeChatId), 1200);
   }
 
-  triggerBotResponse(profileId) {
-    if (!this.theatricalMessages_page) return;
-    const typingIndicator = document.createElement('div');
-    typingIndicator.className = 'theatrical-bubble them';
-    typingIndicator.innerHTML = `<span>Thinking &amp; typing...</span>`;
-    this.theatricalMessages_page.appendChild(typingIndicator);
-    this.theatricalMessages_page.scrollTop = this.theatricalMessages_page.scrollHeight;
+  sendImageMessage(base64Data) {
+    if (!this.activeChatId) return;
+    this.playSound('like');
 
-    setTimeout(() => {
-      typingIndicator.remove();
-      const pool = BOT_RESPONSES[profileId] || [
-        "That is awesome! Would love to hear more about that.",
-        "Totally on the same wavelength. When are you free this week?",
-        "Love that energy!"
-      ];
-      const reply = pool[Math.floor(Math.random() * pool.length)];
+    if (!this.chats[this.activeChatId]) this.chats[this.activeChatId] = [];
 
-      const botMsg = {
-        id: `msg-${Date.now()}`,
-        sender: "them",
-        type: "text",
-        text: reply,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        reactions: ["❤️"],
-        status: "seen"
-      };
+    this.chats[this.activeChatId].push({
+      id: `msg-${Date.now()}`,
+      sender: "me",
+      type: "image",
+      mediaUrl: base64Data,
+      text: "Sent an aesthetic studio capture",
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      reactions: ["❤️"],
+      status: "sent"
+    });
 
-      this.chats[profileId].push(botMsg);
-      const match = this.matches.find(m => m.profileId === profileId);
-      if (match) {
-        match.lastMessage = reply;
-        match.lastTime = botMsg.time;
-      }
-      this.playSound('pop');
-      this.saveState();
-      this.renderActiveMessages();
-      this.renderChatSidebarThreads();
-    }, 1200);
+    const match = this.matches.find(m => m.profileId === this.activeChatId);
+    if (match) {
+      match.lastMessage = "You shared a photo 📷";
+      match.lastTime = "Just now";
+    }
+
+    this.saveState();
+    this.renderChatThreads();
+    this.renderActiveMessages();
+
+    setTimeout(() => this.simulatePartnerReply(this.activeChatId), 1200);
   }
 
   // --------------------------------------------------------------------------
-  // SETTINGS VIEW (MULTIPLE FEATURES)
+  // SETTINGS VIEW
   // --------------------------------------------------------------------------
-  renderSettingsView() {
+  renderSettings() {
     if (this.settingsUserName) this.settingsUserName.textContent = this.user.name;
     if (this.settingsUserEmail) this.settingsUserEmail.textContent = this.user.email;
     if (this.settingsUserAvatar) this.settingsUserAvatar.src = this.user.avatar;
     if (this.settingsBioInput) this.settingsBioInput.value = this.user.bio;
 
-    if (this.sliderDistance && this.labelDistance) {
-      this.sliderDistance.value = this.settings.maxDistance;
-      this.labelDistance.textContent = `${this.settings.maxDistance} km`;
-    }
+    if (this.sliderDistance) this.sliderDistance.value = this.settings.maxDistance;
+    if (this.labelDistance) this.labelDistance.textContent = `${this.settings.maxDistance} km`;
 
-    if (this.sliderAge && this.labelAgeRange) {
-      this.sliderAge.value = this.settings.maxAge;
-      this.labelAgeRange.textContent = `18 – ${this.settings.maxAge}`;
-    }
+    if (this.sliderAge) this.sliderAge.value = this.settings.maxAge;
+    if (this.labelAgeRange) this.labelAgeRange.textContent = `18 – ${this.settings.maxAge}`;
 
-    if (this.selectAiSensitivity) {
-      this.selectAiSensitivity.value = this.settings.aiSensitivity;
-    }
-
+    if (this.selectAiSensitivity) this.selectAiSensitivity.value = this.settings.aiSensitivity;
     if (this.toggleSoundFx) this.toggleSoundFx.checked = this.settings.soundFx;
     if (this.toggleStealth) this.toggleStealth.checked = this.settings.stealthMode;
     if (this.toggleReadReceipts) this.toggleReadReceipts.checked = this.settings.readReceipts;
+    if (this.togglePhotoBlur) this.togglePhotoBlur.checked = this.settings.photoBlur;
   }
 
   // --------------------------------------------------------------------------
-  // MODALS & DETAIL VIEWS
+  // PROFILE INSPECTOR MODAL WITH PROMPTS, VALUES & LINKED SOCIALS
   // --------------------------------------------------------------------------
-  openAuthModal() {
-    this.authModal.classList.add('active');
-  }
-
   showCardDetails() {
     const deck = this.getActiveDeck();
     if (deck.length === 0 && !this.activeChatId) return;
@@ -1716,11 +2150,18 @@ class CrazyCreativeApp {
 
     this.infoModalBody.innerHTML = `
       <div style="display:flex; flex-direction:column; gap:1.25rem; text-align:left;">
-        <img src="${profile.photos[0]}" style="width:100%; height:320px; object-fit:cover; border-radius:1.5rem; border:3px solid #27272A;" alt="${profile.name}">
+        <div style="position:relative;">
+          <img src="${profile.photos[0]}" style="width:100%; height:320px; object-fit:cover; border-radius:1.5rem; border:3px solid #27272A;" alt="${profile.name}">
+          <div style="position:absolute; bottom:1rem; left:1rem; display:flex; gap:0.5rem;">
+            ${profile.photoVerified ? '<span class="badge-solid badge-cyan">✓ PHOTO VERIFIED</span>' : ''}
+            <span class="badge-solid badge-lime">⚡ ${profile.compatibility}% MATCH</span>
+          </div>
+        </div>
+
         <div>
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <h2 style="font-size:2.5rem; font-weight:800; line-height:1; letter-spacing:-0.02em; color:#FFF;">${profile.name}, ${profile.age}</h2>
-            <span style="background:var(--accent-lime); color:#000; font-weight:900; padding:0.35rem 0.85rem; border-radius:9999px; font-size:0.85rem;">⚡ ${profile.compatibility}% Match</span>
+            <span class="anti-ghost-badge">⏳ 48h Spark Window</span>
           </div>
           <div style="color:var(--canvas-pink); font-size:1.1rem; font-weight:800; margin-top:0.4rem;">${profile.occupation} · ${profile.city}</div>
         </div>
@@ -1730,6 +2171,55 @@ class CrazyCreativeApp {
           <p style="font-size:1.1rem; font-weight:600; line-height:1.5; color:#E4E4E7;">${profile.bio}</p>
         </div>
 
+        <!-- Video Vibe Check Feature -->
+        ${profile.videoCheck ? `
+          <div style="background:#18181B; border:2px solid var(--accent-yellow); border-radius:1.25rem; padding:1.25rem; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong style="color:var(--accent-yellow); font-size:1rem; display:block;">📹 Ambient Video Vibe Check</strong>
+              <span style="font-size:0.85rem; color:#D4D4D8;">"${profile.videoCheck.title}" (${profile.videoCheck.duration})</span>
+            </div>
+            <button class="pill-btn pill-yellow pill-xs" onclick="window.crazyApp.openVideoCallModal()">
+              Play Video Reel ▶
+            </button>
+          </div>
+        ` : ''}
+
+        <!-- Linked Social Badges -->
+        <div>
+          <strong style="display:block; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.04em; margin-bottom:0.5rem; color:#FFF;">Verified Connected Socials</strong>
+          <div class="social-links-row">
+            ${profile.socials && profile.socials.spotify ? `
+              <span class="social-badge spotify">
+                <span>♫ Spotify Anthem:</span>
+                <strong>${profile.socials.spotify}</strong>
+                <span class="soundwave-bars">
+                  <span class="soundwave-bar"></span>
+                  <span class="soundwave-bar"></span>
+                  <span class="soundwave-bar"></span>
+                </span>
+              </span>
+            ` : ''}
+            ${profile.socials && profile.socials.instagram ? `
+              <span class="social-badge instagram">
+                <span>📸 Instagram:</span>
+                <strong>${profile.socials.instagram}</strong>
+              </span>
+            ` : ''}
+            ${profile.socials && profile.socials.twitter ? `
+              <span class="social-badge">
+                <span>𝕏 Twitter:</span>
+                <strong>${profile.socials.twitter}</strong>
+              </span>
+            ` : ''}
+            ${profile.socials && profile.socials.github ? `
+              <span class="social-badge">
+                <span>🐙 GitHub:</span>
+                <strong>${profile.socials.github}</strong>
+              </span>
+            ` : ''}
+          </div>
+        </div>
+
         <div>
           <strong style="display:block; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.04em; margin-bottom:0.5rem; color:#FFF;">Hobbies &amp; Creative Passions</strong>
           <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
@@ -1737,14 +2227,32 @@ class CrazyCreativeApp {
           </div>
         </div>
 
+        ${profile.values ? `
+          <div>
+            <strong style="display:block; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.04em; margin-bottom:0.5rem; color:var(--accent-lime);">Shared Values &amp; Ambition</strong>
+            <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+              ${profile.values.map(v => `<span class="badge-solid badge-lime" style="font-size:0.8rem;">✦ ${v}</span>`).join('')}
+            </div>
+          </div>
+        ` : ''}
+
         <div style="margin-top:0.5rem;">
-          <strong style="display:block; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.04em; margin-bottom:0.5rem; color:#FFF;">Prompts</strong>
+          <strong style="display:block; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.04em; margin-bottom:0.5rem; color:#FFF;">Story Prompts</strong>
           ${profile.prompts.map(pr => `
             <div style="background:#202024; border:2px solid #27272A; border-radius:1rem; padding:1rem; margin-bottom:0.5rem;">
               <div style="font-size:0.8rem; color:var(--accent-lime); font-weight:800;">${pr.question}</div>
               <div style="font-size:1rem; font-weight:600; color:#FFF; margin-top:0.25rem;">${pr.answer}</div>
             </div>
           `).join('')}
+        </div>
+
+        <div style="display:flex; gap:0.75rem; margin-top:1rem;">
+          <button class="pill-btn pill-lime" style="flex:1;" onclick="window.crazyApp.quickMatchFromAi('${profile.id}')">
+            Connect &amp; Message ⚡
+          </button>
+          <button class="pill-btn pill-white pill-sm" onclick="window.crazyApp.openSafetyModal()">
+            🛡️ Report
+          </button>
         </div>
       </div>
     `;
@@ -1754,6 +2262,7 @@ class CrazyCreativeApp {
 
   closeModals() {
     document.querySelectorAll('.cc-modal-backdrop').forEach(m => m.classList.remove('active'));
+    if (this.videoCallModal) this.videoCallModal.style.display = 'none';
   }
 }
 
