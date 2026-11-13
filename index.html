@@ -11,14 +11,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;500;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
 
-  <!-- Core Crazy Creative Stylesheet -->
+  <!-- Core Crazy Creative Stylesheet (Solid High-Contrast Poster Style) -->
   <link rel="stylesheet" href="app.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
-<body>
+<body class="logged-out">
 
   <!-- ========================================================================
-       TOP HEADER & LIQUID GLASS NAVBAR (NO WATERMARKS)
+       TOP HEADER (Clean Studio Bar - Nav Capsule Only Appears When Logged In)
        ======================================================================== -->
   <header class="cc-header">
     <div class="cc-header-container">
@@ -29,9 +29,9 @@
         <span>Crazy Love</span>
       </a>
 
-      <!-- Liquid Glass Navbar Center Mount -->
-      <div id="liquidNavbarMount" style="display:flex; flex-direction:column; align-items:center;">
-        <!-- Rendered dynamically by LiquidNavbar in app.js -->
+      <!-- Navigation Capsule Dock (Visible ONLY When Logged In) -->
+      <div id="liquidNavbarMount" class="dashboard-dock-container">
+        <!-- Rendered dynamically by app.js when user is logged in -->
       </div>
 
       <!-- User Authentication & Action CTA -->
@@ -42,10 +42,10 @@
     </div>
   </header>
 
-  <!-- Pinned Right Edge Rail Badge -->
-  <aside class="cc-side-rail liquid-glass-badge" aria-label="System status badge">
+  <!-- Pinned Right Edge Rail Status Badge -->
+  <aside class="cc-side-rail" aria-label="System status badge">
     <div class="side-rail-dot"></div>
-    <span id="sideRailStatus">AI Attraction Engine v3.0</span>
+    <span id="sideRailStatus">Crazy Love Engine v3.2</span>
   </aside>
 
   <!-- ========================================================================
@@ -55,19 +55,27 @@
     
     <section class="stage-hero-pink">
       
-      <!-- Floating Confetti & Shapes -->
-      <div class="confetti-spark" style="top:18%; left:8%; font-size:2.5rem; color:var(--accent-lime);">✦</div>
-      <div class="confetti-spark" style="top:25%; right:10%; font-size:2.8rem; color:var(--accent-cyan); animation-delay:1.5s;">★</div>
-      <div class="confetti-spark" style="bottom:22%; left:12%; font-size:2.2rem; color:var(--accent-yellow); animation-delay:0.8s;">⚡</div>
-      <div class="confetti-spark" style="bottom:28%; right:14%; font-size:2rem; color:var(--canvas-white); animation-delay:2.2s;">✦</div>
+      <!-- Floating Confetti & Spark Elements -->
+      <div class="confetti-spark" style="top:15%; left:6%; font-size:2.5rem; color:var(--accent-lime);">✦</div>
+      <div class="confetti-spark" style="top:22%; right:8%; font-size:2.8rem; color:var(--accent-cyan); animation-delay:1.5s;">★</div>
+      <div class="confetti-spark" style="bottom:26%; left:10%; font-size:2.2rem; color:var(--accent-yellow); animation-delay:0.8s;">⚡</div>
+      <div class="confetti-spark" style="bottom:30%; right:12%; font-size:2rem; color:var(--canvas-white); animation-delay:2.2s;">✦</div>
+
+      <!-- Interactive Bouncy Sticker Badges (Crazy Creative Signature) -->
+      <div class="hero-sticker-badge sticker-left" title="Click to pop">
+        <span>⚡ 100% REAL CREATORS</span>
+      </div>
+      <div class="hero-sticker-badge sticker-right" title="Click to pop">
+        <span>🔥 ZERO BORING DATES</span>
+      </div>
 
       <div class="hero-poster-stack">
         
-        <!-- Handwritten Script Accent -->
+        <!-- Handwritten Script Accent ("wow") with Wiggly Arrow -->
         <div class="hero-script-wow">
           <span>wow!</span>
-          <svg width="40" height="24" viewBox="0 0 40 24" fill="none" stroke="currentColor" stroke-width="3">
-            <path d="M2 12C12 4 28 4 38 12M30 6L38 12L30 18"/>
+          <svg width="46" height="28" viewBox="0 0 46 28" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round">
+            <path d="M3 14C14 5 32 5 43 14M35 7L43 14L35 21"/>
           </svg>
         </div>
 
@@ -78,26 +86,27 @@
 
         <!-- Supporting Descriptive Line -->
         <p class="hero-poster-sub">
-          A theatrical, studio-grade dating experience built for electric sparks, high-chemistry conversations, shared creative hobbies, and unapologetic humans.
+          A theatrical, poster-like studio dating experience built for electric sparks, high-chemistry conversations, shared creative passions, and unapologetic humans.
         </p>
 
-        <!-- Roomy Tactile White Pill Button -->
-        <div style="display:flex; gap:1.25rem; flex-wrap:wrap; justify-content:center;">
-          <button class="pill-btn pill-white liquid-glass-btn" id="btnHeroLaunch" type="button">
+        <!-- Roomy Tactile Pill Buttons -->
+        <div style="display:flex; gap:1.25rem; flex-wrap:wrap; justify-content:center; z-index:10;">
+          <button class="pill-btn pill-white" id="btnHeroLaunch" type="button">
             <span>Explore The Deck Now</span>
             <span style="font-size:1.3rem;">→</span>
           </button>
           
-          <button class="pill-btn pill-black liquid-glass-btn" id="btnHeroSignIn" type="button">
-            <span>Google One-Tap Sync</span>
+          <button class="pill-btn pill-black" id="btnHeroSignIn" type="button">
+            <span>Enter Studio Room</span>
           </button>
         </div>
 
       </div>
 
-      <!-- Mascot Peeking Into Frame From Bottom -->
-      <div class="mascot-peek-wrapper" aria-hidden="true">
+      <!-- Mascot Peeking Into Frame From Bottom with Blinking Eyes -->
+      <div class="mascot-peek-wrapper" id="mascotPeek" aria-label="Interactive Mascot">
         <div class="mascot-character-art">
+          <div class="mascot-mouth"></div>
           <div class="mascot-eyes">
             <div class="mascot-eye"></div>
             <div class="mascot-eye"></div>
@@ -107,6 +116,32 @@
 
     </section>
 
+    <!-- Interactive Infinite Marquee Banner (Crazy Creative Signature) -->
+    <div class="cc-marquee-bar">
+      <div class="cc-marquee-track">
+        <span>⚡ ELECTRIC CHEMISTRY</span>
+        <span>·</span>
+        <span>NO ENDLESS SWIPING</span>
+        <span>·</span>
+        <span>TOKYO &amp; KYOTO CREATIVES</span>
+        <span>·</span>
+        <span>100% REAL IDENTITIES</span>
+        <span>·</span>
+        <span>ANALOG ARCHIVES &amp; 35MM FILM</span>
+        <span>·</span>
+        <span>ZERO CORPORATE PRELUDE</span>
+        <span>·</span>
+        <span>⚡ ELECTRIC CHEMISTRY</span>
+        <span>·</span>
+        <span>NO ENDLESS SWIPING</span>
+        <span>·</span>
+        <span>TOKYO &amp; KYOTO CREATIVES</span>
+        <span>·</span>
+        <span>100% REAL IDENTITIES</span>
+        <span>·</span>
+      </div>
+    </div>
+
     <!-- ====================================================================
          STAGE 2: THE WHITE STAGE (CHOOSE YOUR FREQUENCY)
          ==================================================================== -->
@@ -115,13 +150,13 @@
         
         <div class="section-claim-header">
           <h2 class="section-claim-title">PICK YOUR DATING FREQUENCY.</h2>
-          <p class="section-claim-sub">Two deliberate ways to experience high-voltage chemistry. No micro-transactions, no corporate dark patterns.</p>
+          <p class="section-claim-sub">Two deliberate ways to experience high-voltage chemistry. No micro-transactions, no dark patterns.</p>
         </div>
 
         <div class="cc-cards-grid">
           
           <!-- Card 1 -->
-          <article class="cc-broad-card liquid-glass-card">
+          <article class="cc-broad-card">
             <div>
               <div class="card-top-eyebrow">
                 <span>★ TIER 01</span>
@@ -135,27 +170,27 @@
 
               <ul class="card-bullet-list">
                 <li>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   <span>AI-driven interest &amp; hobby compatibility scoring</span>
                 </li>
                 <li>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Mutual chemistry triggers match celebrations</span>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Interactive photo carousel with music previews</span>
                 </li>
                 <li>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-pink)" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
                   <span>Zero advertising or data telemetry brokers</span>
                 </li>
               </ul>
             </div>
 
-            <button class="pill-btn pill-pink liquid-glass-btn" onclick="window.crazyApp.handleGateRoute('discover')" type="button">
+            <button class="pill-btn pill-pink" onclick="window.crazyApp.handleGateRoute('discover')" type="button">
               Launch Curated Deck →
             </button>
           </article>
 
           <!-- Card 2 -->
-          <article class="cc-broad-card liquid-glass-card" style="background:rgba(255,240,247,0.7) !important; border-color:var(--canvas-pink) !important;">
+          <article class="cc-broad-card cc-broad-card-highlight">
             <div>
               <div class="card-top-eyebrow" style="color:var(--canvas-dark);">
                 <span>⚡ TIER 02</span>
@@ -169,21 +204,21 @@
 
               <ul class="card-bullet-list">
                 <li>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Instagram-style chats with reaction emojis &amp; voice notes</span>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Instagram-style chats with double-tap heart reactions</span>
                 </li>
                 <li>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Community moments feed with photo uploads &amp; comments</span>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Audio waveform voice memos and instant photo shares</span>
                 </li>
                 <li>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  <span>Verified creator status and genuine interactions</span>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--canvas-dark)" stroke-width="3.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Community moments feed with likes and real comments</span>
                 </li>
               </ul>
             </div>
 
-            <button class="pill-btn pill-black liquid-glass-btn" onclick="window.crazyApp.handleGateRoute('chats')" type="button">
+            <button class="pill-btn pill-black" onclick="window.crazyApp.handleGateRoute('chats')" type="button">
               Enter Studio Room →
             </button>
           </article>
@@ -199,26 +234,26 @@
     <section class="stage-dark-theatrical">
       
       <!-- Symmetrical Star Accents -->
-      <div style="position:absolute; top:10%; left:15%; color:var(--accent-lime); font-size:2rem;">✦</div>
-      <div style="position:absolute; top:10%; right:15%; color:var(--accent-cyan); font-size:2rem;">✦</div>
+      <div style="position:absolute; top:10%; left:12%; color:var(--accent-lime); font-size:2.5rem;">✦</div>
+      <div style="position:absolute; top:10%; right:12%; color:var(--accent-cyan); font-size:2.5rem;">✦</div>
 
       <div class="dark-stage-container">
         
         <h2 class="dark-stage-title">THE CONVERSATION ROOM.</h2>
-        <p class="dark-stage-sub">A stage-like environment for unhurried, magnetic correspondence with real creators. Voice notes, photo moments, and instant sparks.</p>
+        <p class="dark-stage-sub">A stage-like environment for unhurried, magnetic correspondence with verified creators. Voice notes, photo moments, and instant sparks.</p>
 
         <!-- Preview CTA Card -->
-        <div class="liquid-glass-panel-dark" style="max-width:850px; margin:0 auto; padding:3.5rem 2.5rem; text-align:center; border-radius:var(--radius-card);">
-          <div style="display:flex; justify-content:center; gap:1rem; margin-bottom:1.5rem;">
-            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80" style="width:4.5rem; height:4.5rem; border-radius:50%; border:3px solid var(--accent-lime); object-fit:cover;" alt="Anya">
-            <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=120&h=120&q=80" style="width:4.5rem; height:4.5rem; border-radius:50%; border:3px solid var(--accent-cyan); object-fit:cover;" alt="Rin">
-            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&h=120&q=80" style="width:4.5rem; height:4.5rem; border-radius:50%; border:3px solid var(--canvas-pink); object-fit:cover;" alt="Elena">
+        <div class="theatrical-teaser-card">
+          <div style="display:flex; justify-content:center; gap:1.25rem; margin-bottom:1.5rem;">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=140&h=140&q=80" class="teaser-avatar" style="border-color:var(--accent-lime);" alt="Anya">
+            <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=140&h=140&q=80" class="teaser-avatar" style="border-color:var(--accent-cyan);" alt="Rin">
+            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=140&h=140&q=80" class="teaser-avatar" style="border-color:var(--canvas-pink);" alt="Elena">
           </div>
-          <h3 style="font-size:2.25rem; font-weight:800; text-transform:uppercase; margin-bottom:1rem;">Over 1,200 High-Chemistry Conversations Active</h3>
+          <h3 style="font-size:2.25rem; font-weight:800; text-transform:uppercase; margin-bottom:1rem; color:#FFF;">Over 1,200 High-Chemistry Conversations Active</h3>
           <p style="color:rgba(255,255,255,0.75); font-size:1.15rem; max-width:550px; margin:0 auto 2rem; font-weight:500;">
             Log in to unlock direct messaging, share your photo moments, and get matched with creative souls in Tokyo.
           </p>
-          <button class="pill-btn pill-lime liquid-glass-btn" onclick="window.crazyApp.handleGateRoute('chats')" type="button">
+          <button class="pill-btn pill-lime" onclick="window.crazyApp.handleGateRoute('chats')" type="button">
             Open Chat Room Now ⚡
           </button>
         </div>
@@ -238,14 +273,14 @@
             Here is the raw truth behind our AI algorithms, photo uploads, identity verification, and matchmaking privacy.
           </p>
 
-          <button class="pill-btn pill-pink liquid-glass-btn" onclick="window.crazyApp.handleGateRoute('discover')" style="margin-top:2.5rem;" type="button">
+          <button class="pill-btn pill-pink" onclick="window.crazyApp.handleGateRoute('discover')" style="margin-top:2.5rem;" type="button">
             Take The Test Drive →
           </button>
         </div>
 
         <div class="faq-rows-stack">
           
-          <div class="faq-item-row liquid-glass-faq open">
+          <div class="faq-item-row open">
             <div class="faq-q-title">
               <span>How does the AI Hobby &amp; Interest matching work?</span>
               <span class="faq-toggle">+</span>
@@ -255,7 +290,7 @@
             </div>
           </div>
 
-          <div class="faq-item-row liquid-glass-faq">
+          <div class="faq-item-row">
             <div class="faq-q-title">
               <span>Can I upload my own photos and videos?</span>
               <span class="faq-toggle">+</span>
@@ -265,7 +300,7 @@
             </div>
           </div>
 
-          <div class="faq-item-row liquid-glass-faq">
+          <div class="faq-item-row">
             <div class="faq-q-title">
               <span>How is my privacy protected?</span>
               <span class="faq-toggle">+</span>
@@ -284,7 +319,7 @@
          STAGE 5: THE CLOSING FLAME CARD & LIME CTA
          ==================================================================== -->
     <section class="stage-closing-flame">
-      <div class="closing-black-card liquid-glass-panel-dark">
+      <div class="closing-black-card">
         
         <div class="closing-eyebrow-badge">
           <span>⚡ READY FOR REAL CONNECTION?</span>
@@ -298,7 +333,7 @@
           Your next partner is waiting in the discovery deck. Step inside the studio room and find your match.
         </p>
 
-        <button class="pill-btn pill-lime liquid-glass-btn" id="btnFlameLaunch" type="button">
+        <button class="pill-btn pill-lime" id="btnFlameLaunch" type="button">
           <span>Launch Discovery Deck Now</span>
           <span style="font-size:1.4rem;">⚡</span>
         </button>
@@ -310,32 +345,30 @@
 
 
   <!-- ========================================================================
-       DISCOVERY DECK INTERACTIVE VIEW (SWIPE ARENA + AI MATCHMAKER)
+       DISCOVERY DECK (BRAND NEW POSTER-GRADE SWIPE ARENA)
        ======================================================================== -->
   <section class="cc-view" id="viewDiscover">
     <div class="dashboard-canvas">
       
-      <!-- Ambient background orbs -->
-      <div class="ambient-orb orb-pink"></div>
-      <div class="ambient-orb orb-cyan"></div>
-      <div class="ambient-orb orb-lime"></div>
-      
       <div class="deck-arena-container">
         
         <!-- Header & AI Matchmaker Trigger -->
-        <div class="deck-header-glass liquid-glass-panel">
+        <div class="deck-top-controller">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
             <div>
               <span class="deck-header-dot">●</span>
-              <span class="deck-header-label">SWIPE ARENA</span>
-              <h2 class="deck-header-title">Curated Candidates</h2>
+              <span class="deck-header-label">CURATED DECK</span>
+              <h2 class="deck-title-text">Discovery Arena</h2>
             </div>
-            <button class="pill-btn pill-lime pill-sm liquid-glass-btn" id="btnOpenAiMatch" type="button">
-              <span>⚡ AI Matchmaker Scan</span>
-            </button>
+            
+            <div style="display:flex; gap:0.75rem; align-items:center;">
+              <button class="pill-btn pill-lime pill-sm" id="btnOpenAiMatch" type="button">
+                <span>⚡ AI Matchmaker Radar</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Interest Filter Category Pills -->
+          <!-- Interest Filter Category Chips -->
           <div class="interest-filter-bar" id="interestFilterBar">
             <!-- Rendered by app.js -->
           </div>
@@ -343,30 +376,34 @@
 
         <!-- 3D Card Stack Arena -->
         <div class="cc-swipe-stage" id="ccSwipeStage">
-          <!-- Rendered by app.js -->
+          <!-- Rendered dynamically by app.js -->
         </div>
 
-        <!-- Tactile Action Controls -->
+        <!-- Giant Solid Tactile Action Controls Bar -->
         <div class="cc-action-controls">
-          <button class="cc-btn-circle cc-btn-rewind liquid-glass-circle" id="btnRewind" title="Rewind (ArrowDown)" type="button">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          <button class="cc-btn-circle cc-btn-rewind" id="btnRewind" title="Rewind Last Profile (ArrowDown)" type="button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
           </button>
 
-          <button class="cc-btn-circle cc-btn-pass liquid-glass-circle" id="btnPass" title="Pass (ArrowLeft)" type="button">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          <button class="cc-btn-circle cc-btn-pass" id="btnPass" title="Pass (ArrowLeft)" type="button">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
 
-          <button class="cc-btn-circle cc-btn-like liquid-glass-circle" id="btnLike" title="Match (ArrowRight)" type="button">
-            <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          <button class="cc-btn-circle cc-btn-superlike" id="btnSuperlike" title="Super Spark" type="button">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
           </button>
 
-          <button class="cc-btn-circle cc-btn-info liquid-glass-circle" id="btnInfo" title="Inspect (Space)" type="button">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <button class="cc-btn-circle cc-btn-like" id="btnLike" title="Connect (ArrowRight)" type="button">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+
+          <button class="cc-btn-circle cc-btn-info" id="btnInfo" title="Inspect Full Story (Space)" type="button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
           </button>
         </div>
 
         <div class="deck-shortcuts-label">
-          Shortcuts: [←] Pass · [→] Connect · [↓] Rewind · [Space] Inspect
+          Keyboard: [←] Pass · [→] Connect · [↓] Rewind · [Space] Inspect
         </div>
 
       </div>
@@ -380,26 +417,22 @@
   <section class="cc-view" id="viewFeed">
     <div class="dashboard-canvas">
       
-      <!-- Ambient background orbs -->
-      <div class="ambient-orb orb-pink-soft"></div>
-      <div class="ambient-orb orb-cyan"></div>
-
       <div class="feed-arena-container">
         
         <!-- Feed Top Navigation & Action -->
         <div class="feed-top-bar">
           <div>
             <span class="deck-header-dot">●</span>
-            <span class="deck-header-label">CREATOR HUB</span>
-            <h2 class="chats-page-title">Community Moments</h2>
+            <span class="deck-header-label">COMMUNITY STREAM</span>
+            <h2 class="chats-page-title">Creator Moments</h2>
           </div>
-          <button class="pill-btn pill-pink pill-sm liquid-glass-btn" id="btnOpenUploadModal" type="button">
+          <button class="pill-btn pill-pink pill-sm" id="btnOpenUploadModal" type="button">
             <span>+ Share A Moment</span>
           </button>
         </div>
 
-        <!-- Creator Stories Bar (Instagram Style) -->
-        <div class="stories-scroll-tray liquid-glass-panel" id="storiesTray">
+        <!-- Creator Stories Bar -->
+        <div class="stories-scroll-tray" id="storiesTray">
           <!-- Rendered dynamically by app.js -->
         </div>
 
@@ -419,10 +452,6 @@
   <section class="cc-view" id="viewChats">
     <div class="dashboard-canvas">
       
-      <!-- Ambient background orbs -->
-      <div class="ambient-orb orb-purple"></div>
-      <div class="ambient-orb orb-pink-soft"></div>
-      
       <div class="chats-arena-container">
         
         <div class="chats-top-bar">
@@ -431,13 +460,13 @@
             <span class="deck-header-label">INSTAGRAM DIRECT</span>
             <h2 class="chats-page-title">Active Conversations</h2>
           </div>
-          <button class="pill-btn pill-pink pill-sm liquid-glass-btn" data-route="discover" type="button">
+          <button class="pill-btn pill-pink pill-sm" data-route="discover" type="button">
             ← Back to Deck
           </button>
         </div>
 
-        <!-- Theatrical Instagram-Style Chat Box -->
-        <div class="theatrical-chat-box liquid-glass-chat-box">
+        <!-- Theatrical High-Contrast Chat Box -->
+        <div class="theatrical-chat-box">
           
           <!-- Left Sidebar: Conversations & Active Stories -->
           <div class="theatrical-sidebar">
@@ -452,8 +481,8 @@
             </div>
 
             <!-- Thread Search -->
-            <div style="padding:0.65rem 1rem;">
-              <input type="text" class="chat-search-input liquid-glass-input" id="chatSearchInput" placeholder="Search matches or hobbies...">
+            <div style="padding:0.85rem 1rem;">
+              <input type="text" class="chat-search-input" id="chatSearchInput" placeholder="Search conversations or hobbies...">
             </div>
 
             <!-- Thread List -->
@@ -474,8 +503,8 @@
                 </div>
                 <div>
                   <div style="display:flex; align-items:center; gap:0.4rem;">
-                    <div id="theatricalChatName_page" style="font-size:1.25rem; font-weight:800;">Anya Chen</div>
-                    <span style="color:var(--accent-cyan); font-size:1rem;" title="Verified Creator">✓</span>
+                    <div id="theatricalChatName_page" style="font-size:1.25rem; font-weight:800; color:#FFF;">Anya Chen</div>
+                    <span style="color:var(--accent-cyan); font-size:1.1rem;" title="Verified Creator">✓</span>
                   </div>
                   <div id="theatricalChatStatus_page" style="font-size:0.8rem; color:var(--accent-lime); font-weight:700;">● Active now</div>
                 </div>
@@ -483,9 +512,9 @@
 
               <!-- Quick Action Call Simulation & Info -->
               <div style="display:flex; align-items:center; gap:0.6rem;">
-                <button class="chat-icon-action liquid-glass-btn" id="btnSimulateAudioCall" title="Start Audio Call" type="button">📞</button>
-                <button class="chat-icon-action liquid-glass-btn" id="btnSimulateVideoCall" title="Start Video Call" type="button">📹</button>
-                <button class="pill-btn pill-sm pill-white liquid-glass-btn" onclick="window.crazyApp.showCardDetails()" type="button">
+                <button class="chat-icon-action" id="btnSimulateAudioCall" title="Start Audio Call" type="button">📞</button>
+                <button class="chat-icon-action" id="btnSimulateVideoCall" title="Start Video Call" type="button">📹</button>
+                <button class="pill-btn pill-sm pill-white" onclick="window.crazyApp.showCardDetails()" type="button">
                   Inspect Vibe
                 </button>
               </div>
@@ -513,18 +542,18 @@
 
             <!-- Interactive Message Input Bar (Media Attach & Voice) -->
             <div class="theatrical-input-bar">
-              <label class="chat-attach-btn liquid-glass-btn" title="Send Photo in Chat">
+              <label class="chat-attach-btn" title="Send Photo in Chat">
                 📷
                 <input type="file" id="chatPhotoUpload" accept="image/*" style="display:none;">
               </label>
 
-              <button class="chat-attach-btn liquid-glass-btn" id="btnSendVoiceNote" title="Send Voice Memo" type="button">
+              <button class="chat-attach-btn" id="btnSendVoiceNote" title="Send Voice Memo" type="button">
                 🎙️
               </button>
 
-              <input type="text" class="theatrical-input liquid-glass-input" id="theatricalInput_page" placeholder="Message or double-tap to react...">
+              <input type="text" class="theatrical-input" id="theatricalInput_page" placeholder="Message or double-tap message to react...">
 
-              <button class="pill-btn pill-lime pill-sm liquid-glass-btn" id="btnTheatricalSend_page" type="button">
+              <button class="pill-btn pill-lime pill-sm" id="btnTheatricalSend_page" type="button">
                 Send ⚡
               </button>
             </div>
@@ -538,65 +567,148 @@
 
 
   <!-- ========================================================================
-       USER PROFILE & ACCOUNT SETTINGS VIEW
+       APP SETTINGS & USER PROFILE VIEW (RICH MULTIPLE FEATURES)
        ======================================================================== -->
-  <section class="cc-view" id="viewProfile">
+  <section class="cc-view" id="viewSettings">
     <div class="dashboard-canvas">
       
-      <div class="ambient-orb orb-pink"></div>
-      <div class="ambient-orb orb-lime"></div>
-
-      <div class="profile-page-container">
+      <div class="settings-page-container">
         
-        <div class="profile-hero-card liquid-glass-panel">
-          <div class="profile-cover-gradient"></div>
+        <!-- Header -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <span class="deck-header-dot">●</span>
+            <span class="deck-header-label">PREFERENCES</span>
+            <h2 class="chats-page-title">App Settings &amp; Studio</h2>
+          </div>
+          <button class="pill-btn pill-black pill-sm" id="btnLogoutFromSettings" type="button">
+            Sign Out
+          </button>
+        </div>
+
+        <div class="settings-grid-layout">
           
-          <div class="profile-info-layout">
-            <div style="position:relative;">
-              <img id="userProfileAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=240&h=240&q=80" class="profile-large-avatar" alt="User">
-              <span class="profile-verified-badge">✓</span>
+          <!-- Column 1: Profile Details Card -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <h3>Creator Identity</h3>
+              <span class="badge-solid badge-lime">VERIFIED</span>
             </div>
 
-            <div style="flex:1;">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
-                <div>
-                  <h2 id="userProfileName" style="font-size:2.5rem; font-weight:800; line-height:1.1;">Armaan Yadav</h2>
-                  <div id="userProfileHandle" style="color:var(--canvas-pink); font-size:1.1rem; font-weight:800; margin-top:0.25rem;">@armaan.yadav · Tokyo</div>
-                  <div id="userProfileRole" style="font-size:1rem; color:var(--muted-gray); font-weight:700; margin-top:0.2rem;">Creative Director &amp; Visual Storyteller</div>
-                </div>
-
-                <div style="display:flex; gap:0.75rem;">
-                  <button class="pill-btn pill-pink pill-sm liquid-glass-btn" id="btnProfileEdit" type="button">
-                    Edit Profile
-                  </button>
-                  <button class="pill-btn pill-black pill-sm liquid-glass-btn" id="btnLogoutProfile" type="button">
-                    Sign Out
-                  </button>
-                </div>
+            <div style="display:flex; gap:1.25rem; align-items:center; margin-bottom:1.5rem;">
+              <img id="settingsUserAvatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&h=200&q=80" style="width:5rem; height:5rem; border-radius:50%; object-fit:cover; border:3px solid var(--accent-lime);" alt="Avatar">
+              <div>
+                <strong id="settingsUserName" style="font-size:1.35rem; display:block; color:#FFF;">Armaan Yadav</strong>
+                <span id="settingsUserEmail" style="font-size:0.9rem; color:var(--muted-gray); font-weight:600;">armaan123009@gmail.com</span>
+                <span style="display:block; font-size:0.8rem; color:var(--accent-cyan); font-weight:700; margin-top:0.2rem;">@armaan.yadav · Tokyo</span>
               </div>
+            </div>
 
-              <!-- Stats Row -->
-              <div class="profile-stats-row">
-                <div><strong>6</strong> <span>Matches</span></div>
-                <div><strong>18</strong> <span>Shared Moments</span></div>
-                <div><strong>96%</strong> <span>AI Chemistry Rating</span></div>
+            <div class="settings-field">
+              <label>Studio Bio</label>
+              <textarea id="settingsBioInput" class="theatrical-input" rows="3" style="border-radius:1rem; width:100%;">Architectural photography, collecting Japanese city-pop vinyl, and designing digital platforms with electric character.</textarea>
+            </div>
+
+            <button class="pill-btn pill-pink pill-sm" id="btnSaveBio" style="margin-top:0.75rem;" type="button">
+              Save Bio Changes
+            </button>
+          </div>
+
+          <!-- Column 2: Discovery & Matching Preferences -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <h3>Matchmaking Preferences</h3>
+              <span class="badge-solid badge-pink">AI RADAR</span>
+            </div>
+
+            <!-- Maximum Distance Slider -->
+            <div class="settings-field">
+              <div style="display:flex; justify-content:space-between;">
+                <label>Maximum Distance</label>
+                <span id="labelDistance" style="font-weight:800; color:var(--accent-lime);">15 km</span>
               </div>
+              <input type="range" min="1" max="50" value="15" class="cc-slider" id="sliderDistance">
+            </div>
 
-              <!-- Bio -->
-              <p class="profile-bio-text" id="userProfileBio">
-                Architectural photography, collecting Japanese city-pop vinyl, and designing digital platforms with electric character.
-              </p>
-
-              <!-- Interest Tags -->
-              <div class="profile-tags-container" id="userProfileTags">
-                <span class="liquid-glass-badge">35mm Film</span>
-                <span class="liquid-glass-badge">Product Design</span>
-                <span class="liquid-glass-badge">Specialty Coffee</span>
-                <span class="liquid-glass-badge">Synthesizers</span>
-                <span class="liquid-glass-badge">Tokyo Architecture</span>
+            <!-- Age Range Slider -->
+            <div class="settings-field">
+              <div style="display:flex; justify-content:space-between;">
+                <label>Preferred Age Range</label>
+                <span id="labelAgeRange" style="font-weight:800; color:var(--accent-lime);">21 – 30</span>
               </div>
+              <input type="range" min="18" max="45" value="30" class="cc-slider" id="sliderAge">
+            </div>
+
+            <!-- AI Sensitivity -->
+            <div class="settings-field">
+              <label>AI Chemistry Sensitivity</label>
+              <select class="theatrical-input" id="selectAiSensitivity" style="border-radius:9999px; width:100%;">
+                <option value="strict">Strict (90%+ shared creative hobbies)</option>
+                <option value="balanced" selected>Balanced (Creative overlap &amp; lifestyle sync)</option>
+                <option value="adventurous">Serendipitous (Spontaneous discovery)</option>
+              </select>
             </div>
           </div>
+
+          <!-- Column 3: App Controls & Privacy -->
+          <div class="settings-card" style="grid-column:1 / -1;">
+            <div class="settings-card-header">
+              <h3>App Controls &amp; Audio</h3>
+              <span class="badge-solid badge-yellow">SYSTEM</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
+              
+              <!-- Toggle 1: Sound Effects -->
+              <div class="settings-toggle-row">
+                <div>
+                  <strong>Tactile Sound FX (Clicks &amp; Swooshes)</strong>
+                  <p style="font-size:0.85rem; color:var(--muted-gray); margin-top:0.2rem;">Play acoustic clicks and pops on swipe and like actions.</p>
+                </div>
+                <label class="cc-toggle">
+                  <input type="checkbox" id="toggleSoundFx" checked>
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+
+              <!-- Toggle 2: Incognito Mode -->
+              <div class="settings-toggle-row">
+                <div>
+                  <strong>Stealth Mode (Hide Distance)</strong>
+                  <p style="font-size:0.85rem; color:var(--muted-gray); margin-top:0.2rem;">Only reveal your city, keep exact distance private.</p>
+                </div>
+                <label class="cc-toggle">
+                  <input type="checkbox" id="toggleStealth">
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+
+              <!-- Toggle 3: Message Read Receipts -->
+              <div class="settings-toggle-row">
+                <div>
+                  <strong>Send "Seen" Receipts</strong>
+                  <p style="font-size:0.85rem; color:var(--muted-gray); margin-top:0.2rem;">Display checkmarks when you have read messages.</p>
+                </div>
+                <label class="cc-toggle">
+                  <input type="checkbox" id="toggleReadReceipts" checked>
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+
+              <!-- Action: Reset Swipes Queue -->
+              <div class="settings-toggle-row">
+                <div>
+                  <strong>Reset Swiped Profiles</strong>
+                  <p style="font-size:0.85rem; color:var(--muted-gray); margin-top:0.2rem;">Bring back passed candidates to your active queue.</p>
+                </div>
+                <button class="pill-btn pill-pink pill-sm" id="btnResetAllSwipes" type="button">
+                  ↺ Reset Queue
+                </button>
+              </div>
+
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -610,8 +722,8 @@
 
   <!-- Match Celebration Modal -->
   <div class="cc-modal-backdrop" id="ccMatchModal">
-    <div class="cc-modal-box liquid-glass-modal">
-      <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
+    <div class="cc-modal-box">
+      <button class="cc-modal-close" data-close-modal type="button">✕</button>
 
       <div class="modal-icon-circle modal-icon-lime">⚡</div>
 
@@ -627,10 +739,10 @@
       </div>
 
       <div style="display:flex; flex-direction:column; gap:0.85rem;">
-        <button class="pill-btn pill-lime liquid-glass-btn" id="btnMatchChat" type="button">
+        <button class="pill-btn pill-lime" id="btnMatchChat" type="button">
           Open Chat Console ⚡
         </button>
-        <button class="pill-btn pill-black liquid-glass-btn" id="btnMatchClose" type="button">
+        <button class="pill-btn pill-black" id="btnMatchClose" type="button">
           Keep Swiping
         </button>
       </div>
@@ -638,10 +750,10 @@
     </div>
   </div>
 
-  <!-- Google Auth & Log-in Modal -->
+  <!-- Studio Log-In / Auth Modal -->
   <div class="cc-modal-backdrop" id="ccAuthModal">
-    <div class="cc-modal-box liquid-glass-modal">
-      <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
+    <div class="cc-modal-box">
+      <button class="cc-modal-close" data-close-modal type="button">✕</button>
 
       <div class="modal-icon-circle modal-icon-pink">★</div>
 
@@ -657,11 +769,11 @@
       </div>
 
       <div style="display:flex; flex-direction:column; gap:0.85rem;">
-        <button class="pill-btn pill-pink liquid-glass-btn" id="googleAuthBtn" type="button">
+        <button class="pill-btn pill-pink" id="googleAuthBtn" type="button">
           <span>Continue as Armaan Yadav</span>
           <span>→</span>
         </button>
-        <button class="pill-btn pill-black liquid-glass-btn" id="guestAuthBtn" type="button">
+        <button class="pill-btn pill-black" id="guestAuthBtn" type="button">
           Explore as Guest Member
         </button>
       </div>
@@ -671,8 +783,8 @@
 
   <!-- Profile Inspector Modal -->
   <div class="cc-modal-backdrop" id="ccInfoModal">
-    <div class="cc-modal-box liquid-glass-modal" style="max-height:85vh; overflow-y:auto;">
-      <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
+    <div class="cc-modal-box" style="max-height:88vh; overflow-y:auto;">
+      <button class="cc-modal-close" data-close-modal type="button">✕</button>
       <div id="infoModalBody">
         <!-- Rendered by app.js -->
       </div>
@@ -681,11 +793,11 @@
 
   <!-- AI Matchmaker Modal -->
   <div class="cc-modal-backdrop" id="ccAiMatchModal">
-    <div class="cc-modal-box liquid-glass-modal" style="max-width:620px;">
-      <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
+    <div class="cc-modal-box" style="max-width:620px;">
+      <button class="cc-modal-close" data-close-modal type="button">✕</button>
       
       <div class="modal-icon-circle modal-icon-lime">✦</div>
-      <h2 class="modal-title">AI Chemistry Scan</h2>
+      <h2 class="modal-title">AI Chemistry Radar</h2>
       <p class="modal-subtitle">
         Select the hobbies &amp; aesthetics you value most. Our algorithm will rank your top compatible creators.
       </p>
@@ -694,7 +806,7 @@
         <!-- Rendered by app.js -->
       </div>
 
-      <button class="pill-btn pill-lime liquid-glass-btn" id="btnRunAiMatchScan" style="margin-top:1.5rem;" type="button">
+      <button class="pill-btn pill-lime" id="btnRunAiMatchScan" style="margin-top:1.5rem;" type="button">
         Find Best Matches ⚡
       </button>
 
@@ -706,8 +818,8 @@
 
   <!-- Media Upload Modal -->
   <div class="cc-modal-backdrop" id="ccUploadModal">
-    <div class="cc-modal-box liquid-glass-modal" style="max-width:580px;">
-      <button class="cc-modal-close liquid-glass-circle-sm" data-close-modal type="button">✕</button>
+    <div class="cc-modal-box" style="max-width:580px;">
+      <button class="cc-modal-close" data-close-modal type="button">✕</button>
       
       <div class="modal-icon-circle modal-icon-pink">📷</div>
       <h2 class="modal-title">Share A Moment</h2>
@@ -718,7 +830,7 @@
       <!-- Upload Drop Zone -->
       <div class="upload-dropzone" id="uploadDropzone">
         <img id="uploadPreviewImg" style="display:none; width:100%; height:220px; object-fit:cover; border-radius:1rem; margin-bottom:0.75rem;" alt="Preview">
-        <label class="pill-btn pill-sm pill-white liquid-glass-btn" style="cursor:pointer;">
+        <label class="pill-btn pill-sm pill-white" style="cursor:pointer;">
           <span>Choose Photo from Device</span>
           <input type="file" id="momentFileInput" accept="image/*" style="display:none;">
         </label>
@@ -734,10 +846,10 @@
       </div>
 
       <!-- Caption Input -->
-      <textarea class="theatrical-input liquid-glass-input" id="uploadCaption" rows="3" placeholder="Write an aesthetic story or observation..." style="border-radius:1rem; width:100%; margin-top:1rem;"></textarea>
+      <textarea class="theatrical-input" id="uploadCaption" rows="3" placeholder="Write an aesthetic story or observation..." style="border-radius:1rem; width:100%; margin-top:1rem;"></textarea>
 
       <!-- Interest Category -->
-      <select class="theatrical-input liquid-glass-input" id="uploadInterest" style="border-radius:9999px; width:100%; margin-top:0.75rem;">
+      <select class="theatrical-input" id="uploadInterest" style="border-radius:9999px; width:100%; margin-top:0.75rem;">
         <option value="35mm Film">📸 35mm Film &amp; Photography</option>
         <option value="Design">🏛️ Architecture &amp; Spatial Design</option>
         <option value="Electronic Music">🎧 Electronic Music &amp; Vinyl</option>
@@ -745,7 +857,7 @@
         <option value="Coffee">☕ Specialty Coffee &amp; Culinary</option>
       </select>
 
-      <button class="pill-btn pill-pink liquid-glass-btn" id="btnSubmitMoment" style="margin-top:1.25rem; width:100%;" type="button">
+      <button class="pill-btn pill-pink" id="btnSubmitMoment" style="margin-top:1.25rem; width:100%;" type="button">
         Post to Community Moments ⚡
       </button>
 

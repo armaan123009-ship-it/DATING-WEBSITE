@@ -1,7 +1,8 @@
 // ============================================================================
 // CRAZY LOVE / PAWANDATE - CORE APPLICATION CONTROLLER
-// High-Impact Poster Transitions, AI Hobby Matching, Instagram-Style Direct Chat,
-// Community Moments Media Feed, and Authentication Gate
+// High-Impact Poster Layout, Editorial Swipe Deck, Sound FX,
+// Instagram Direct Chat, Moments Feed, and Rich App Settings
+// Reference: https://crazycreative.design/
 // ============================================================================
 
 import { PROFILES, CATEGORIES } from './data/profiles.js';
@@ -11,13 +12,83 @@ import { LiquidNavbar, NimbusIcons } from './components/ui/liquid-glass-navbar.j
 
 class CrazyCreativeApp {
   constructor() {
-    this.storageKey = 'cc_dating_state_v2';
+    this.storageKey = 'cc_dating_state_v3';
+    this.cardPhotoIndices = {}; // track photo index per profile
     this.initState();
+    this.initSoundFX();
     this.initDOM();
     this.initLiquidNavbar();
     this.bindEvents();
     this.updateHeaderAuthState();
     this.renderCurrentView();
+  }
+
+  // --------------------------------------------------------------------------
+  // SOUND FX ENGINE (WEB AUDIO OSCILLATOR - ZERO EXTERNAL ASSETS NEEDED)
+  // --------------------------------------------------------------------------
+  initSoundFX() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) this.audioCtx = new AudioContext();
+    } catch (e) {
+      this.audioCtx = null;
+    }
+  }
+
+  playSound(type = 'pop') {
+    if (!this.settings.soundFx || !this.audioCtx) return;
+    try {
+      if (this.audioCtx.state === 'suspended') this.audioCtx.resume();
+      const osc = this.audioCtx.createOscillator();
+      const gain = this.audioCtx.createGain();
+      const now = this.audioCtx.currentTime;
+
+      if (type === 'like') {
+        // High playful chime
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.12); // G5
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+        osc.connect(gain);
+        gain.connect(this.audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.14);
+      } else if (type === 'pass') {
+        // Low swoop
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(160, now + 0.1);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        osc.connect(gain);
+        gain.connect(this.audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      } else if (type === 'superlike') {
+        // Sparkle arpeggio
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(659.25, now); // E5
+        osc.frequency.exponentialRampToValueAtTime(987.77, now + 0.18); // B5
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.connect(gain);
+        gain.connect(this.audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.2);
+      } else {
+        // Generic crisp pop
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.06);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+        osc.connect(gain);
+        gain.connect(this.audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.06);
+      }
+    } catch (e) {}
   }
 
   // --------------------------------------------------------------------------
@@ -30,6 +101,7 @@ class CrazyCreativeApp {
         const parsed = JSON.parse(saved);
         this.isAuthenticated = parsed.isAuthenticated !== undefined ? parsed.isAuthenticated : true;
         this.user = parsed.user || this.getDefaultUser();
+        this.settings = parsed.settings || this.getDefaultSettings();
         this.matches = parsed.matches || INITIAL_MATCHES;
         this.chats = parsed.chats || INITIAL_MESSAGES;
         this.feedPosts = parsed.feedPosts || INITIAL_FEED_POSTS;
@@ -50,8 +122,9 @@ class CrazyCreativeApp {
   }
 
   resetDefaultState() {
-    this.isAuthenticated = true; // Logged in with rich demo state
+    this.isAuthenticated = true; // Logged in demo state
     this.user = this.getDefaultUser();
+    this.settings = this.getDefaultSettings();
     this.matches = [...INITIAL_MATCHES];
     this.chats = JSON.parse(JSON.stringify(INITIAL_MESSAGES));
     this.feedPosts = JSON.parse(JSON.stringify(INITIAL_FEED_POSTS));
@@ -75,10 +148,22 @@ class CrazyCreativeApp {
     };
   }
 
+  getDefaultSettings() {
+    return {
+      maxDistance: 15,
+      maxAge: 30,
+      aiSensitivity: "balanced",
+      soundFx: true,
+      stealthMode: false,
+      readReceipts: true
+    };
+  }
+
   saveState() {
     const data = {
       isAuthenticated: this.isAuthenticated,
       user: this.user,
+      settings: this.settings,
       matches: this.matches,
       chats: this.chats,
       feedPosts: this.feedPosts,
@@ -90,26 +175,26 @@ class CrazyCreativeApp {
   }
 
   // --------------------------------------------------------------------------
-  // LIQUID GLASS NAVBAR INTEGRATION (NO WATERMARKS)
+  // NAVIGATION BAR (VISIBLE ONLY AFTER LOGIN)
   // --------------------------------------------------------------------------
   initLiquidNavbar() {
     const mountContainer = document.getElementById('liquidNavbarMount');
     if (!mountContainer) return;
-    mountContainer.innerHTML = ''; // Clean slate
+    mountContainer.innerHTML = '';
 
     this.liquidNav = new LiquidNavbar({
       target: mountContainer,
-      tone: "light",
+      tone: "dark",
       defaultActive: 0,
       sound: false,
       items: [
-        { label: "Home", icon: NimbusIcons.home, fx: "glow", route: "home" },
         { label: "Deck", icon: NimbusIcons.plane, fx: "plane", route: "discover" },
-        { label: "Feed", icon: NimbusIcons.camera, fx: "spin", route: "feed" },
+        { label: "Moments", icon: NimbusIcons.camera, fx: "spin", route: "feed" },
         { label: "Chats", icon: NimbusIcons.drop, fx: "drop", route: "chats" },
-        { label: "Profile", icon: NimbusIcons.user, fx: "wave", route: "profile" }
+        { label: "Settings", icon: NimbusIcons.settings, fx: "glow", route: "settings" }
       ],
       onChange: (index, item) => {
+        this.playSound('pop');
         this.handleGateRoute(item.route);
       }
     });
@@ -124,7 +209,6 @@ class CrazyCreativeApp {
       return;
     }
 
-    // Require login for dashboard features
     if (!this.isAuthenticated) {
       this.pendingGateRoute = route;
       this.openAuthModal();
@@ -138,11 +222,13 @@ class CrazyCreativeApp {
     const slot = document.getElementById('headerUserSlot');
     if (!slot) return;
 
+    // Body class for CSS control of navbar visibility
     if (this.isAuthenticated) {
+      document.body.classList.remove('logged-out');
       slot.innerHTML = `
-        <div class="header-user-badge liquid-glass-btn" id="headerProfileTrigger" title="View Profile">
+        <div class="header-user-badge" id="headerProfileTrigger" title="App Settings">
           <img src="${this.user.avatar}" class="user-avatar-sm" alt="${this.user.name}">
-          <span style="color:#FFF;">${this.user.name.split(' ')[0]}</span>
+          <span>${this.user.name.split(' ')[0]}</span>
           <span style="color:var(--accent-lime); font-size:0.8rem;">★</span>
           <button class="btn-header-logout" id="btnQuickLogout" title="Sign Out" type="button">✕</button>
         </div>
@@ -152,7 +238,8 @@ class CrazyCreativeApp {
       if (trigger) {
         trigger.addEventListener('click', (e) => {
           if (e.target.closest('#btnQuickLogout')) return;
-          this.navigateTo('profile');
+          this.playSound('pop');
+          this.navigateTo('settings');
         });
       }
 
@@ -164,14 +251,18 @@ class CrazyCreativeApp {
         });
       }
     } else {
+      document.body.classList.add('logged-out');
       slot.innerHTML = `
-        <button class="pill-btn pill-white pill-sm liquid-glass-btn" id="btnHeaderActionLogin" type="button">
-          <span>Log In</span>
+        <button class="pill-btn pill-white pill-sm" id="btnHeaderActionLogin" type="button">
+          <span>Sign In</span>
           <span style="font-size:1.1rem; line-height:1;">→</span>
         </button>
       `;
       const btn = document.getElementById('btnHeaderActionLogin');
-      if (btn) btn.addEventListener('click', () => this.openAuthModal());
+      if (btn) btn.addEventListener('click', () => {
+        this.playSound('pop');
+        this.openAuthModal();
+      });
     }
   }
 
@@ -182,6 +273,7 @@ class CrazyCreativeApp {
     this.saveState();
     this.updateHeaderAuthState();
     this.closeModals();
+    this.playSound('like');
 
     const targetRoute = this.pendingGateRoute || 'discover';
     this.pendingGateRoute = null;
@@ -192,6 +284,7 @@ class CrazyCreativeApp {
     this.isAuthenticated = false;
     this.saveState();
     this.updateHeaderAuthState();
+    this.playSound('pass');
     this.navigateTo('home');
   }
 
@@ -204,7 +297,7 @@ class CrazyCreativeApp {
       discover: document.getElementById('viewDiscover'),
       feed: document.getElementById('viewFeed'),
       chats: document.getElementById('viewChats'),
-      profile: document.getElementById('viewProfile')
+      settings: document.getElementById('viewSettings')
     };
 
     this.navLinks = document.querySelectorAll('[data-route]');
@@ -217,6 +310,7 @@ class CrazyCreativeApp {
     this.btnPass = document.getElementById('btnPass');
     this.btnLike = document.getElementById('btnLike');
     this.btnRewind = document.getElementById('btnRewind');
+    this.btnSuperlike = document.getElementById('btnSuperlike');
     this.btnInfo = document.getElementById('btnInfo');
     this.interestFilterBar = document.getElementById('interestFilterBar');
     this.btnOpenAiMatch = document.getElementById('btnOpenAiMatch');
@@ -265,9 +359,25 @@ class CrazyCreativeApp {
     this.btnSubmitMoment = document.getElementById('btnSubmitMoment');
     this.uploadPresetsRow = document.getElementById('uploadPresetsRow');
 
-    // Profile Screen Buttons
-    this.btnLogoutProfile = document.getElementById('btnLogoutProfile');
-    this.btnProfileEdit = document.getElementById('btnProfileEdit');
+    // Settings elements
+    this.sliderDistance = document.getElementById('sliderDistance');
+    this.labelDistance = document.getElementById('labelDistance');
+    this.sliderAge = document.getElementById('sliderAge');
+    this.labelAgeRange = document.getElementById('labelAgeRange');
+    this.selectAiSensitivity = document.getElementById('selectAiSensitivity');
+    this.toggleSoundFx = document.getElementById('toggleSoundFx');
+    this.toggleStealth = document.getElementById('toggleStealth');
+    this.toggleReadReceipts = document.getElementById('toggleReadReceipts');
+    this.btnResetAllSwipes = document.getElementById('btnResetAllSwipes');
+    this.btnLogoutFromSettings = document.getElementById('btnLogoutFromSettings');
+    this.settingsBioInput = document.getElementById('settingsBioInput');
+    this.btnSaveBio = document.getElementById('btnSaveBio');
+    this.settingsUserName = document.getElementById('settingsUserName');
+    this.settingsUserEmail = document.getElementById('settingsUserEmail');
+    this.settingsUserAvatar = document.getElementById('settingsUserAvatar');
+
+    // Interactive Mascot
+    this.mascotPeek = document.getElementById('mascotPeek');
   }
 
   // --------------------------------------------------------------------------
@@ -283,32 +393,81 @@ class CrazyCreativeApp {
       });
     });
 
-    if (this.btnHeroLaunch) this.btnHeroLaunch.addEventListener('click', () => this.handleGateRoute('discover'));
-    if (this.btnHeroSignIn) this.btnHeroSignIn.addEventListener('click', () => this.openAuthModal());
-    if (this.btnFlameLaunch) this.btnFlameLaunch.addEventListener('click', () => this.handleGateRoute('discover'));
+    if (this.btnHeroLaunch) this.btnHeroLaunch.addEventListener('click', () => {
+      this.playSound('pop');
+      this.handleGateRoute('discover');
+    });
+    if (this.btnHeroSignIn) this.btnHeroSignIn.addEventListener('click', () => {
+      this.playSound('pop');
+      this.openAuthModal();
+    });
+    if (this.btnFlameLaunch) this.btnFlameLaunch.addEventListener('click', () => {
+      this.playSound('pop');
+      this.handleGateRoute('discover');
+    });
 
-    // Deck Gestures and Buttons
-    if (this.btnPass) this.btnPass.addEventListener('click', () => this.swipeTopCard('pass'));
-    if (this.btnLike) this.btnLike.addEventListener('click', () => this.swipeTopCard('like'));
-    if (this.btnRewind) this.btnRewind.addEventListener('click', () => this.rewindLastCard());
-    if (this.btnInfo) this.btnInfo.addEventListener('click', () => this.showCardDetails());
-    if (this.btnOpenAiMatch) this.btnOpenAiMatch.addEventListener('click', () => this.openAiMatchModal());
+    // Mascot Click Interaction
+    if (this.mascotPeek) {
+      this.mascotPeek.addEventListener('click', () => {
+        this.playSound('pop');
+        this.mascotPeek.style.transform = 'translateX(-50%) translateY(-24px) rotate(4deg)';
+        setTimeout(() => {
+          this.mascotPeek.style.transform = '';
+        }, 300);
+      });
+    }
+
+    // Deck Gestures and Action Buttons
+    if (this.btnPass) this.btnPass.addEventListener('click', () => {
+      this.playSound('pass');
+      this.swipeTopCard('pass');
+    });
+    if (this.btnLike) this.btnLike.addEventListener('click', () => {
+      this.playSound('like');
+      this.swipeTopCard('like');
+    });
+    if (this.btnSuperlike) this.btnSuperlike.addEventListener('click', () => {
+      this.playSound('superlike');
+      this.swipeTopCard('like');
+    });
+    if (this.btnRewind) this.btnRewind.addEventListener('click', () => {
+      this.playSound('pop');
+      this.rewindLastCard();
+    });
+    if (this.btnInfo) this.btnInfo.addEventListener('click', () => {
+      this.playSound('pop');
+      this.showCardDetails();
+    });
+    if (this.btnOpenAiMatch) this.btnOpenAiMatch.addEventListener('click', () => {
+      this.playSound('pop');
+      this.openAiMatchModal();
+    });
 
     // Keyboard Shortcuts
     window.addEventListener('keydown', (e) => {
       if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
       if (this.currentView === 'discover') {
-        if (e.key === 'ArrowLeft') this.swipeTopCard('pass');
-        if (e.key === 'ArrowRight') this.swipeTopCard('like');
-        if (e.key === 'ArrowDown') this.rewindLastCard();
+        if (e.key === 'ArrowLeft') {
+          this.playSound('pass');
+          this.swipeTopCard('pass');
+        }
+        if (e.key === 'ArrowRight') {
+          this.playSound('like');
+          this.swipeTopCard('like');
+        }
+        if (e.key === 'ArrowDown') {
+          this.playSound('pop');
+          this.rewindLastCard();
+        }
         if (e.key === ' ') {
           e.preventDefault();
+          this.playSound('pop');
           this.showCardDetails();
         }
       }
     });
 
-    // Chat Sending
+    // Chat Message Sending
     if (this.btnTheatricalSend_page) {
       this.btnTheatricalSend_page.addEventListener('click', () => {
         const text = this.theatricalInput_page.value;
@@ -329,15 +488,17 @@ class CrazyCreativeApp {
     // Quick Emoji Bar
     document.querySelectorAll('.quick-emoji-chip').forEach(chip => {
       chip.addEventListener('click', () => {
+        this.playSound('like');
         const emoji = chip.dataset.emoji;
         this.sendChatMessage(emoji);
       });
     });
 
-    // Call Simulation
+    // Audio/Video Call Simulation
     const audioCallBtn = document.getElementById('btnSimulateAudioCall');
     if (audioCallBtn) {
       audioCallBtn.addEventListener('click', () => {
+        this.playSound('superlike');
         const partner = PROFILES.find(p => p.id === this.activeChatId);
         alert(`📞 Connecting studio encrypted audio line with ${partner ? partner.name : 'match'}... (Microphone active)`);
       });
@@ -345,19 +506,21 @@ class CrazyCreativeApp {
     const videoCallBtn = document.getElementById('btnSimulateVideoCall');
     if (videoCallBtn) {
       videoCallBtn.addEventListener('click', () => {
+        this.playSound('superlike');
         const partner = PROFILES.find(p => p.id === this.activeChatId);
         alert(`📹 Starting HD video call with ${partner ? partner.name : 'match'}... (Camera preview active)`);
       });
     }
 
-    // Chat Voice Memo
+    // Voice Memo
     if (this.btnSendVoiceNote) {
       this.btnSendVoiceNote.addEventListener('click', () => {
+        this.playSound('pop');
         this.sendVoiceNoteMessage();
       });
     }
 
-    // Chat Photo Upload
+    // Photo Upload in Chat
     if (this.chatPhotoUpload) {
       this.chatPhotoUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -377,9 +540,10 @@ class CrazyCreativeApp {
       });
     }
 
-    // Feed / Moments Upload
+    // Feed Upload Moment
     if (this.btnOpenUploadModal) {
       this.btnOpenUploadModal.addEventListener('click', () => {
+        this.playSound('pop');
         this.openUploadModal();
       });
     }
@@ -413,6 +577,7 @@ class CrazyCreativeApp {
 
     if (this.btnSubmitMoment) {
       this.btnSubmitMoment.addEventListener('click', () => {
+        this.playSound('like');
         this.submitNewMoment();
       });
     }
@@ -438,35 +603,99 @@ class CrazyCreativeApp {
 
     // Modal Close
     document.querySelectorAll('[data-close-modal]').forEach(btn => {
-      btn.addEventListener('click', () => this.closeModals());
+      btn.addEventListener('click', () => {
+        this.playSound('pop');
+        this.closeModals();
+      });
     });
 
-    // FAQ Accordion Click Handlers
+    // FAQ Accordion Handlers
     document.querySelectorAll('.faq-item-row').forEach(row => {
       row.addEventListener('click', () => {
+        this.playSound('pop');
         row.classList.toggle('open');
       });
     });
 
-    // Profile Page Logout
-    if (this.btnLogoutProfile) {
-      this.btnLogoutProfile.addEventListener('click', () => this.logoutUser());
-    }
-    if (this.btnProfileEdit) {
-      this.btnProfileEdit.addEventListener('click', () => {
-        const newBio = prompt("Update your studio bio:", this.user.bio);
-        if (newBio) {
-          this.user.bio = newBio;
-          this.saveState();
-          this.renderProfileView();
-        }
+    // AI Chemistry Scan
+    if (this.btnRunAiMatchScan) {
+      this.btnRunAiMatchScan.addEventListener('click', () => {
+        this.playSound('superlike');
+        this.executeAiChemistryScan();
       });
     }
 
-    // AI Matchmaker Scan button
-    if (this.btnRunAiMatchScan) {
-      this.btnRunAiMatchScan.addEventListener('click', () => {
-        this.executeAiChemistryScan();
+    // Settings Controls
+    this.bindSettingsEvents();
+  }
+
+  bindSettingsEvents() {
+    if (this.sliderDistance && this.labelDistance) {
+      this.sliderDistance.addEventListener('input', (e) => {
+        this.settings.maxDistance = e.target.value;
+        this.labelDistance.textContent = `${e.target.value} km`;
+        this.saveState();
+      });
+    }
+
+    if (this.sliderAge && this.labelAgeRange) {
+      this.sliderAge.addEventListener('input', (e) => {
+        this.settings.maxAge = e.target.value;
+        this.labelAgeRange.textContent = `18 – ${e.target.value}`;
+        this.saveState();
+      });
+    }
+
+    if (this.selectAiSensitivity) {
+      this.selectAiSensitivity.addEventListener('change', (e) => {
+        this.settings.aiSensitivity = e.target.value;
+        this.saveState();
+      });
+    }
+
+    if (this.toggleSoundFx) {
+      this.toggleSoundFx.addEventListener('change', (e) => {
+        this.settings.soundFx = e.target.checked;
+        this.saveState();
+      });
+    }
+
+    if (this.toggleStealth) {
+      this.toggleStealth.addEventListener('change', (e) => {
+        this.settings.stealthMode = e.target.checked;
+        this.saveState();
+        if (this.currentView === 'discover') this.renderDeck();
+      });
+    }
+
+    if (this.toggleReadReceipts) {
+      this.toggleReadReceipts.addEventListener('change', (e) => {
+        this.settings.readReceipts = e.target.checked;
+        this.saveState();
+      });
+    }
+
+    if (this.btnResetAllSwipes) {
+      this.btnResetAllSwipes.addEventListener('click', () => {
+        this.playSound('pop');
+        this.swiped = {};
+        this.saveState();
+        alert("Discovery Queue reset successfully! All profiles are now available to explore.");
+      });
+    }
+
+    if (this.btnSaveBio && this.settingsBioInput) {
+      this.btnSaveBio.addEventListener('click', () => {
+        this.user.bio = this.settingsBioInput.value.trim();
+        this.saveState();
+        this.playSound('like');
+        alert("Studio bio updated successfully!");
+      });
+    }
+
+    if (this.btnLogoutFromSettings) {
+      this.btnLogoutFromSettings.addEventListener('click', () => {
+        this.logoutUser();
       });
     }
   }
@@ -478,16 +707,11 @@ class CrazyCreativeApp {
     this.currentView = viewName;
     document.body.classList.toggle('in-dashboard', viewName !== 'home');
 
-    // Sync Liquid Navbar state & dynamic tone
+    // Sync Navigation Dock
     if (this.liquidNav) {
-      const routeToIndex = { home: 0, discover: 1, feed: 2, chats: 3, profile: 4 };
-      const idx = routeToIndex[viewName] !== undefined ? routeToIndex[viewName] : 0;
-      this.liquidNav.setActive(idx);
-
-      if (viewName === 'home') {
-        this.liquidNav.setTone('light');
-      } else {
-        this.liquidNav.setTone('dark');
+      const routeToIndex = { discover: 0, feed: 1, chats: 2, settings: 3 };
+      if (routeToIndex[viewName] !== undefined) {
+        this.liquidNav.setActive(routeToIndex[viewName]);
       }
     }
 
@@ -508,8 +732,8 @@ class CrazyCreativeApp {
       this.renderFeedView();
     } else if (viewName === 'chats') {
       this.renderTheatricalChat();
-    } else if (viewName === 'profile') {
-      this.renderProfileView();
+    } else if (viewName === 'settings') {
+      this.renderSettingsView();
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -520,7 +744,7 @@ class CrazyCreativeApp {
   }
 
   // --------------------------------------------------------------------------
-  // DISCOVERY CARD STACK & HOBBY FILTERING
+  // BRAND NEW EDITORIAL DISCOVERY DECK (SWIPE ARENA)
   // --------------------------------------------------------------------------
   renderCategoryFilterBar() {
     if (!this.interestFilterBar) return;
@@ -531,6 +755,7 @@ class CrazyCreativeApp {
       chip.className = `interest-chip ${this.activeCategory === cat.id ? 'active' : ''}`;
       chip.innerHTML = `<span>${cat.icon}</span> <span>${cat.label}</span>`;
       chip.addEventListener('click', () => {
+        this.playSound('pop');
         this.activeCategory = cat.id;
         this.saveState();
         this.renderCategoryFilterBar();
@@ -554,16 +779,17 @@ class CrazyCreativeApp {
 
     if (deck.length === 0) {
       this.ccSwipeStage.innerHTML = `
-        <div class="liquid-glass-modal" style="border-radius:var(--radius-card); padding:3.5rem 2rem; text-align:center; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.5rem;">
-          <div style="width:4.5rem; height:4.5rem; border-radius:50%; background:var(--accent-lime); display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:900; box-shadow:0 4px 16px rgba(212,255,0,0.4);">★</div>
-          <h3 style="font-size:2.5rem; font-weight:800; text-transform:uppercase; line-height:1; color:var(--ink-dark);">Queue Complete!</h3>
-          <p style="color:var(--muted-gray); font-size:1.15rem; max-width:320px; font-weight:600;">You've explored the current creators in this vibe. Reset your queue or try another category.</p>
-          <button class="pill-btn pill-pink liquid-glass-btn" id="btnResetCrazyDeck">↺ Reset Queue</button>
+        <div style="background:#18181B; border:3px solid #27272A; border-radius:var(--radius-card); padding:3.5rem 2rem; text-align:center; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.5rem; box-shadow:0 20px 50px rgba(0,0,0,0.6);">
+          <div style="width:4.75rem; height:4.75rem; border-radius:50%; background:var(--accent-lime); display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:900; color:#000; box-shadow:0 6px 20px rgba(212,255,0,0.4);">★</div>
+          <h3 style="font-size:2.5rem; font-weight:800; text-transform:uppercase; line-height:1; color:#FFF;">Queue Explored!</h3>
+          <p style="color:#A1A1AA; font-size:1.15rem; max-width:340px; font-weight:600;">You've seen all verified candidates in this vibe. Reset your queue or choose another category.</p>
+          <button class="pill-btn pill-pink" id="btnResetCrazyDeck">↺ Reset Queue</button>
         </div>
       `;
       const resetBtn = document.getElementById('btnResetCrazyDeck');
       if (resetBtn) {
         resetBtn.addEventListener('click', () => {
+          this.playSound('pop');
           this.swiped = {};
           this.saveState();
           this.renderDeck();
@@ -587,6 +813,8 @@ class CrazyCreativeApp {
   createCardElement(profile, reverseIndex, totalCount) {
     const isSecond = reverseIndex === totalCount - 2;
     const isThird = reverseIndex === totalCount - 3;
+    const currentPhotoIdx = this.cardPhotoIndices[profile.id] || 0;
+    const photos = profile.photos && profile.photos.length > 0 ? profile.photos : [profile.avatar];
 
     const card = document.createElement('div');
     card.className = `cc-swipe-card ${isSecond ? 'depth-2' : ''} ${isThird ? 'depth-3' : ''}`;
@@ -594,9 +822,24 @@ class CrazyCreativeApp {
 
     card.innerHTML = `
       <div class="cc-card-art">
-        <img src="${profile.photos[0]}" alt="${profile.name}">
-        <div class="cc-card-tag">${profile.categoryLabel}</div>
-        <div class="cc-card-score">⚡ ${profile.compatibility}% MATCH</div>
+        <!-- Photo Pagination Bars -->
+        <div class="card-photo-bars">
+          ${photos.map((_, i) => `<span class="card-photo-bar-dash ${i === currentPhotoIdx ? 'active' : ''}"></span>`).join('')}
+        </div>
+
+        <!-- Badges Row -->
+        <div class="cc-card-badges-row">
+          <span class="cc-card-category-tag">${profile.categoryLabel}</span>
+          <span class="cc-card-match-score">⚡ ${profile.compatibility}% MATCH</span>
+        </div>
+
+        <!-- Image -->
+        <img src="${photos[currentPhotoIdx]}" class="card-hero-img" alt="${profile.name}">
+        <div class="cc-card-vignette"></div>
+
+        <!-- Tap zones to navigate photos -->
+        <div class="card-tap-zone card-tap-left" title="Previous photo"></div>
+        <div class="card-tap-zone card-tap-right" title="Next photo"></div>
 
         <!-- Dynamic Action Stamps -->
         <div class="cc-stamp cc-stamp-like">MATCH!</div>
@@ -608,25 +851,55 @@ class CrazyCreativeApp {
           <div class="cc-card-title-row">
             <div>
               <span class="cc-name-heading">${profile.name}, ${profile.age}</span>
-              <span style="color:var(--accent-cyan); font-size:1rem; margin-left:0.25rem;">✓</span>
+              <span style="color:var(--accent-cyan); font-size:1.15rem; margin-left:0.35rem;" title="Verified Creator">✓</span>
             </div>
-            <span style="font-size:0.875rem; font-weight:800; color:var(--canvas-pink);">${profile.distance}</span>
+            <span style="font-size:0.9rem; font-weight:800; color:var(--canvas-pink);">
+              ${this.settings.stealthMode ? profile.city : profile.distance}
+            </span>
           </div>
-          <div style="font-size:0.95rem; font-weight:700; color:var(--muted-gray); margin-top:0.25rem;">
+          <div style="font-size:0.95rem; font-weight:700; color:var(--accent-lime); margin-top:0.2rem;">
             ${profile.occupation} · ${profile.city}
           </div>
-          <p style="font-size:1.05rem; line-height:1.45; font-weight:600; margin-top:0.75rem; color:var(--ink-secondary); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+          <p class="cc-bio-snippet">
             ${profile.bio}
           </p>
         </div>
 
         <div>
-          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.75rem;">
-            ${profile.hobbies.slice(0, 3).map(h => `<span class="liquid-glass-badge" style="position:static; display:inline-block; font-size:0.78rem; padding:0.25rem 0.65rem; border-radius:9999px;">${h}</span>`).join('')}
+          <div class="cc-card-hobbies-row">
+            ${profile.hobbies.slice(0, 3).map(h => `<span class="cc-hobby-pill">${h}</span>`).join('')}
           </div>
         </div>
       </div>
     `;
+
+    // Bind Photo Tap switcher
+    const tapLeft = card.querySelector('.card-tap-left');
+    const tapRight = card.querySelector('.card-tap-right');
+    const imgEl = card.querySelector('.card-hero-img');
+    const dashes = card.querySelectorAll('.card-photo-bar-dash');
+
+    if (tapLeft && tapRight && photos.length > 1) {
+      tapLeft.addEventListener('click', (e) => {
+        e.stopPropagation();
+        let idx = this.cardPhotoIndices[profile.id] || 0;
+        idx = (idx - 1 + photos.length) % photos.length;
+        this.cardPhotoIndices[profile.id] = idx;
+        imgEl.src = photos[idx];
+        dashes.forEach((d, i) => d.classList.toggle('active', i === idx));
+        this.playSound('pop');
+      });
+
+      tapRight.addEventListener('click', (e) => {
+        e.stopPropagation();
+        let idx = this.cardPhotoIndices[profile.id] || 0;
+        idx = (idx + 1) % photos.length;
+        this.cardPhotoIndices[profile.id] = idx;
+        imgEl.src = photos[idx];
+        dashes.forEach((d, i) => d.classList.toggle('active', i === idx));
+        this.playSound('pop');
+      });
+    }
 
     return card;
   }
@@ -642,6 +915,8 @@ class CrazyCreativeApp {
     const stampPass = cardEl.querySelector('.cc-stamp-pass');
 
     const onStart = (e) => {
+      // Don't drag if clicking photo tap zones directly
+      if (e.target.classList.contains('card-tap-zone')) return;
       isDragging = true;
       const point = e.touches ? e.touches[0] : e;
       startX = point.clientX;
@@ -677,8 +952,10 @@ class CrazyCreativeApp {
 
       const threshold = 110;
       if (currentX > threshold) {
+        this.playSound('like');
         this.executeSwipe(cardEl, 'like');
       } else if (currentX < -threshold) {
+        this.playSound('pass');
         this.executeSwipe(cardEl, 'pass');
       } else {
         cardEl.style.transform = '';
@@ -769,7 +1046,7 @@ class CrazyCreativeApp {
   }
 
   // --------------------------------------------------------------------------
-  // AI HOBBY MATCHMAKER SCANNER
+  // AI CHEMISTRY RADAR SCANNER
   // --------------------------------------------------------------------------
   openAiMatchModal() {
     this.aiHobbiesPicker.innerHTML = '';
@@ -786,6 +1063,7 @@ class CrazyCreativeApp {
       chip.className = `ai-hobby-chip ${isSelected ? 'selected' : ''}`;
       chip.textContent = hobby;
       chip.addEventListener('click', () => {
+        this.playSound('pop');
         if (this.selectedAiHobbies.includes(hobby)) {
           this.selectedAiHobbies = this.selectedAiHobbies.filter(h => h !== hobby);
         } else {
@@ -807,7 +1085,6 @@ class CrazyCreativeApp {
       return;
     }
 
-    // Score all profiles against user chosen hobbies
     const scored = PROFILES.map(p => {
       const shared = p.hobbies.filter(h => this.selectedAiHobbies.includes(h));
       const matchScore = Math.min(Math.round(75 + (shared.length * 8)), 99);
@@ -819,7 +1096,7 @@ class CrazyCreativeApp {
 
     this.aiMatchResults.innerHTML = `
       <div style="font-size:0.85rem; font-weight:800; color:var(--accent-lime); text-transform:uppercase; margin-bottom:0.75rem;">
-        ⚡ AI Identified ${topThree.length} Compatible Matches:
+        ⚡ AI Radar Identified ${topThree.length} Top Matches:
       </div>
       ${topThree.map(item => `
         <div class="ai-result-card">
@@ -830,11 +1107,11 @@ class CrazyCreativeApp {
               <span style="color:var(--accent-lime); font-weight:900; font-size:0.95rem;">⚡ ${item.score}%</span>
             </div>
             <div style="font-size:0.8rem; color:var(--canvas-pink); font-weight:700;">${item.profile.occupation}</div>
-            <div style="font-size:0.75rem; color:rgba(255,255,255,0.7); margin-top:0.25rem;">
+            <div style="font-size:0.75rem; color:#A1A1AA; margin-top:0.25rem;">
               Shared passions: ${item.shared.length > 0 ? item.shared.join(', ') : item.profile.hobbies.slice(0, 2).join(', ')}
             </div>
           </div>
-          <button class="pill-btn pill-sm pill-pink liquid-glass-btn" onclick="window.crazyApp.startChatWith('${item.profile.id}')" type="button">
+          <button class="pill-btn pill-sm pill-pink" onclick="window.crazyApp.startChatWith('${item.profile.id}')" type="button">
             Chat →
           </button>
         </div>
@@ -844,6 +1121,7 @@ class CrazyCreativeApp {
 
   startChatWith(profileId) {
     this.closeModals();
+    this.playSound('like');
     const profile = PROFILES.find(p => p.id === profileId);
     if (profile) this.triggerMatch(profile);
     this.navigateTo('chats');
@@ -861,16 +1139,18 @@ class CrazyCreativeApp {
     if (!this.storiesTray) return;
     this.storiesTray.innerHTML = '';
 
-    // Render my story bubble + creator stories
     const myStoryEl = document.createElement('div');
     myStoryEl.className = 'story-bubble';
     myStoryEl.innerHTML = `
-      <div class="story-ring-wrap" style="background:rgba(255,255,255,0.2);">
+      <div class="story-ring-wrap" style="background:#27272A;">
         <img src="${this.user.avatar}" class="story-avatar-img" alt="My Story">
       </div>
       <span class="story-name-label">Your Story +</span>
     `;
-    myStoryEl.addEventListener('click', () => this.openUploadModal());
+    myStoryEl.addEventListener('click', () => {
+      this.playSound('pop');
+      this.openUploadModal();
+    });
     this.storiesTray.appendChild(myStoryEl);
 
     PROFILES.forEach(profile => {
@@ -895,7 +1175,7 @@ class CrazyCreativeApp {
 
     this.feedPosts.forEach(post => {
       const card = document.createElement('article');
-      card.className = 'feed-card liquid-glass-panel';
+      card.className = 'feed-card';
       card.dataset.postId = post.id;
 
       card.innerHTML = `
@@ -907,7 +1187,7 @@ class CrazyCreativeApp {
               <div class="feed-location-text">${post.location}</div>
             </div>
           </div>
-          <button class="pill-btn pill-sm pill-white liquid-glass-btn" style="padding:0.35rem 0.85rem; font-size:0.8rem;" onclick="window.crazyApp.startChatWith('${post.authorId}')" type="button">
+          <button class="pill-btn pill-sm pill-white" style="padding:0.35rem 0.85rem; font-size:0.8rem;" onclick="window.crazyApp.startChatWith('${post.authorId}')" type="button">
             Direct Message ⚡
           </button>
         </div>
@@ -957,19 +1237,20 @@ class CrazyCreativeApp {
           </div>
 
           <div class="feed-comment-input-bar">
-            <input type="text" class="feed-comment-input liquid-glass-input" placeholder="Add a comment for ${post.authorName}...">
-            <button class="pill-btn pill-sm pill-pink liquid-glass-btn btn-post-comment" type="button">Post</button>
+            <input type="text" class="feed-comment-input" placeholder="Add a comment for ${post.authorName}...">
+            <button class="pill-btn pill-sm pill-pink btn-post-comment" type="button">Post</button>
           </div>
         </div>
       `;
 
-      // Event: Double-tap/click to like with heart burst
+      // Double-click photo to trigger heart burst
       const mediaWrap = card.querySelector('.feed-media-wrap');
       const burstHeart = card.querySelector('.heart-burst-icon');
       const likeBtn = card.querySelector('.btn-feed-like');
       const likesCountSpan = card.querySelector('.feed-likes-count');
 
       mediaWrap.addEventListener('dblclick', () => {
+        this.playSound('like');
         burstHeart.classList.remove('burst');
         void burstHeart.offsetWidth;
         burstHeart.classList.add('burst');
@@ -987,26 +1268,29 @@ class CrazyCreativeApp {
       likeBtn.addEventListener('click', () => {
         post.isLiked = !post.isLiked;
         post.likesCount += post.isLiked ? 1 : -1;
+        this.playSound(post.isLiked ? 'like' : 'pass');
         likeBtn.classList.toggle('liked', post.isLiked);
         likeBtn.querySelector('span:first-child').textContent = post.isLiked ? '❤️' : '🤍';
         likesCountSpan.textContent = post.likesCount;
         this.saveState();
       });
 
-      // Event: Toggle comments drawer
+      // Toggle comments
       const commentToggleBtn = card.querySelector('.btn-feed-toggle-comments');
       const commentsSection = card.querySelector('.feed-comments-section');
       commentToggleBtn.addEventListener('click', () => {
+        this.playSound('pop');
         commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
       });
 
-      // Event: Post new comment
+      // Post comment
       const commentInput = card.querySelector('.feed-comment-input');
       const postCommentBtn = card.querySelector('.btn-post-comment');
 
       const handleAddComment = () => {
         const text = commentInput.value.trim();
         if (!text) return;
+        this.playSound('pop');
         const newC = {
           id: `c-${Date.now()}`,
           authorName: this.user.name,
@@ -1063,7 +1347,7 @@ class CrazyCreativeApp {
   }
 
   // --------------------------------------------------------------------------
-  // INSTAGRAM-STYLE DIRECT MESSAGES CONSOLE
+  // INSTAGRAM-STYLE DIRECT CHAT CONSOLE
   // --------------------------------------------------------------------------
   renderTheatricalChat() {
     this.renderChatStoriesStrip();
@@ -1102,7 +1386,7 @@ class CrazyCreativeApp {
     });
 
     if (filteredMatches.length === 0) {
-      container.innerHTML = `<div style="padding:2rem 1rem; text-align:center; color:var(--muted-gray); font-size:0.9rem;">No matching threads found.</div>`;
+      container.innerHTML = `<div style="padding:2rem 1rem; text-align:center; color:var(--muted-gray); font-size:0.9rem;">No matching conversations found.</div>`;
       return;
     }
 
@@ -1123,14 +1407,15 @@ class CrazyCreativeApp {
             <strong style="font-size:1.05rem; font-weight:800; color:#FFF;">${profile.name}</strong>
             <span style="font-size:0.75rem; color:var(--muted-gray);">${match.lastTime || match.matchedAt}</span>
           </div>
-          <div style="font-size:0.875rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:rgba(255,255,255,0.7); margin-top:0.2rem;">
+          <div style="font-size:0.875rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#A1A1AA; margin-top:0.2rem;">
             ${match.lastMessage || 'Connected!'}
           </div>
         </div>
-        ${match.unread ? `<span style="width:8px; height:8px; border-radius:50%; background:var(--canvas-pink);"></span>` : ''}
+        ${match.unread ? `<span style="width:9px; height:9px; border-radius:50%; background:var(--canvas-pink);"></span>` : ''}
       `;
 
       thread.addEventListener('click', () => {
+        this.playSound('pop');
         match.unread = false;
         this.activeChatId = profile.id;
         this.saveState();
@@ -1191,6 +1476,13 @@ class CrazyCreativeApp {
             </div>
             <div style="font-size:0.7rem; opacity:0.7; margin-top:0.35rem; text-align:right;">${msg.time} · Voice Memo</div>
           `;
+          const playBtn = bubble.querySelector('.voice-play-btn');
+          if (playBtn) {
+            playBtn.addEventListener('click', () => {
+              this.playSound('like');
+              playBtn.textContent = playBtn.textContent === '▶' ? '⏸' : '▶';
+            });
+          }
         } else if (msg.type === 'image') {
           bubble.innerHTML = `
             <img src="${msg.mediaUrl}" style="max-width:240px; border-radius:0.85rem; object-fit:cover; margin-bottom:0.35rem;" alt="Media">
@@ -1200,7 +1492,7 @@ class CrazyCreativeApp {
         } else {
           bubble.innerHTML = `
             <div>${msg.text}</div>
-            <div style="font-size:0.7rem; opacity:0.7; margin-top:0.35rem; text-align:right;">${msg.time} ${msg.sender === 'me' ? '· Seen ✓' : ''}</div>
+            <div style="font-size:0.7rem; opacity:0.7; margin-top:0.35rem; text-align:right;">${msg.time} ${msg.sender === 'me' && this.settings.readReceipts ? '· Seen ✓' : ''}</div>
           `;
         }
 
@@ -1212,8 +1504,9 @@ class CrazyCreativeApp {
           bubble.appendChild(rxPill);
         }
 
-        // Double-click message to react with ❤️
+        // Double-click message to react
         bubble.addEventListener('dblclick', () => {
+          this.playSound('like');
           if (!msg.reactions) msg.reactions = [];
           if (!msg.reactions.includes('❤️')) {
             msg.reactions.push('❤️');
@@ -1234,7 +1527,7 @@ class CrazyCreativeApp {
       icebreakerContainer.innerHTML = '';
       ICEBREAKER_PROMPTS.forEach(prompt => {
         const chip = document.createElement('button');
-        chip.className = 'pill-btn pill-sm pill-white liquid-glass-btn';
+        chip.className = 'pill-btn pill-sm pill-white';
         chip.style.padding = '0.35rem 0.85rem';
         chip.style.fontSize = '0.8rem';
         chip.textContent = prompt;
@@ -1250,6 +1543,7 @@ class CrazyCreativeApp {
     const text = customText !== null ? customText.trim() : (this.theatricalInput_page ? this.theatricalInput_page.value.trim() : '');
     if (!text || !this.activeChatId) return;
 
+    this.playSound('pop');
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const userMsg = {
       id: `msg-${Date.now()}`,
@@ -1277,12 +1571,12 @@ class CrazyCreativeApp {
     this.renderActiveMessages();
     this.renderChatSidebarThreads();
 
-    // Trigger Automated Companion Response after 1.2s delay
     this.triggerBotResponse(this.activeChatId);
   }
 
   sendImageMessage(dataUrl) {
     if (!this.activeChatId || !dataUrl) return;
+    this.playSound('like');
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const userMsg = {
       id: `msg-${Date.now()}`,
@@ -1312,6 +1606,7 @@ class CrazyCreativeApp {
 
   sendVoiceNoteMessage() {
     if (!this.activeChatId) return;
+    this.playSound('superlike');
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const userMsg = {
       id: `msg-${Date.now()}`,
@@ -1371,6 +1666,7 @@ class CrazyCreativeApp {
         match.lastMessage = reply;
         match.lastTime = botMsg.time;
       }
+      this.playSound('pop');
       this.saveState();
       this.renderActiveMessages();
       this.renderChatSidebarThreads();
@@ -1378,29 +1674,35 @@ class CrazyCreativeApp {
   }
 
   // --------------------------------------------------------------------------
-  // USER PROFILE VIEW
+  // SETTINGS VIEW (MULTIPLE FEATURES)
   // --------------------------------------------------------------------------
-  renderProfileView() {
-    const avatar = document.getElementById('userProfileAvatar');
-    const name = document.getElementById('userProfileName');
-    const handle = document.getElementById('userProfileHandle');
-    const role = document.getElementById('userProfileRole');
-    const bio = document.getElementById('userProfileBio');
-    const tags = document.getElementById('userProfileTags');
+  renderSettingsView() {
+    if (this.settingsUserName) this.settingsUserName.textContent = this.user.name;
+    if (this.settingsUserEmail) this.settingsUserEmail.textContent = this.user.email;
+    if (this.settingsUserAvatar) this.settingsUserAvatar.src = this.user.avatar;
+    if (this.settingsBioInput) this.settingsBioInput.value = this.user.bio;
 
-    if (avatar) avatar.src = this.user.avatar;
-    if (name) name.textContent = this.user.name;
-    if (handle) handle.textContent = `${this.user.handle} · ${this.user.city}`;
-    if (role) role.textContent = this.user.role;
-    if (bio) bio.textContent = this.user.bio;
-
-    if (tags) {
-      tags.innerHTML = this.user.hobbies.map(h => `<span class="liquid-glass-badge" style="position:static; display:inline-block; margin-right:0.4rem; margin-bottom:0.4rem;">${h}</span>`).join('');
+    if (this.sliderDistance && this.labelDistance) {
+      this.sliderDistance.value = this.settings.maxDistance;
+      this.labelDistance.textContent = `${this.settings.maxDistance} km`;
     }
+
+    if (this.sliderAge && this.labelAgeRange) {
+      this.sliderAge.value = this.settings.maxAge;
+      this.labelAgeRange.textContent = `18 – ${this.settings.maxAge}`;
+    }
+
+    if (this.selectAiSensitivity) {
+      this.selectAiSensitivity.value = this.settings.aiSensitivity;
+    }
+
+    if (this.toggleSoundFx) this.toggleSoundFx.checked = this.settings.soundFx;
+    if (this.toggleStealth) this.toggleStealth.checked = this.settings.stealthMode;
+    if (this.toggleReadReceipts) this.toggleReadReceipts.checked = this.settings.readReceipts;
   }
 
   // --------------------------------------------------------------------------
-  // AUTH & MODALS
+  // MODALS & DETAIL VIEWS
   // --------------------------------------------------------------------------
   openAuthModal() {
     this.authModal.classList.add('active');
@@ -1414,31 +1716,31 @@ class CrazyCreativeApp {
 
     this.infoModalBody.innerHTML = `
       <div style="display:flex; flex-direction:column; gap:1.25rem; text-align:left;">
-        <img src="${profile.photos[0]}" style="width:100%; height:320px; object-fit:cover; border-radius:1.5rem; border:2px solid var(--ink-dark);" alt="${profile.name}">
+        <img src="${profile.photos[0]}" style="width:100%; height:320px; object-fit:cover; border-radius:1.5rem; border:3px solid #27272A;" alt="${profile.name}">
         <div>
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h2 style="font-size:2.5rem; font-weight:800; line-height:1; letter-spacing:-0.02em;">${profile.name}, ${profile.age}</h2>
+            <h2 style="font-size:2.5rem; font-weight:800; line-height:1; letter-spacing:-0.02em; color:#FFF;">${profile.name}, ${profile.age}</h2>
             <span style="background:var(--accent-lime); color:#000; font-weight:900; padding:0.35rem 0.85rem; border-radius:9999px; font-size:0.85rem;">⚡ ${profile.compatibility}% Match</span>
           </div>
           <div style="color:var(--canvas-pink); font-size:1.1rem; font-weight:800; margin-top:0.4rem;">${profile.occupation} · ${profile.city}</div>
         </div>
 
-        <div class="auth-info-card" style="border-color:var(--canvas-pink);">
+        <div class="auth-info-card">
           <strong style="display:block; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.04em; color:var(--canvas-pink); margin-bottom:0.35rem;">Story &amp; Vibe</strong>
-          <p style="font-size:1.1rem; font-weight:600; line-height:1.5;">${profile.bio}</p>
+          <p style="font-size:1.1rem; font-weight:600; line-height:1.5; color:#E4E4E7;">${profile.bio}</p>
         </div>
 
         <div>
           <strong style="display:block; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.04em; margin-bottom:0.5rem; color:#FFF;">Hobbies &amp; Creative Passions</strong>
           <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
-            ${profile.hobbies.map(t => `<span class="liquid-glass-badge" style="position:static; display:inline-block; font-size:0.85rem; padding:0.35rem 0.85rem; border-radius:9999px;">${t}</span>`).join('')}
+            ${profile.hobbies.map(t => `<span class="cc-hobby-pill" style="font-size:0.85rem; padding:0.35rem 0.85rem;">${t}</span>`).join('')}
           </div>
         </div>
 
         <div style="margin-top:0.5rem;">
           <strong style="display:block; text-transform:uppercase; font-size:0.85rem; letter-spacing:0.04em; margin-bottom:0.5rem; color:#FFF;">Prompts</strong>
           ${profile.prompts.map(pr => `
-            <div style="background:rgba(255,255,255,0.06); border-radius:1rem; padding:1rem; margin-bottom:0.5rem;">
+            <div style="background:#202024; border:2px solid #27272A; border-radius:1rem; padding:1rem; margin-bottom:0.5rem;">
               <div style="font-size:0.8rem; color:var(--accent-lime); font-weight:800;">${pr.question}</div>
               <div style="font-size:1rem; font-weight:600; color:#FFF; margin-top:0.25rem;">${pr.answer}</div>
             </div>
